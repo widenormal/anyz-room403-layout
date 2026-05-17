@@ -1,0 +1,13 @@
+__pycache__/
+Icon?
+Icon
+node_modules/
+.env
+.env.*
+!.env.*.example
+*.secret
+credentials.json
+.DS_Store
+.claude/settings.local.json
+*.duckdb
+.import/

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "_comment_auth": "下のいずれか方式を設定。OP_SERVICE_ACCOUNT_TOKEN があれば全 LLM 共通で 1Password 経由取得が動く。",
+
+    "_mode_1_direct": "方式1: API キーを直接記入（手軽だがローテーションが手動）",
+    "GEMINI_API_KEY": "AIza...your-api-key-here",
+    "XAI_API_KEY": "xai-...your-grok-api-key-here",
+    "OPENAI_API_KEY": "sk-...your-openai-api-key-here",
+    "GITHUB_TOKEN": "ghp_...your-github-pat-here",
+
+    "_mode_2_op": "方式2: 1Password Service Account 経由（推奨、ローテーションが中央管理）",
+    "OP_SERVICE_ACCOUNT_TOKEN": "ops_eyJ...your-service-account-token-here",
+
+    "_eco_mode": "Drive 共有フォルダなど大勢が使う領域では ECO_MODE=1 を設定すると軽処理が Qwen/Haiku にルーティングされる",
+    "ECO_MODE": "0",
+
+    "_qwen_local": "Qwen はローカル Ollama 上で動作。認証不要。SessionStart フックが自動セットアップ",
+    "QWEN_MODEL": "qwen3.5:7b-instruct",
+    "OLLAMA_HOST": "http://localhost:11434",
+
+    "GEMINI_CLI_TRUST_WORKSPACE": "true"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(gemini:*)",
+      "Bash(gemini -p:*)",
+      "Bash(bash scripts/gemini-call.sh:*)",
+      "Bash(bash scripts/grok-call.sh:*)",
+      "Bash(bash scripts/codex-call.sh:*)",
+      "Bash(bash scripts/qwen-call.sh:*)",
+      "Bash(bash scripts/llm-router.sh:*)",
+      "Bash(bash scripts/github-fetch.sh:*)",
+      "Bash(bash scripts/github-tree.sh:*)",
+      "Bash(op read:*)",
+      "Bash(op run:*)",
+      "Bash(ollama:*)"
+    ]
+  }
+}
