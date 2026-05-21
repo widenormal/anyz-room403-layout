@@ -95,6 +95,28 @@ if ! command -v hermes >/dev/null 2>&1; then
   exit 127
 fi
 
+diag_and_die() {
+  local item="$1" svc="$2"
+  {
+    echo "ERROR: ${svc} 認証取得失敗（3段階診断）"
+    echo "  - op CLI:                  $(command -v op >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    echo "  - OP_SERVICE_ACCOUNT_TOKEN: $([ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ] && echo ✅ || echo ❌)"
+    echo "  - op whoami:               $(op whoami >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    local v
+    v="$(op item get "$item" --vault claude-code-secrets --fields credential --reveal 2>&1 || true)"
+    if [ -z "$v" ]; then
+      echo "  - op read credential:      ❌ 空値（vault item の field 未投入の可能性）"
+    elif echo "$v" | grep -qi "error\|not found"; then
+      echo "  - op read credential:      ❌ ${v}"
+    else
+      echo "  - op read credential:      ✅ ${#v}B → ラッパーのロジックバグの可能性大"
+    fi
+    echo "対応: 上記が全部 ✅ ならラッパー修正、または '${item}' を直接 export して呼ぶ"
+    echo "取得先: https://console.x.ai/"
+  } >&2
+  exit 1
+}
+
 resolve_xai_api_key() {
   if [[ -n "${XAI_API_KEY:-}" ]]; then
     return 0
@@ -111,14 +133,14 @@ resolve_xai_api_key() {
 
   if [[ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ]] && command -v op >/dev/null 2>&1; then
     local op_value
-    if op_value="$(op read 'op://claude-code-secrets/Grok API Key (Template)/credential' 2>/dev/null)" && [[ -n "$op_value" ]]; then
+    # op item get は括弧入り title でも動作（op read の op:// 参照は括弧 NG）
+    if op_value="$(op item get 'Grok API Key (Template)' --vault claude-code-secrets --fields credential --reveal 2>/dev/null)" && [[ -n "$op_value" ]]; then
       export XAI_API_KEY="$op_value"
       return 0
     fi
   fi
 
-  echo "Error: XAI_API_KEY が見つかりません。https://console.x.ai/ で API key を取得し、XAI_API_KEY を設定するか ~/.grok-env を用意するか 1Password(op) を設定してください。" >&2
-  exit 1
+  diag_and_die "Grok API Key (Template)" "Grok"
 }
 
 resolve_xai_api_key

@@ -31,24 +31,41 @@ if [ -z "$PROMPT" ]; then
   exit 1
 fi
 
+diag_and_die() {
+  local item="$1" svc="$2"
+  {
+    echo "ERROR: ${svc} 認証取得失敗（3段階診断）"
+    echo "  - op CLI:                  $(command -v op >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    echo "  - OP_SERVICE_ACCOUNT_TOKEN: $([ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ] && echo ✅ || echo ❌)"
+    echo "  - op whoami:               $(op whoami >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    local v
+    v="$(op item get "$item" --vault claude-code-secrets --fields credential --reveal 2>&1 || true)"
+    if [ -z "$v" ]; then
+      echo "  - op read credential:      ❌ 空値（vault item の field 未投入の可能性）"
+    elif echo "$v" | grep -qi "error\|not found"; then
+      echo "  - op read credential:      ❌ ${v}"
+    else
+      echo "  - op read credential:      ✅ ${#v}B → ラッパーのロジックバグの可能性大"
+    fi
+    echo "対応: 上記が全部 ✅ ならラッパー修正、または '${item}' を直接 export して呼ぶ"
+    echo "取得先: https://console.x.ai/team/default/api-keys"
+  } >&2
+  exit 1
+}
+
 resolve_key() {
   if [ -n "${XAI_API_KEY:-}" ]; then
     return 0
   fi
   if [ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ] && command -v op >/dev/null 2>&1; then
-    XAI_API_KEY="$(op read 'op://claude-code-secrets/Grok API Key (Template)/credential' 2>/dev/null || true)"
+    # op item get は括弧入り title でも動作（op read の op:// 参照は括弧 NG）
+    XAI_API_KEY="$(op item get 'Grok API Key (Template)' --vault claude-code-secrets --fields credential --reveal 2>/dev/null || true)"
     if [ -n "$XAI_API_KEY" ]; then
       export XAI_API_KEY
       return 0
     fi
   fi
-  cat >&2 <<'EOF'
-ERROR: 認証情報が未設定です。以下のいずれかを設定してください:
-  - XAI_API_KEY (.claude/settings.local.json の env 直接モード)
-  - OP_SERVICE_ACCOUNT_TOKEN (1Password モード、推奨。Vault: claude-code-secrets / Item: 'Grok API Key (Template)')
-取得先: https://console.x.ai/team/default/api-keys
-EOF
-  return 1
+  diag_and_die "Grok API Key (Template)" "Grok"
 }
 
 resolve_key

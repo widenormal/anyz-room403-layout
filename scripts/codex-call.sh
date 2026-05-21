@@ -44,6 +44,28 @@ if [ -z "$PROMPT" ]; then
   exit 1
 fi
 
+diag_and_die() {
+  local item="$1" svc="$2"
+  {
+    echo "ERROR: ${svc} 認証取得失敗（3段階診断）"
+    echo "  - op CLI:                  $(command -v op >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    echo "  - OP_SERVICE_ACCOUNT_TOKEN: $([ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ] && echo ✅ || echo ❌)"
+    echo "  - op whoami:               $(op whoami >/dev/null 2>&1 && echo ✅ || echo ❌)"
+    local v
+    v="$(op item get "$item" --vault claude-code-secrets --fields credential --reveal 2>&1 || true)"
+    if [ -z "$v" ]; then
+      echo "  - op read credential:      ❌ 空値（vault item の field 未投入の可能性）"
+    elif echo "$v" | grep -qi "error\|not found"; then
+      echo "  - op read credential:      ❌ ${v}"
+    else
+      echo "  - op read credential:      ✅ ${#v}B → ラッパーのロジックバグの可能性大"
+    fi
+    echo "対応: 上記が全部 ✅ ならラッパー修正、または '${item}' を直接 export して呼ぶ"
+    echo "取得先: https://platform.openai.com/api-keys"
+  } >&2
+  exit 1
+}
+
 resolve_key() {
   if [ -n "${OPENAI_API_KEY:-}" ]; then
     return 0
@@ -55,13 +77,7 @@ resolve_key() {
       return 0
     fi
   fi
-  cat >&2 <<'EOF'
-ERROR: 認証情報が未設定です。以下のいずれかを設定してください:
-  - OPENAI_API_KEY (.claude/settings.local.json の env 直接モード)
-  - OP_SERVICE_ACCOUNT_TOKEN (1Password モード、推奨。Vault: claude-code-secrets / Item: 'OpenAI API Key')
-取得先: https://platform.openai.com/api-keys
-EOF
-  return 1
+  diag_and_die "OpenAI API Key" "Codex"
 }
 
 resolve_key
