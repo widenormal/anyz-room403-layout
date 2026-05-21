@@ -4,7 +4,13 @@
 
 ## ディレクトリ構成
 
+テンプレ管理対象ディレクトリ（`scripts/apply-template.sh` の `TEMPLATE_DIRS` で派生リポへ伝搬）:
 
+- `19期計画/` — 全社の期次計画
+- `個人OKR/` — メンバー別の個人 OKR
+- `人事_Grade・職種別行動目標/` — Grade / 職種別の行動目標リファレンス
+
+これらは現状 `.gitkeep` のみのスケルトンで、template 側にファイルが追加されると `--repair` で派生リポへ上書き同期される。
 
 ## 設計原則
 
@@ -33,7 +39,7 @@
 
 | スキル | 目的 | 起動タイミング |
 |---|---|---|
-| `skill-creator.md` | スキルの新規作成・改善（Meta Skill） | 新規・改善・定期レビュー時 |
+| `skill-creator/SKILL.md` | スキルの新規作成・改善（Meta Skill） | 新規・改善・定期レビュー時 |
 | `session-handoff.md` | セッション終了時のコンテキスト永続化 | セッション終了時必須 |
 | `create-brand.md` | ブランド画像生成 | 画像生成時 |
 | `llm-router.md` | マルチLLMオーケストレーションの司令塔 | LLM 振り分け迷い時 |
@@ -51,7 +57,7 @@ Claude Code を司令塔として外部 LLM を呼び分ける構成。Drive 共
 
 ### スキル追加時のルール
 
-1. `.claude/skills/skill-creator.md` を起動し Phase 1 Step 1-1 の必要性チェックを通す
+1. `.claude/skills/skill-creator/SKILL.md` を起動し Phase 1 Step 1-1 の必要性チェックを通す
 2. 配置は `.claude/skills/*.md` 直下（サブディレクトリ不要の場合）
 3. 言語は日本語、最初の3行に「> 1行説明」「目的」「起動条件」を配置
 4. 追加後に当表（「既存スキル一覧」）と `CLAUDE.md` Layer 3 ツリーの両方を更新（CLAUDE.md が保護対象の場合はユーザーに依頼）
