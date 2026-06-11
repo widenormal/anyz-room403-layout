@@ -1,0 +1,81 @@
+/* 5 co. スライドCIテーマ｜3色のみ（白・水色・濃紺） ============================== */
+:root{
+  /* ---- ブランド3色 ---- */
+  --white:  #FFFFFF;
+  --powder: #C3D7EE;            /* アイスブルー / PANTONE 2707 C */
+  --navy:   #101820;            /* リッチブラック / PANTONE Black 6 C */
+
+  /* ---- 3色から派生（白と混ぜた淡色＝ティント。新色相は作らない） ---- */
+  --powder-pale: #DEE9F6;       /* 水色＋白：広い面・薄帯 */
+  --powder-soft: #D5E3F3;       /* 水色やや濃いめ */
+
+  /* ---- 濃淡は不透明度で（＝3色の範囲内） ---- */
+  --navy-85: rgba(16,24,32,.85);
+  --navy-60: rgba(16,24,32,.60);
+  --navy-14: rgba(16,24,32,.14);/* 罫線 */
+  --powder-35: rgba(195,215,238,.35);
+
+  /* ---- フォント ---- */
+  --serif-ja: "Hiragino Mincho ProN","Yu Mincho",serif;
+  --serif-en: "EB Garamond","Garamond",Georgia,serif;
+}
+
+/* ---- ベース ---- */
+*{ box-sizing:border-box; font-variant-ligatures:none; }
+body{
+  margin:0; background:var(--white); color:var(--navy);
+  font-family:var(--serif-ja); line-height:1.7; letter-spacing:.02em;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+
+/* ---- タイポ ---- */
+h1,h2,h3{ font-family:var(--serif-ja); color:var(--navy); font-weight:600; letter-spacing:.04em; margin:0 0 .4em; }
+h1{ font-size:2.6rem; line-height:1.25; }
+h2{ font-size:1.8rem; }
+h3{ font-size:1.25rem; }
+.en{ font-family:var(--serif-en); }
+.tagline{ font-family:var(--serif-en); font-style:italic; color:var(--navy); letter-spacing:.06em; }
+.lead{ font-size:1.15rem; color:var(--navy-85); }
+small,.note{ color:var(--navy-60); }
+
+/* ---- スライド枠（16:9）---- */
+.slide{
+  position:relative; width:1280px; height:720px; margin:0 auto 28px;
+  background:var(--white); overflow:hidden; padding:72px 88px;
+}
+.slide.center{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+
+/* 地色バリエーション（3色のみ） */
+.slide.powder{ background:var(--powder-pale); }       /* 淡水色地 */
+.slide.powder-strong{ background:var(--powder); }     /* 水色地 */
+.slide.reverse{ background:var(--navy); color:var(--powder); }
+.slide.reverse h1,.slide.reverse h2,.slide.reverse h3,
+.slide.reverse .tagline{ color:var(--powder); }
+
+/* ---- 部品 ---- */
+.rule{ border:0; border-top:1px solid var(--navy-14); margin:1.2em 0; }     /* 罫線 */
+.band{ background:var(--powder-pale); padding:.5em 1em; border-radius:4px; } /* 帯 */
+.chip{ display:inline-block; background:var(--powder); color:var(--navy);
+       padding:.2em .8em; border-radius:999px; font-size:.85rem; letter-spacing:.06em; }
+.kicker{ font-family:var(--serif-en); letter-spacing:.18em; text-transform:uppercase;
+         font-size:.8rem; color:var(--navy-60); }
+.accent-bar{ width:48px; height:3px; background:var(--powder); margin:.6em 0 1em; } /* 見出し下の差し色 */
+
+/* カード/囲み（3色のみ） */
+.card{ background:var(--white); border:1px solid var(--navy-14); border-radius:8px; padding:24px; }
+.card.fill{ background:var(--powder-pale); border-color:transparent; }
+
+/* 表（罫線＝navy薄、見出し行＝水色） */
+table{ width:100%; border-collapse:collapse; }
+th{ background:var(--powder-pale); color:var(--navy); text-align:left; }
+th,td{ padding:.5em .8em; border-bottom:1px solid var(--navy-14); }
+
+/* ---- ロゴ ---- */
+.logo{ display:inline-block; color:var(--navy); }      /* SVGを内包し fill=currentColor */
+.slide.reverse .logo, .slide.powder-strong .logo{ color:var(--powder); }
+.logo svg{ width:160px; height:auto; display:block; }
+.logo--sm svg{ width:96px; }
+
+/* ---- 数字モチーフ（任意・うっすら）---- */
+.numfield{ position:absolute; inset:0; pointer-events:none; color:var(--powder-35); }
+.numfield svg, .numfield text{ fill:currentColor; }
