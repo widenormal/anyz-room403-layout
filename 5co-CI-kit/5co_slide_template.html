@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>5 co. スライド・テンプレート一式（CI準拠）</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<!--
+==================================================================================
+  5 co. スライド・テンプレート一式  ／  CI2026（3色＝白・水色・濃紺）準拠
+  ----------------------------------------------------------------------------------
+  ■ 使い方
+    1) このファイルを複製して中身（文言・数値）だけ差し替える。
+    2) 1スライド＝1つの <section class="slide ..."> 。要る型をコピペして並べるだけ。
+    3) Chrome で開き「印刷 → PDFに保存（用紙=A4横・余白=なし・背景グラフィックON）」で配布用PDF。
+    4) 配色は3色のみ（白 #FFFFFF／水色 #C3D7EE＝PANTONE 545C／濃紺 #101820＝PANTONE 282C）。
+       グレー・黒#000・他色相は使わない。濃淡は不透明度か白混ぜ（--powder-pale 等）で。
+    5) 数字背景・ロゴは触らない（assets/ を参照）。文言には数字背景を掛けない＝可読性最優先。
+
+  ■ スライド型（このファイル内のサンプル順）
+    A 表紙(cover-card)  B 章扉(section)  C リード＋KPI  D 表  E 比較2カラム
+    F タイムライン  G キーメッセージ  H 組織図(現在→将来)  I 対話/傾聴(Listen+memo)
+    J 数値ハイライト  K 名刺見せ  L クロージング(裏表紙)
+
+  ■ クラス早見
+    .slide … 本文はプレーン（数字背景なし=CI v2）   .powder=淡水色地  .center=中央寄せ
+    章扉の数字背景は <div class="numfield-cover"> を section 先頭に置く  .reverse=ダーク地（文字=ice）
+    .kicker / h2 + .accent-bar / .lead … 見出しの定石
+    .kpi-grid>.card.kpi(.em) … 数値4枚（.em=濃紺強調）
+    .compare>.card(.navy) … 2カラム比較（.navy=濃紺カード）
+    .keymsg … 濃紺メッセージ帯   .ask … 問い   .memo … その場記入欄
+==================================================================================
+-->
+<style>
+/* ===== 5co CI theme（ci-theme.css をインライン） ===== */
+:root{
+  --white:#FFFFFF; --powder:#C3D7EE; /*水色 PANTONE 545C*/ --navy:#101820; /*濃紺 PANTONE 282C*/
+  --powder-pale:#DEE9F6; --powder-soft:#D5E3F3;
+  --navy-85:rgba(16,24,32,.85); --navy-60:rgba(16,24,32,.60); --navy-14:rgba(16,24,32,.14);
+  --powder-35:rgba(195,215,238,.35);
+  --serif-ja:"Hiragino Mincho ProN","Yu Mincho",serif;
+  --serif-en:"EB Garamond","Garamond",Georgia,serif;
+}
+*{box-sizing:border-box;}
+html{font-size:19px;}
+body{margin:0;background:var(--white);color:var(--navy);font-family:var(--serif-ja);line-height:1.7;letter-spacing:.02em;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+h1,h2,h3{font-family:var(--serif-ja);color:var(--navy);font-weight:600;letter-spacing:.04em;margin:0 0 .4em;}
+h1{font-size:2.8rem;line-height:1.25;} h2{font-size:2rem;} h3{font-size:1.35rem;}
+.en{font-family:var(--serif-en);}
+.tagline{font-family:var(--serif-en);font-style:italic;color:var(--navy);letter-spacing:.06em;}
+.lead{font-size:1.3rem;color:var(--navy-85);} small,.note{color:var(--navy-60);}
+.slide{position:relative;width:297mm;height:210mm;margin:0 auto 28px;background:var(--white);overflow:hidden;padding:14mm 18mm;}
+.slide.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.slide.powder{background:var(--powder-pale);} .slide.powder-strong{background:var(--powder);}
+.slide.reverse{background:var(--navy);color:var(--powder);}
+.slide.reverse h1,.slide.reverse h2,.slide.reverse h3,.slide.reverse .tagline{color:var(--powder);}
+.rule{border:0;border-top:1px solid var(--navy-14);margin:1.2em 0;}
+.band{background:var(--powder-pale);padding:.5em 1em;border-radius:4px;}
+.chip{display:inline-block;background:var(--powder);color:var(--navy);padding:.2em .8em;border-radius:999px;font-size:.85rem;letter-spacing:.06em;}
+.kicker{font-family:var(--serif-en);letter-spacing:.18em;text-transform:uppercase;font-size:.8rem;color:var(--navy-60);}
+.accent-bar{display:block;width:48px;height:3px;background:var(--powder);margin:.6em 0 1em;}
+.card{background:var(--white);border:1px solid var(--navy-14);border-radius:8px;padding:24px;}
+.card.fill{background:var(--powder-pale);border-color:transparent;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--powder-pale);color:var(--navy);text-align:left;}
+th,td{padding:.6em .9em;border-bottom:1px solid var(--navy-14);font-size:1.02rem;}
+.logo{display:inline-block;color:var(--navy);}
+.slide.reverse .logo,.slide.powder-strong .logo{color:var(--powder);}
+.logo svg{width:160px;height:auto;display:block;} .logo--sm svg{width:96px;}
+
+/* ===== デッキ枠・共通 ===== */
+body{background:var(--powder-pale);}
+.deck{display:flex;flex-direction:column;align-items:center;gap:32px;padding:32px 0;}
+.slide{box-shadow:0 8px 40px rgba(16,24,32,.14);}
+.slide .fit{transform-origin:top left;width:100%;}
+.corner-logo{position:absolute;top:44px;right:64px;width:104px;color:var(--navy);z-index:3;}
+.slide.reverse .corner-logo,.slide.powder-strong .corner-logo{color:var(--powder);}
+.brand svg{width:100%;height:auto;display:block;fill:currentColor;}
+
+/* ページノンブル */
+.pageno{position:absolute;left:18mm;bottom:9mm;font-family:var(--serif-en);font-size:.78rem;letter-spacing:.12em;color:var(--navy-60);z-index:3;}
+.slide.reverse .pageno,.slide.powder-strong .pageno{color:rgba(255,255,255,.7);}
+
+/* ===== 数字背景（外部SVG・3色のみ・うっすら） ===== */
+.numfield-cover{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url("assets/numfield_slide_16x9.svg");background-size:cover;background-position:center;background-repeat:no-repeat;}
+.slide > .fit, .slide > .cover-content{position:relative;z-index:1;}
+
+/* ===== A 表紙：名刺 表面と同じトンマナ（左=ロゴ＋数字／右=明朝の情報） ===== */
+.cover-card{display:flex;align-items:center;padding:0;background:var(--powder);}
+.cover-card .cc-left{flex:0 0 40%;align-self:stretch;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.cover-card .cc-left .cc-logo{position:relative;z-index:1;width:50%;color:var(--navy);}
+.cover-card .cc-left .cc-logo svg{width:100%;height:auto;display:block;}
+.cover-card .cc-right{flex:1;padding:0 18mm;position:relative;z-index:1;}
+.cover-card .cc-right h1{font-size:2.6rem;text-align:left;line-height:1.3;}
+.cover-card .cc-right .accent-bar{margin:.5em 0 1.1em;}
+.cover-card .cc-right .lead,.cover-card .cc-right .kicker,.cover-card .cc-right .note{text-align:left;}
+
+/* ===== B 章扉（section divider） ===== */
+.section-divider{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.section-divider .sec-no{font-family:var(--serif-en);font-size:1rem;letter-spacing:.32em;color:var(--powder);text-transform:uppercase;margin-bottom:14px;}
+.section-divider h2{font-size:2.9rem;line-height:1.3;}
+.section-divider .accent-bar{margin:1em auto 1.1em;width:64px;}
+.section-divider .lead{max-width:62%;}
+
+/* ===== C KPI ===== */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:10px 0 18px;}
+.kpi{padding:20px 22px;}
+.kpi-label{font-size:.98rem;color:var(--navy-60);font-weight:600;}
+.kpi-val{font-family:var(--serif-en);font-size:2.4rem;color:var(--navy);line-height:1.15;margin-top:8px;}
+.kpi-val span{font-size:1.1rem;color:var(--navy-60);}
+.kpi-sub{font-size:.92rem;color:var(--navy-60);margin-top:6px;line-height:1.5;}
+.kpi.em{background:var(--navy);}
+.kpi.em .kpi-label,.kpi.em .kpi-val,.kpi.em .kpi-val span,.kpi.em .kpi-sub{color:#C3D7EE;}
+.kpi.em .kpi-val span{color:var(--powder);}
+
+/* ===== D 表（強調行） ===== */
+tr.me td{background:var(--powder-soft);font-weight:600;}
+
+/* ===== E 比較2カラム ===== */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:6px 0;}
+.card.navy{background:var(--navy);color:#C3D7EE;border-color:transparent;}
+.card.navy h3,.card.navy h4{color:#C3D7EE;}
+.c-tag{display:inline-block;font-family:var(--serif-en);font-size:.84rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:10px;background:var(--powder-soft);color:var(--navy);}
+.card.navy .c-tag{background:rgba(195,215,238,.35);color:#C3D7EE;}
+.c-price{font-family:var(--serif-en);font-size:1.85rem;margin:2px 0 10px;}
+ul.clean{list-style:none;padding:0;margin:8px 0 0;}
+ul.clean li{font-size:1.1rem;padding:6px 0 6px 20px;position:relative;line-height:1.6;}
+ul.clean li::before{content:'';position:absolute;left:0;top:.85em;width:6px;height:6px;border-radius:50%;background:var(--powder);}
+
+/* ===== F タイムライン ===== */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:8px 0;}
+.tl .p{font-family:var(--serif-en);font-size:.8rem;letter-spacing:.1em;color:var(--navy-60);}
+.tl h4{font-size:1.05rem;margin:6px 0 8px;color:var(--navy);}
+
+/* ===== G キーメッセージ ===== */
+.keymsg{background:var(--navy);color:#C3D7EE;border-radius:8px;padding:30px 40px;text-align:center;}
+.keymsg .kl{font-family:var(--serif-en);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--powder);margin-bottom:12px;}
+.keymsg .kb{font-size:1.25rem;line-height:1.8;}
+.keymsg em{color:var(--powder);font-style:normal;}
+
+/* ===== H 組織図 ===== */
+.org-compare{display:grid;grid-template-columns:1fr 44px 1fr;gap:14px;align-items:stretch;margin-top:10px;}
+.org{border:1px solid var(--navy-14);border-radius:10px;padding:18px 18px 20px;}
+.org.future{background:var(--powder-pale);border-color:transparent;}
+.org-title{font-weight:600;color:var(--navy);text-align:center;margin-bottom:12px;font-size:1.25rem;}
+.node{text-align:center;border-radius:8px;padding:11px;font-size:1.05rem;}
+.node.lead{background:var(--navy);color:#C3D7EE;}
+.conn{width:2px;height:14px;background:var(--navy-14);margin:6px auto;}
+.teams{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.tnode{background:var(--white);border:1px solid var(--navy-14);border-radius:8px;padding:12px 4px;text-align:center;font-weight:600;font-size:1.35rem;}
+.tnode small{display:block;font-weight:400;color:var(--navy-60);font-size:.86rem;margin-top:4px;line-height:1.45;}
+.tnode.hi{background:var(--powder);border-color:transparent;}
+.org-note{margin-top:12px;font-size:.98rem;color:var(--navy-85);line-height:1.6;border-top:1px solid var(--navy-14);padding-top:10px;}
+.org-arrow{display:flex;align-items:center;justify-content:center;font-family:var(--serif-en);font-size:2rem;color:var(--powder);}
+
+/* ===== I 対話／傾聴 ===== */
+.ask{margin-top:18px;padding:14px 20px;border-left:3px solid var(--powder);background:var(--powder-pale);border-radius:0 6px 6px 0;}
+.ask .ql{font-family:var(--serif-en);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--navy-60);display:block;margin-bottom:4px;}
+.memo{min-height:200px;border:1px dashed var(--navy-14);border-radius:8px;margin-top:10px;background:rgba(255,255,255,.55);}
+.listen-tag{display:inline-block;font-family:var(--serif-en);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);background:var(--powder);padding:3px 12px;border-radius:999px;}
+
+/* ===== K 名刺モックアップ（91×55mm 比率） ===== */
+.meishi-wrap{display:flex;gap:30px;justify-content:center;align-items:center;margin:14px 0 6px;}
+.meishi{border-radius:6px;position:relative;overflow:hidden;background:#fff;box-shadow:0 8px 28px rgba(16,24,32,.16);}
+.meishi.front{width:628px;height:380px;display:grid;grid-template-columns:206px 1fr;}
+.meishi .m-logo{background:var(--powder-pale);display:flex;align-items:center;justify-content:center;color:var(--navy);}
+.meishi .m-logo svg{width:132px;height:auto;}
+.m-right{padding:34px 30px;color:var(--navy);}
+.m-name{font-size:2rem;font-weight:600;letter-spacing:.08em;}
+.m-romaji{font-family:var(--serif-en);font-size:1rem;color:var(--navy-60);letter-spacing:.06em;margin-top:2px;}
+.m-title{font-family:var(--serif-en);font-size:1.1rem;color:var(--navy);margin-top:10px;letter-spacing:.03em;}
+.m-co{font-family:var(--serif-en);font-size:1.35rem;color:var(--navy);margin-top:20px;}
+.m-contact{font-family:var(--serif-en);font-size:.84rem;color:var(--navy-85);line-height:1.7;margin-top:8px;}
+.meishi.back{width:430px;height:260px;background:var(--powder);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--navy);}
+.meishi.back svg{width:122px;height:auto;}
+.meishi-cap{text-align:center;}
+
+/* ===== 印刷（A4横・ページ送り） ===== */
+@page{size:A4 landscape;margin:0;}
+@media print{
+  body{background:#fff;padding:0;} .deck{gap:0;padding:0;}
+  .slide{box-shadow:none;margin:0;page-break-after:always;break-after:page;}
+  .slide:last-child{page-break-after:auto;break-after:auto;}
+}
+
+/* ===== footer 規定（CI v2）: 左=© / 右=CONFIDENTIAL+頁。公開資料は CONFIDENTIAL を削除 ===== */
+*{font-variant-ligatures:none;}
+body{counter-reset:page;}
+.slide{counter-increment:page;}
+.slide::before{content:"\00a9 2026 5co. All rights reserved.";position:absolute;left:36px;bottom:14px;
+  font-family:var(--serif-en);font-size:11px;letter-spacing:.08em;color:var(--navy-60);z-index:2;}
+.slide::after{content:"CONFIDENTIAL \30FB " counter(page,decimal-leading-zero);position:absolute;right:36px;bottom:14px;
+  font-family:var(--serif-en);font-size:11px;letter-spacing:.16em;color:var(--navy-60);z-index:2;}
+.slide.reverse::before,.slide.reverse::after{color:rgba(195,215,238,.65);}
+
+</style>
+</head>
+<body>
+
+<!-- ロゴ lockup（マーク＋タグライン一体・currentColor）を symbol 化して全ページで再利用 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lockup" viewBox="0 0 50.857 36.507"><g>
+    <g>
+      <path d="M41.913,17.869c.686-1.558,1.057-3.283,1.057-5.083.037-1.799-.278-5.268-2.43-7.457-1.447-1.465-3.32-1.632-5.194-1.261-3.302.668-4.266,3.024-6.159,5.509-1.762,2.319-3.58,3.191-6.27,3.673-.927.167-2.226.204-3.339-.037-.594-.13-.798.334-.39.779,3.654,3.803,9.813,4.118,12.298,2.69,3.58-2.059,4.044-4.804,7.234-5.305.241-.037.482-.056.686-.074.779.037,1.707.278,1.929,1.002.519,1.818.278,2.82-.167,4.062-.686,1.911-1.336,3.024-2.374,4.044-.464.223-.89-.297-.742-.965.13-.594.575-1.707.371-2.3-.278-.872-1.298-1.076-1.855-.482-1.985,2.133-5.287,4.879-8.384,3.228-.39-.204-.668.167-.427.556.927,1.428,2.096,2.616,3.45,3.32-.352.019-.705.037-1.057.037-.723,0-1.447-.037-2.17-.093-2.282-.761-2.69-2.226-3.302-3.895-.816-2.263-2.597.148-4.879-1.929-.408-.371-.631-.779-1.002-.631-.334.13-.334.556-.13,1.02.612,1.465,1.614,2.745,2.486,3.58.649.612,1.521,1.336,2.486,1.929,0,0,.019,0,.019.019.39.241.798.464,1.187.649.668.315,1.336.556,2.022.723,1.02.297,2.022.427,3.283.427,2.541,0,4.897-.742,6.882-2.022.723-.408,1.465-.983,2.207-1.707.631-.612,1.113-1.28,1.54-1.948.241-.352.464-.742.668-1.113.204-.352.371-.631.464-.946h0Z"/>
+      <path d="M21.527,8.761c1.076-2.374.445-4.619,1.187-6.233-1.261.668-2.078,1.781-2.393,2.17-.965,1.206-1.892,2.708-2.43,4.508-.074.037-.13.056-.204.093-1.28.556-6.808.371-8.31.668-.371.074-.556.167-.742.501-.278.501-1.911,6.845-1.632,7.105,1.762-.148,4.508-.594,5.546,2.022,1.28,3.265-2.523,5.287-5.398,5.435.723.983,2.931.853,4.137.761,2.374-.204,3.84-.649,4.971-1.929,2.245-2.523,1.41-7.865-4.062-8.236-.853-.056-1.632.148-2.486.074.204-.334.482-1.948.556-2.022.464-.39,5.25.111,6.251-.39l1.521-2.282c.074.019.148.019.241,0,1.54-.13,2.541-.686,3.246-2.245h0Z"/>
+      <path d="M20.766,11.562c-.019.167.315.371.612.464,1.243.352,2.393-.167,3.524-.983,1.317-.946,2.319-2.356,2.912-3.599,2.003-4.192,3.636-5.862,8.218-6.01C34.326.414,32.434-.124,30.208.024c-2.838.185-3.84.686-5.008,2.504-.538.835-.761,1.911-1.02,4.415-.278,2.857-1.688,3.895-2.931,4.266-.371.111-.464.148-.482.352h0Z"/>
+    </g>
+    <g>
+      <path d="M2.875,29.922c.031,0,.093.124.093.155,0,.093.062.711.062.742,0,.124-.031.185-.062.185-.062,0-.185-.062-.216-.185-.062-.247-.216-.433-.309-.526-.185-.155-.371-.216-.618-.216-.278,0-.711.247-.711.711,0,.402.309.618.958,1.051,1.051.649,1.113,1.144,1.113,1.515s-.216.835-.68,1.082c-.247.155-.68.278-1.051.278-.526,0-.773-.062-1.113-.185-.062-.031-.185-.155-.216-.216-.062-.247-.124-.556-.124-.835,0-.062.093-.155.124-.155.062,0,.185.155.309.402.247.464.618.711,1.051.711.278,0,.711-.216.711-.649,0-.309-.155-.587-.773-.989-.804-.526-1.206-.927-1.206-1.608,0-.464.247-.804.464-.989.247-.216.587-.34,1.206-.34.371-.062.773.031.989.062Z"/>
+      <path d="M5.781,31.622c.031,0,.124.031.124.093,0-.031.031.216.031.309s-.155.093-.185.093h-.649c-.062,0-.062.031-.062.062v1.453c0,.185.031.278.093.34.062.062.216.124.309.124.062,0,.216-.062.309-.093.062-.031.093-.062.124-.062s.062.062.062.124-.093.185-.124.216c-.185.216-.526.371-.866.371-.309,0-.587-.124-.711-.309-.093-.124-.155-.216-.155-.526,0-.278.031-1.329.031-1.577,0-.062-.124-.093-.278-.155-.062-.031-.093-.093-.093-.155q0-.031.031-.062c.433-.278.68-.433.866-.618.093-.093.124-.155.155-.155.062,0,.155.093.155.155v.371c0,.031.031.062.062.062.185-.031.742-.062.773-.062Z"/>
+      <path d="M6.492,31.87c.309-.093.68-.185.835-.309.093-.062.155-.093.185-.093.062,0,.093.062.093.093,0,.124-.031.278-.031.433,0,0,.031.062.062.031.185-.216.526-.464.742-.464.34,0,.464.216.464.34,0,.031-.031.093-.031.124-.093.124-.34.464-.402.464-.031,0-.124,0-.155-.031-.062-.093-.34-.247-.495-.247-.031,0-.093,0-.124.031-.031.031-.062.062-.062.155,0,.155.031,1.391.031,1.515,0,.247.062.371.155.402.062,0,.216.062.309.093.124.031.155.093.155.124,0,.062-.093.093-.216.093-.247,0-.68-.031-1.113-.031-.124,0-.309.031-.464.031-.093,0-.185-.031-.185-.124,0-.062.124-.093.185-.124.247-.093.278-.185.278-.618v-1.113c0-.155-.031-.278-.062-.309-.093-.093-.278-.247-.278-.278.031-.062.062-.185.124-.185Z"/>
+      <path d="M11.377,31.962c.062.093.155.309.155.649,0,.278-.031,1.144-.031,1.206,0,.155.093.247.247.247.031,0,.185-.062.247-.093h.031c.031.031.031.093.031.124,0,.155-.371.526-.804.526-.216,0-.464-.031-.587-.34,0-.031-.062-.031-.062-.031-.155.093-.433.247-.556.309-.093.031-.216.062-.34.062-.278,0-.587-.34-.587-.773,0-.124.062-.278.124-.371s.216-.155.247-.155c.185-.093.897-.278,1.051-.309.062,0,.093-.093.093-.093,0-.062.031-.464,0-.556,0-.185-.155-.464-.464-.464-.062,0-.155,0-.216.031-.031,0-.031.062-.031.371q0,.031-.031.062c-.031.031-.68.309-.742.309-.031,0-.093-.062-.093-.124,0-.216.155-.402.649-.742.309-.185.68-.278.742-.278.587.031.804.278.927.433ZM10.573,34.095c.031-.031.031-.093.062-.124,0-.062.031-.402.031-.711,0-.031-.031-.062-.031-.062-.093,0-.433.093-.526.185-.093.062-.124.093-.124.309,0,.309.247.495.371.495.031-.031.185-.062.216-.093Z"/>
+      <path d="M14.314,31.622c.031,0,.124.031.124.093,0-.031.031.216.031.309s-.155.093-.185.093h-.649c-.062,0-.062.031-.062.062v1.453c0,.185.031.278.093.34.062.062.216.124.309.124.062,0,.216-.062.309-.093.062-.031.093-.062.124-.062s.062.062.062.124-.093.185-.124.216c-.185.216-.526.371-.866.371-.309,0-.587-.124-.711-.309-.093-.124-.155-.216-.155-.526,0-.278.031-1.329.031-1.577,0-.062-.124-.093-.278-.155-.062-.031-.093-.093-.093-.155q0-.031.031-.062c.433-.278.68-.433.866-.618.093-.093.124-.155.155-.155.062,0,.155.093.155.155v.371c0,.031.031.062.062.062.216-.031.742-.062.773-.062Z"/>
+      <path d="M17.251,31.87c.185.155.309.402.309.649,0,.062-.093.185-.155.185h-1.577c-.031,0-.093.031-.093.062,0,.062-.031.155-.031.278s.062.433.185.618c.185.247.495.34.804.34s.526-.062.649-.247c.031-.031.062-.093.093-.093s.062.062.062.124c0,.031,0,.124-.062.185-.216.34-.556.68-1.237.68-.866,0-1.36-.649-1.36-1.484,0-.587.34-1.175.958-1.484.185-.093.402-.155.618-.155.34.031.649.155.835.34ZM15.736,32.426c0,.031.031.062.062.062h.711c.093,0,.247-.093.247-.278s-.185-.464-.371-.464c-.278,0-.587.34-.649.68Z"/>
+      <path d="M20.25,31.653c.093.031.155.062.185.062.155,0,.711.031.804.062.031,0,.062.062.062.093,0,.124-.155.309-.155.309h-.402c-.031,0-.031.031-.031.062,0,.062.031.155.031.278,0,.402-.155.68-.433.897-.34.247-.773.278-.927.278-.031,0-.247,0-.309-.031h-.093c-.031.031-.093.093-.093.155,0,.124.155.247.278.247.309,0,1.206.031,1.391.062.093,0,.247.062.402.185.185.185.309.433.309.68,0,.618-.495,1.02-.773,1.206-.371.216-.742.309-1.144.309-.433,0-.68-.093-.927-.247s-.402-.433-.402-.68c0-.216.124-.34.247-.433.124-.062.34-.185.464-.247.031,0,.031-.031,0-.062-.062,0-.216-.062-.309-.155-.185-.124-.309-.309-.309-.587,0-.031.031-.093.062-.093.031-.031.495-.309.618-.433,0,0,.031-.062,0-.062-.216-.093-.618-.402-.618-.927,0-.309.155-.618.433-.804.216-.155.556-.278.958-.278.247.031.464.093.68.155ZM20.25,36.043c.216-.124.309-.34.309-.526,0-.124-.031-.247-.124-.34-.124-.124-.216-.155-.433-.185-.278-.031-.371-.031-.773-.031-.124,0-.278.031-.309.093-.124.124-.155.247-.155.402,0,.216.093.371.247.495.185.155.464.216.711.216.093,0,.309-.031.526-.124ZM19.168,31.87c-.124.155-.155.371-.155.618,0,.526.247.958.526.958.062,0,.155-.031.216-.124.093-.093.155-.402.155-.742,0-.093-.062-.464-.155-.618s-.216-.247-.34-.247c-.093.031-.185.093-.247.155Z"/>
+      <path d="M21.703,31.622c.309,0,.587.031.804.031h.618c.062,0,.185.031.185.093s-.031.093-.185.155c-.185.062-.185.124-.124.309.124.371.402,1.051.526,1.298,0,.031.062.031.093,0,.093-.216.433-1.051.495-1.268.062-.155-.031-.247-.278-.34-.093-.031-.155-.093-.155-.124,0-.062.093-.093.185-.093h.433c.124,0,.34-.031.556-.031.093,0,.155.031.155.093s-.093.124-.185.155c-.155.031-.247.155-.371.34-.124.216-.742,1.7-.866,1.979-.216.587-.556,1.391-.804,1.979-.062.185-.34.278-.433.278-.278,0-.433-.247-.433-.433,0-.124.093-.371.34-.371h.371c.062,0,.124-.062.155-.124.062-.124.247-.649.309-.773v-.093c-.031-.031-.093-.216-.124-.309-.185-.464-.742-1.793-.927-2.164-.093-.155-.124-.216-.309-.278-.093-.031-.185-.062-.185-.155-.031-.093.062-.155.155-.155Z"/>
+      <path d="M26.062,34.25c0,.804-.897,1.144-1.082,1.144-.062,0-.155-.031-.155-.093,0-.093.093-.124.155-.155.34-.185.526-.402.526-.618,0-.185-.185-.247-.309-.278-.031,0-.309-.062-.309-.371s.309-.495.526-.495c.309,0,.649.309.649.866Z"/>
+      <path d="M28.319,31.87c.309-.093.68-.185.835-.309.093-.062.155-.093.185-.093.062,0,.093.062.093.093,0,.124-.031.278-.031.433,0,0,.031.062.062.031.185-.216.526-.464.742-.464.34,0,.464.216.464.34,0,.031-.031.093-.031.124-.093.124-.34.464-.402.464-.031,0-.124,0-.155-.031-.062-.093-.34-.247-.495-.247-.031,0-.093,0-.124.031s-.062.062-.062.155c0,.155.031,1.391.031,1.515,0,.247.062.371.155.402.062,0,.216.062.309.093.124.031.155.093.155.124,0,.062-.093.093-.216.093-.247,0-.68-.031-1.113-.031-.124,0-.309.031-.464.031-.093,0-.185-.031-.185-.124,0-.062.124-.093.185-.124.247-.093.278-.185.278-.618v-1.113c0-.155-.031-.278-.062-.309-.093-.093-.278-.247-.278-.278.031-.062.031-.185.124-.185Z"/>
+      <path d="M33.266,31.87c.185.155.309.402.309.649,0,.062-.093.185-.155.185h-1.577c-.031,0-.093.031-.093.062,0,.062-.031.155-.031.278s.062.433.185.618c.185.247.495.34.804.34s.526-.062.649-.247c.031-.031.062-.093.093-.093s.062.062.062.124c0,.031,0,.124-.062.185-.216.34-.556.68-1.237.68-.866,0-1.36-.649-1.36-1.484,0-.587.34-1.175.958-1.484.185-.093.402-.155.618-.155.309.031.618.155.835.34ZM31.751,32.426c0,.031.031.062.062.062h.711c.093,0,.247-.093.247-.278s-.185-.464-.371-.464c-.278,0-.587.34-.649.68Z"/>
+      <path d="M36.11,31.653c.495,0,.866-.062.989-.093.093-.031.216-.031.247-.031.062,0,.093,0,.093.464,0,.68-.031,1.36,0,2.04,0,.247.093.247.216.278.155.062.216.093.216.155s-.124.124-.216.124c-.062,0-.495-.031-.649-.031-.247,0-.526.031-.649.031-.093,0-.216-.031-.216-.124,0-.062.124-.093.216-.155.124-.062.155-.155.155-.278.031-.495.031-1.7.031-1.917,0-.031-.062-.093-.093-.093h-.989s-.062.031-.062.093c0,.155,0,1.762.031,1.886.031.216.062.278.309.34.124.031.155.093.155.124,0,.062-.062.124-.155.124s-.68-.031-.866-.031c-.247,0-.649.031-.742.031s-.155-.062-.155-.093.062-.093.124-.124c.309-.093.309-.216.309-.526v-1.608c0-.031,0-.124-.062-.124-.093,0-.185-.031-.278-.062-.031,0-.093-.031-.093-.093,0-.093.155-.185.34-.278.062-.031.093-.062.093-.124,0-.34.093-.804.278-1.113.155-.34.402-.526.711-.742.309-.185.711-.309,1.051-.309.371,0,.649.124.804.309.062.062.093.155.093.247,0,.185-.309.433-.464.433-.062,0-.185-.062-.278-.155-.155-.185-.495-.433-.711-.433-.185,0-.247.062-.34.155-.093.124-.216.742-.216,1.639,0,.031.062.062.093.062.185,0,.402,0,.68,0Z"/>
+      <path d="M38.676,31.839c.155-.062.526-.185.649-.216.155-.062.247-.124.278-.124s.093.093.093.124v.309c0,.031.062.031.062.031.309-.216.556-.402.897-.402.371,0,.587.185.68.309.155.185.278.495.278.897,0,.155,0,1.237.031,1.36,0,.124.062.185.247.247.155.031.185.062.185.155,0,.062-.062.124-.216.124h-.742c-.185,0-.495.031-.618.031s-.216,0-.216-.124c0-.062.093-.093.185-.124.155-.062.185-.124.216-.371,0-.247.031-1.175.031-1.391,0-.093-.031-.278-.155-.402-.093-.093-.247-.155-.402-.155-.216,0-.309.062-.402.093-.031,0-.062.124-.062.155v1.824c0,.093.031.155.247.216.062.031.124.093.124.124,0,.062-.093.124-.216.124h-.618c-.278,0-.587.031-.711.031s-.216-.062-.216-.124.062-.093.155-.124c.247-.093.278-.124.309-.402.031-.216.031-.773.031-1.515,0-.093-.062-.155-.247-.309-.031-.062-.062-.062-.062-.093.031-.155.124-.247.185-.278Z"/>
+      <path d="M44.767,31.87c.185.155.309.402.309.649,0,.062-.093.185-.155.185h-1.577c-.031,0-.093.031-.093.062,0,.062-.031.155-.031.278s.062.433.185.618c.185.247.495.34.804.34s.526-.062.649-.247c.031-.031.062-.093.093-.093s.062.062.062.124c0,.031,0,.124-.062.185-.216.34-.556.68-1.237.68-.866,0-1.36-.649-1.36-1.484,0-.587.34-1.175.958-1.484.185-.093.402-.155.618-.155.34.031.649.155.835.34ZM43.252,32.426c0,.031.031.062.062.062h.711c.093,0,.247-.093.247-.278s-.185-.464-.371-.464c-.278,0-.587.34-.649.68Z"/>
+      <path d="M47.704,31.591c.031,0,.062-.031.062-.062.031-.247,0-1.144,0-1.329,0-.062,0-.185-.278-.309-.062-.031-.124-.062-.124-.093s.093-.155.124-.155c.216-.031.804-.124,1.02-.216.062-.031.124-.031.155-.031s.062.093.062.155c-.031.216-.062,1.36-.062,2.721v1.298c0,.526.062.618.155.618h.34c.031,0,.031.062.031.062,0,.031-.124.185-.155.185-.216.031-.711.093-.835.155-.185.062-.309.093-.34.093s-.093-.062-.093-.093c0-.062.031-.155.031-.278,0-.031-.062-.062-.062-.062-.216.185-.587.34-.897.34-.402,0-.649-.155-.866-.309-.309-.278-.433-.711-.433-1.051,0-.773.433-1.175.804-1.36.247-.155.68-.278.989-.278.155-.031.247-.031.371,0ZM46.714,32.055c-.216.247-.247.711-.247.897,0,.649.433,1.206.958,1.206.093,0,.185,0,.278-.093.031-.031.093-.216.093-.278,0-.155.031-1.051,0-1.298,0-.031-.062-.216-.124-.309-.216-.247-.433-.34-.587-.34-.062,0-.185.031-.371.216Z"/>
+      <path d="M50.857,34.065c0,.402-.309.587-.556.587s-.526-.185-.526-.587c0-.433.371-.587.556-.587.402,0,.526.402.526.587Z"/>
+    </g>
+  </g></symbol></svg>
+
+<div class="deck">
+
+  <!-- ============ A 表紙（cover-card） ============ -->
+  <section class="slide cover-card">
+    <div class="cc-left"><div class="brand cc-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div></div>
+    <div class="cc-right">
+      <h1>プレゼンタイトルを<br>ここに入れる</h1>
+      <span class="accent-bar"></span>
+      <p class="lead" style="margin:0;">サブタイトル／対象者名</p>
+      <p class="kicker" style="color:var(--navy-60);margin-top:16px;">日付・場面・出席者 ・ 2026-06-03</p>
+      <p class="note" style="margin-top:14px;">アジェンダ項目1 ／ 項目2 ／ 項目3 ／ 項目4</p>
+    </div>
+  </section>
+
+  <!-- ============ B 章扉（section divider・濃紺リバース） ============ -->
+  <section class="slide reverse section-divider"><div class="numfield-cover"></div>
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <p class="sec-no">Section 01</p>
+    <h2>章タイトル＝この章で伝えたいこと</h2>
+    <span class="accent-bar"></span>
+    <p class="lead" style="color:rgba(255,255,255,.85)">この章のねらいを1〜2行で。聞き手が「何を持ち帰ればいいか」を先に示す。</p>
+    <div class="pageno">02</div>
+  </section>
+
+  <!-- ============ C 本文：リード＋KPI ============ -->
+  <section class="slide">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">01 · セクション名</p>
+      <h2>メイン主張を一文で言い切る<span class="accent-bar"></span></h2>
+      <p class="lead">補足リード。主張の前提・狙いを1〜2行で。数字背景は文字に掛けない。</p>
+      <div class="kpi-grid">
+        <div class="card kpi"><div class="kpi-label">指標A</div><div class="kpi-val">133<span>億</span></div><div class="kpi-sub">補足（出典・前提）</div></div>
+        <div class="card kpi em"><div class="kpi-label">指標B（強調）</div><div class="kpi-val">300<span>億</span></div><div class="kpi-sub">.em で濃紺強調</div></div>
+        <div class="card kpi"><div class="kpi-label">指標C</div><div class="kpi-val">2.2<span>%→4%</span></div><div class="kpi-sub">変化を矢印で</div></div>
+        <div class="card kpi em"><div class="kpi-label">指標D（強調）</div><div class="kpi-val">12<span>億</span></div><div class="kpi-sub">補足</div></div>
+      </div>
+      <p class="band"><strong>ポイント：</strong>このバンドで「だから何が言えるか（示唆）」を一文で締める。</p>
+      <div class="ask"><span class="ql">問い ― 相手へ</span>ここで投げかけたい問いを1つ。対話型の資料は問いを各章に置く。</div>
+    </div>
+    <div class="pageno">03</div>
+  </section>
+
+  <!-- ============ D 本文：表 ============ -->
+  <section class="slide">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">02 · 一覧で見せる</p>
+      <h2>表で構造を見せる（強調行は class="me"）<span class="accent-bar"></span></h2>
+      <p class="lead">列は3〜4本まで。見出し行＝水色、注目行＝薄水色（.me）で1行だけ目立たせる。</p>
+      <table>
+        <thead><tr><th>区分</th><th>内容</th><th>数値</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td>項目A</td><td>説明テキスト</td><td>約11億</td><td>補足</td></tr>
+          <tr class="me"><td>項目B（注目）</td><td>最重要の行をここで強調</td><td>約77億</td><td>主戦場</td></tr>
+          <tr><td>項目C</td><td>説明テキスト</td><td>約26億</td><td>補足</td></tr>
+          <tr><td>項目D</td><td>説明テキスト</td><td>約3.5億</td><td>種まき</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="font-size:.85rem;margin-top:10px;">※ 注釈はこの位置に小さく。前提・出典・除外条件を明記。</p>
+    </div>
+    <div class="pageno">04</div>
+  </section>
+
+  <!-- ============ E 本文：比較2カラム ============ -->
+  <section class="slide">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">03 · 現在 vs 目指す姿</p>
+      <h2>AとBの違いを左右で対比<span class="accent-bar"></span></h2>
+      <div class="compare">
+        <div class="card">
+          <span class="c-tag">現在</span>
+          <h3>いまの状態</h3>
+          <div class="c-price">数値・ラベル</div>
+          <ul class="clean">
+            <li>特徴1</li><li>特徴2</li><li>特徴3</li><li>課題となっている点</li>
+          </ul>
+        </div>
+        <div class="card navy">
+          <span class="c-tag">目指す姿</span>
+          <h3>これからの状態</h3>
+          <div class="c-price">数値・ラベル</div>
+          <ul class="clean">
+            <li>変化1</li><li>変化2</li><li>変化3</li><li>得られる価値</li>
+          </ul>
+        </div>
+      </div>
+      <p class="band" style="margin-top:18px;"><strong>転換の核心：</strong>左→右への変化を一文で。比較は「だからどう動くか」に着地させる。</p>
+    </div>
+    <div class="pageno">05</div>
+  </section>
+
+  <!-- ============ F 本文：タイムライン ============ -->
+  <section class="slide powder">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">03 · ロードマップ</p>
+      <h2>時間軸でステップを見せる<span class="accent-bar"></span></h2>
+      <div class="tl" style="margin-top:8px;">
+        <div class="card"><div class="p">2026.06</div><h4>フェーズ1：着手</h4><ul class="clean"><li>やること1</li><li>やること2</li><li>やること3</li></ul></div>
+        <div class="card"><div class="p">2026.07–08</div><h4>フェーズ2：実行</h4><ul class="clean"><li>やること1</li><li>やること2</li><li>やること3</li></ul></div>
+        <div class="card navy"><div class="p" style="color:var(--powder)">2026.09–10</div><h4>フェーズ3：到達/審査</h4><ul class="clean"><li>評価項目1</li><li>評価項目2</li><li>評価項目3</li></ul></div>
+      </div>
+      <div class="ask"><span class="ql">問い ― 相手へ</span>このロードマップに挑戦したいと思えますか？不安・障害があれば率直に。</div>
+    </div>
+    <div class="pageno">06</div>
+  </section>
+
+  <!-- ============ G キーメッセージ（濃紺帯） ============ -->
+  <section class="slide center">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit" style="display:flex;flex-direction:column;justify-content:center;height:100%;">
+      <div class="keymsg">
+        <div class="kl">Key Message</div>
+        <div class="kb">いちばん伝えたい一文を<em>大きく短く</em>。<br>強調語は <em>水色</em> で。3〜4行に収める。</div>
+      </div>
+    </div>
+    <div class="pageno">07</div>
+  </section>
+
+  <!-- ============ H 組織図（現在 → 将来） ============ -->
+  <section class="slide">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">組織図 · 現在 → 12ヶ月後</p>
+      <h2>体制の変化をビフォー／アフターで<span class="accent-bar"></span></h2>
+      <p class="lead">左＝現在、右＝目指す姿。注目チームは .hi（水色）で1つだけ強調。</p>
+      <div class="org-compare">
+        <div class="org">
+          <div class="org-title">現在（2026-06）</div>
+          <div class="node lead">経営 ・ リーダー名</div>
+          <div class="conn"></div>
+          <div class="teams">
+            <div class="tnode">A<small>領域 / 4名</small></div>
+            <div class="tnode hi">B<small>領域 / 5名<br>注目ポジション</small></div>
+            <div class="tnode">C<small>領域 / 0名</small></div>
+            <div class="tnode">D<small>領域 / 2名</small></div>
+          </div>
+          <div class="org-note">現状の課題を1〜2行で（依存・偏り・負荷など）。<strong>太字で論点を立てる。</strong></div>
+        </div>
+        <div class="org-arrow">→</div>
+        <div class="org future">
+          <div class="org-title">12ヶ月後（目指す姿）</div>
+          <div class="node lead">経営 ・ リーダー名</div>
+          <div class="conn"></div>
+          <div class="teams">
+            <div class="tnode">A<small>領域 / 5名</small></div>
+            <div class="tnode hi">B<small>領域 / 8名<br>昇格・拡充</small></div>
+            <div class="tnode">C<small>領域 / 3名</small></div>
+            <div class="tnode">D<small>領域 / 3名</small></div>
+          </div>
+          <div class="org-note"><strong>計19名（新規 8名）</strong>。どう変わり、何が解決するかを1〜2行で。</div>
+        </div>
+      </div>
+    </div>
+    <div class="pageno">08</div>
+  </section>
+
+  <!-- ============ I 対話／傾聴（Listen + memo） ============ -->
+  <section class="slide">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit">
+      <p class="kicker">対話 · 相手に聞く</p>
+      <h2>ここは「聞く」ための時間<span class="accent-bar"></span></h2>
+      <p class="lead"><span class="listen-tag">Listen</span>　面談・1on1 では、話す半分・聞く半分。問いを用意し、その場でメモ。</p>
+      <div class="compare">
+        <div class="card fill"><h3>問いかけ</h3>
+          <ul class="clean">
+            <li>いま最もやりがい・手応えを感じるのは？</li>
+            <li>逆に、いちばん負荷・モヤモヤを感じるのは？</li>
+            <li>この提案について率直にどう思うか？</li>
+            <li>変えてほしいこと・希望は？</li>
+          </ul>
+        </div>
+        <div class="card"><h3>メモ（その場で記入）</h3><div class="memo"></div></div>
+      </div>
+    </div>
+    <div class="pageno">09</div>
+  </section>
+
+  <!-- ============ J 数値ハイライト（大きな数字） ============ -->
+  <section class="slide powder center">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit" style="display:flex;flex-direction:column;justify-content:center;height:100%;">
+      <p class="kicker" style="text-align:center">04 · いちばん見せたい数字</p>
+      <h2 style="text-align:center">この一枚で記憶に残す数字<span class="accent-bar" style="margin:.6em auto 1.2em"></span></h2>
+      <div class="keymsg" style="padding:30px 40px;">
+        <div class="kl">大きな数字（前提つき）</div>
+        <div class="kb"><span class="en" style="font-size:2.8rem;color:var(--powder)">約 5〜7 億円</span><br>数字の意味・前提を1〜2行で。<em>確約ではなく試算</em>であることを明記。</div>
+      </div>
+      <p class="note" style="margin-top:12px;font-size:.9rem;text-align:center;max-width:80%;margin-left:auto;margin-right:auto;">※ 前提・変動要因・確定方法（規程／個別契約等）を必ず注記する。</p>
+    </div>
+    <div class="pageno">10</div>
+  </section>
+
+  <!-- ============ K 名刺見せ（自己完結モックアップ） ============ -->
+  <section class="slide center">
+    <div class="brand corner-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="fit" style="width:100%;">
+      <p class="kicker" style="text-align:center">昇格時 · あなたの名刺</p>
+      <h2 style="text-align:center">未来の名刺を見せる（実物 PNG に差し替え可）<span class="accent-bar" style="margin:.6em auto 1.2em"></span></h2>
+      <div class="meishi-wrap">
+        <div class="meishi front">
+          <div class="m-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+          <div class="m-right">
+            <div class="m-name">姓 名</div>
+            <div class="m-romaji">Sei Mei</div>
+            <div class="m-title">Senior Account Executive</div>
+            <div class="m-co">5 co.</div>
+            <div class="m-contact">T. 090-0000-0000　E. name@5co.ltd<br>〒000-0000 住所</div>
+          </div>
+        </div>
+        <div class="meishi back"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+      </div>
+      <p class="note meishi-cap" style="margin-top:14px;">※ 実物を見せる場合は meishi/cards/&lt;社員名&gt;/ の front/back PNG を &lt;img&gt; で差し替え。</p>
+    </div>
+    <div class="pageno">11</div>
+  </section>
+
+  <!-- ============ L クロージング（裏表紙・濃紺リバース） ============ -->
+  <section class="slide reverse center">
+    <div class="cover-content">
+      <div class="logo" style="color:#C3D7EE;margin-bottom:26px;"><svg viewBox="0 0 50.857 36.507" style="width:150px;"><use href="#lockup"/></svg></div>
+      <h2 style="color:#C3D7EE;">最後の一言・合意・ネクストアクション</h2>
+      <p class="lead" style="color:rgba(255,255,255,.85);max-width:64%;">この資料で何を決めたいかを最後にもう一度。次の一歩を一文で。</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// A4横の各スライドに収まらない .fit は等比縮小（クリップ防止・3色/レイアウトは維持）
+window.addEventListener('load',function(){
+  document.querySelectorAll('.slide').forEach(function(sl){
+    var fit=sl.querySelector('.fit'); if(!fit) return;
+    var cs=getComputedStyle(sl);
+    var availH=sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    if(fit.scrollHeight>availH){ var s=availH/fit.scrollHeight; fit.style.transform='scale('+s.toFixed(4)+')'; fit.style.width=(100/s).toFixed(2)+'%'; }
+  });
+});
+</script>
+</body>
+</html>

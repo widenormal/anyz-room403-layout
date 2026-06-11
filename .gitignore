@@ -7,6 +7,9 @@ node_modules/
 !.env.*.example
 *.secret
 credentials.json
+# op-secrets: 生成された参照テンプレ・解決物は絶対にコミットしない（secrets.map は追跡する）
+op-ref.*
+*.op-ref.env
 .DS_Store
 .claude/settings.local.json
 *.duckdb

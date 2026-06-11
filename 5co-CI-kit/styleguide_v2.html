@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>5co. スライド スタイルガイド v2（CI 2026-06-10）</title>
+<style>
+/* ===== CI v2 トークン ===== */
+:root{
+  --white:#FFFFFF;
+  --ice:  #C3D7EE;   /* PANTONE 2707 C */
+  --ink:  #101820;   /* PANTONE Black 6 C */
+  --ice-55:#DEE9F6;
+  --ice-25:#F0F5FB;
+  --ink-85:rgba(16,24,32,.85);
+  --ink-60:rgba(16,24,32,.60);
+  --ink-14:rgba(16,24,32,.14);
+  --serif-ja:"Hiragino Mincho ProN","Yu Mincho",serif;
+  --serif-en:"EB Garamond","Garamond",Georgia,serif;
+  /* φ タイプスケール（base 18px） */
+  --fs-note:11px; --fs-body:18px; --fs-md:29px; --fs-lg:47px; --fs-xl:76px;
+  --u:29px;        /* ベースライン単位 = body × φ */
+  --m:64px;        /* 基本マージン。上 = m×φ ≈ 104px */
+}
+*{box-sizing:border-box; font-variant-ligatures:none;}
+body{margin:0; background:#E9ECEF; color:var(--ink); font-family:var(--serif-ja);
+     line-height:1.618; letter-spacing:.02em; -webkit-print-color-adjust:exact;}
+.wrap{max-width:1380px; margin:0 auto; padding:24px;}
+h1.page{font-size:24px; letter-spacing:.06em; margin:8px 0 18px;}
+.sec{font-family:var(--serif-en); letter-spacing:.18em; text-transform:uppercase;
+     font-size:13px; color:var(--ink-60); margin:34px 0 10px;}
+
+/* ===== 見本スライド枠 ===== */
+.slide{position:relative; width:1280px; height:720px; margin:0 auto 24px; overflow:hidden;
+       background:var(--white); padding:calc(var(--m)*1.618) var(--m) var(--m);
+       box-shadow:0 1px 8px rgba(16,24,32,.12); transform-origin:top left;}
+.half{width:640px; height:360px; padding:52px 32px 32px; display:inline-block; vertical-align:top; margin:0 12px 12px 0;}
+.slide.pale{background:var(--ice);}
+.slide.dark{background:var(--ink); color:var(--ice);}
+.slide.dark .kicker{color:var(--ice); opacity:.6;}
+
+/* ===== タイポ ===== */
+.t-xl{font-size:var(--fs-xl); line-height:1.15; letter-spacing:.04em; margin:0;}
+.t-lg{font-size:var(--fs-lg); line-height:1.25; letter-spacing:.04em; margin:0;}
+.t-md{font-size:var(--fs-md); line-height:calc(var(--u)*1.5); letter-spacing:.04em; margin:0;}
+.t-body{font-size:var(--fs-body); line-height:var(--u); margin:0;}
+.t-note{font-size:var(--fs-note); color:var(--ink-60); margin:0;}
+.en{font-family:var(--serif-en);}
+.tagline{font-family:var(--serif-en); font-style:italic; letter-spacing:.06em;}
+.kicker{font-family:var(--serif-en); letter-spacing:.18em; text-transform:uppercase;
+        font-size:13px; color:var(--ink-60);}
+
+/* ===== パレット見本 ===== */
+.swatches{display:flex; gap:14px;}
+.sw{width:220px; border:1px solid var(--ink-14); background:var(--white);}
+.sw .chipbox{height:110px;}
+.sw .meta{padding:10px 12px; font-size:12.5px; line-height:1.55;}
+.sw .meta b{font-size:14px; display:block; font-family:var(--serif-en);}
+
+/* ===== 部品 ===== */
+.rule{border:0; border-top:1px solid var(--ink-14); margin:calc(var(--u)/2) 0;}
+.grid-demo{position:absolute; inset:0; pointer-events:none;}
+.grid-demo .gl{position:absolute; top:0; bottom:0; width:1px; background:rgba(200,60,60,.45);}
+.baseline{position:absolute; left:0; right:0; height:1px; background:rgba(16,24,32,.07);}
+.lockup{display:flex; flex-direction:column; align-items:center; gap:10px;}
+.mark{width:96px; height:68px; border:1.5px solid currentColor; border-radius:50% 50% 50% 8px;
+      display:flex; align-items:center; justify-content:center; font-family:var(--serif-en); font-size:34px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="page">5co. スライド スタイルガイド v2 — CI 2026-06-10（PANTONE Black 6 C × 2707 C）</h1>
+
+  <div class="sec">1. Palette — 2色＋白（濃淡はティント/不透明度のみ・グレー#000禁止）</div>
+  <div class="swatches">
+    <div class="sw"><div class="chipbox" style="background:var(--ink)"></div>
+      <div class="meta"><b>--ink #101820</b>PANTONE Black 6 C<br>文字・ロゴ・ダーク地（リッチブラック）</div></div>
+    <div class="sw"><div class="chipbox" style="background:var(--ice)"></div>
+      <div class="meta"><b>--ice #C3D7EE</b>PANTONE 2707 C<br>淡青地・アクセント（H≈211°）</div></div>
+    <div class="sw"><div class="chipbox" style="background:var(--ice-55)"></div>
+      <div class="meta"><b>--ice-55 #DEE9F6</b>2707C 55%ティント<br>薄帯・カード地</div></div>
+    <div class="sw"><div class="chipbox" style="background:var(--ice-25)"></div>
+      <div class="meta"><b>--ice-25 #F0F5FB</b>2707C 25%ティント<br>ごく薄い面</div></div>
+    <div class="sw"><div class="chipbox" style="background:var(--white); border-bottom:1px solid var(--ink-14)"></div>
+      <div class="meta"><b>--white #FFFFFF</b>紙白<br>基本地・抜き</div></div>
+  </div>
+
+  <div class="sec">2. Type Scale — φ(1.618) ラダー（base 18px）／リガチャ無効</div>
+  <div style="background:var(--white); border:1px solid var(--ink-14); padding:26px 30px;">
+    <p class="t-xl en">76 Aa 5co.</p>
+    <p class="t-lg">47 見出し 大 — Strategy, refined.</p>
+    <p class="t-md">29 見出し 中 — 水晶玉で市場を透視する</p>
+    <p class="t-body">18 本文 — 行送りは u=29px（=18×φ）のベースライングリッドに乗せる。Officer の ffi も分離。</p>
+    <p class="t-note">11 注記 — 機微情報の但し書き・出典など（--ink-60）</p>
+  </div>
+
+  <div class="sec">3. Surfaces — 3モード（White / Pale / Dark）と面ごとのロゴ色</div>
+  <div>
+    <section class="slide half" style="background:var(--white)">
+      <p class="kicker">White face</p>
+      <p class="t-md">本文スライドの基本</p>
+      <p class="t-body" style="margin-top:14px">地=白／文字・ロゴ= ink。数字モチーフは使わない（プレーン）。</p>
+      <div class="lockup" style="position:absolute; right:36px; bottom:28px; color:var(--ink)">
+        <div class="mark">5</div><span class="tagline" style="font-size:14px">Strategy, refined.</span>
+      </div>
+    </section>
+    <section class="slide half pale">
+      <p class="kicker" style="color:var(--ink-60)">Pale face（名刺表面と同型）</p>
+      <p class="t-md">表紙・リード・引用</p>
+      <p class="t-body" style="margin-top:14px">地= ice ベタ／文字・ロゴ= ink。リッツの淡青ステーショナリーの文法。</p>
+      <div class="lockup" style="position:absolute; right:36px; bottom:28px; color:var(--ink)">
+        <div class="mark">5</div><span class="tagline" style="font-size:14px">Strategy, refined.</span>
+      </div>
+    </section>
+    <section class="slide half dark">
+      <p class="kicker">Dark face（名刺裏面と同型）</p>
+      <p class="t-md" style="color:var(--ice)">章扉・キーメッセージ</p>
+      <p class="t-body" style="margin-top:14px; color:var(--ice)">地= ink ベタ／文字・ロゴ= <b>ice</b>（白抜きは使わない）。表裏の完全な色反転。</p>
+      <div class="lockup" style="position:absolute; right:36px; bottom:28px; color:var(--ice)">
+        <div class="mark">5</div><span class="tagline" style="font-size:14px">Strategy, refined.</span>
+      </div>
+    </section>
+    <section class="slide half" style="background:var(--white)">
+      <p class="kicker">Margins & Grid</p>
+      <p class="t-body" style="margin-top:10px">左右・下= m(64px)／<b>上= m×φ(≈104px)</b><br>
+      黄金分割カラム: x = W−W/φ<br>ブロック間隔は u(29px) の整数/半整数倍<br>
+      底はベースラインで厳密に・天はハングライン</p>
+      <div class="grid-demo"><div class="gl" style="left:38.2%"></div></div>
+      <p class="t-note" style="position:absolute; left:39%; bottom:12px; color:rgba(200,60,60,.8)">← 黄金分割線（38.2%）</p>
+    </section>
+  </div>
+
+  <div class="sec">4. Do / Don't（要旨）</div>
+  <div style="background:var(--white); border:1px solid var(--ink-14); padding:20px 26px; font-size:14.5px; line-height:1.9;">
+    ✅ 余白で語る・1スライド1メッセージ ／ ✅ 濃淡は ice/ink のティント ／ ✅ Dark面の文字は ice ／ ✅ 数字モチーフは表紙・章扉のみ<br>
+    ❌ グレー・#000・新色相 ❌ Dark面の白文字 ❌ 本文への全面数字背景 ❌ 場当たりの margin（u 単位以外） ❌ ロックアップの分離・比率変更
+  </div>
+
+  <p class="t-note" style="margin-top:22px">正: slide/SLIDE_DESIGN_GUIDELINES.md ／ 根拠: memory/decisions.md 2026-06-10 ／ ロックアップ v2 SVG 差し替えまでは枠内の「5」マークはプレースホルダ表示</p>
+</div>
+</body>
+</html>
