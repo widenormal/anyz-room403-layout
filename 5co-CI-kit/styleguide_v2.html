@@ -15,7 +15,7 @@
   --ink-60:rgba(16,24,32,.60);
   --ink-14:rgba(16,24,32,.14);
   --serif-ja:"Hiragino Mincho ProN","Yu Mincho",serif;
-  --serif-en:"EB Garamond","Garamond",Georgia,serif;
+  --serif-en:"Garamond Premier Pro","EB Garamond","Hiragino Mincho ProN","Yu Mincho",serif;
   /* φ タイプスケール（base 18px） */
   --fs-note:11px; --fs-body:18px; --fs-md:29px; --fs-lg:47px; --fs-xl:76px;
   --u:29px;        /* ベースライン単位 = body × φ */
@@ -64,6 +64,7 @@ h1.page{font-size:24px; letter-spacing:.06em; margin:8px 0 18px;}
 .lockup{display:flex; flex-direction:column; align-items:center; gap:10px;}
 .mark{width:96px; height:68px; border:1.5px solid currentColor; border-radius:50% 50% 50% 8px;
       display:flex; align-items:center; justify-content:center; font-family:var(--serif-en); font-size:34px;}
+table, th, td, .t-num, .kpi-val, .big, .med {font-variant-numeric: lining-nums tabular-nums;}
 </style>
 </head>
 <body>
@@ -106,7 +107,7 @@ h1.page{font-size:24px; letter-spacing:.06em; margin:8px 0 18px;}
     <section class="slide half pale">
       <p class="kicker" style="color:var(--ink-60)">Pale face（名刺表面と同型）</p>
       <p class="t-md">表紙・リード・引用</p>
-      <p class="t-body" style="margin-top:14px">地= ice ベタ／文字・ロゴ= ink。リッツの淡青ステーショナリーの文法。</p>
+      <p class="t-body" style="margin-top:14px">地= ice ベタ／文字・ロゴ= ink。淡青ステーショナリーの文法。</p>
       <div class="lockup" style="position:absolute; right:36px; bottom:28px; color:var(--ink)">
         <div class="mark">5</div><span class="tagline" style="font-size:14px">Strategy, refined.</span>
       </div>

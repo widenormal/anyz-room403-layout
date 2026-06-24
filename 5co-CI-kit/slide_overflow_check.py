@@ -14,11 +14,18 @@ PROBE = """
 <script>
 window.addEventListener('load', () => {
   const out = [];
+  const logo = [];
   document.querySelectorAll('.slide').forEach((s, i) => {
     const over = s.scrollHeight - s.clientHeight;
     if (over > 2) out.push((i + 1) + ':+' + over + 'px');
+    // 隅ロゴ幅ガード: 正準=64px。表紙(cover)の cf-logo は除外。
+    const lg = s.querySelector('svg.corner, .corner-logo, .hd, svg.cc-logo, .lockup');
+    if (lg && !s.matches('.cover-full, .cover-card')) {
+      const w = Math.round(lg.getBoundingClientRect().width);
+      if (w > 72) logo.push((i + 1) + ':' + w + 'px');
+    }
   });
-  document.title = 'OVERFLOW_REPORT[' + out.join(',') + ']';
+  document.title = 'OVERFLOW_REPORT[' + out.join(',') + ']!LOGO_REPORT[' + logo.join(',') + ']';
 });
 </script>
 """
@@ -37,7 +44,24 @@ def check(path: pathlib.Path) -> str:
         m = re.search(r'OVERFLOW_REPORT\[([^\]]*)\]', r.stdout)
         if not m:
             return 'ERROR: report not found'
-        return 'OVERFLOW ' + m.group(1) if m.group(1) else 'OK'
+        lm = re.search(r'LOGO_REPORT\[([^\]]*)\]', r.stdout)
+        msgs = []
+        if m.group(1):
+            msgs.append('OVERFLOW ' + m.group(1))
+        if lm and lm.group(1):
+            msgs.append('LOGO>64px ' + lm.group(1))  # 隅ロゴ過大（正準64px）
+        # <title> がファイル名の主題と無関係＝head 流用時の更新漏れを検出
+        tm = re.search(r'<title>(.*?)</title>', html, re.S)
+        if tm:
+            title = tm.group(1).strip()
+            if '__DOC_TITLE__' in title:
+                msgs.append('TITLE? <title> がテンプレ未置換（__DOC_TITLE__ のまま）')
+            STOP = {'スライド', 'シート', '資料', 'さん', 'ため', 'こと', '全社', '共有', '版'}
+            ftoks = set(re.findall(r'[一-龥ぁ-んァ-ヶ]{2,}', re.sub(r'\d{6,8}', '', path.stem))) - STOP
+            ttoks = set(re.findall(r'[一-龥ぁ-んァ-ヶ]{2,}', title)) - STOP
+            if title and ftoks and not (ftoks & ttoks):
+                msgs.append(f'TITLE? <title>「{title[:24]}」がファイル名と不一致（テンプレ流用の更新漏れ?）')
+        return ' / '.join(msgs) if msgs else 'OK'
     finally:
         tmp.unlink(missing_ok=True)
 

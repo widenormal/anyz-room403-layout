@@ -17,7 +17,7 @@
 
   /* ---- フォント ---- */
   --serif-ja: "Hiragino Mincho ProN","Yu Mincho",serif;
-  --serif-en: "EB Garamond","Garamond",Georgia,serif;
+  --serif-en: "Garamond Premier Pro","EB Garamond","Hiragino Mincho ProN","Yu Mincho",serif;
 }
 
 /* ---- ベース ---- */
@@ -79,3 +79,6 @@ th,td{ padding:.5em .8em; border-bottom:1px solid var(--navy-14); }
 /* ---- 数字モチーフ（任意・うっすら）---- */
 .numfield{ position:absolute; inset:0; pointer-events:none; color:var(--powder-35); }
 .numfield svg, .numfield text{ fill:currentColor; }
+
+/* 数字＝ライニング+タブラー必須（CI v2・2026-06-11規定） */
+table, th, td, .t-num, .kpi-val, .big, .med { font-variant-numeric: lining-nums tabular-nums; }

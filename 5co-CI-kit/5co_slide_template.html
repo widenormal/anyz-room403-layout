@@ -2,8 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii05LjM1IC0yLjMyIDYyLjMgNjIuMyIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8cGF0aCBmaWxsPSIjMTAxODIwIiBkPSJNNDMuNi4yNGwtNi42NCwxMS40OWMtMy4zMywxLjY4LTIzLjY2LjE3LTI1LjIzLDEuNDQtLjI4LjIzLTEuOTUsNi4zNy0yLjY0LDcuNDgsMi44NC4yOCw1LjQzLS4zMSw4LjI3LS4yNCwyNy43Ny41OSwyNS4zMywzNC43Ny0yLDM3LjA0LTMuOTkuMzMtMTEuMzYuNzUtMTMuNzgtMi41Miw5LjYtLjQ2LDIxLjMtOC4xNSwxNy0xOUMxNS4xMywyNy4yMiw1Ljk4LDI4LjY1LjEsMjkuMTdjLS45MS0uOSw0LjUxLTIyLjAxLDUuNDUtMjMuNjguNjItMS4xLDEuMjctMS40NSwyLjQ5LTEuNjgsNC45OS0uOTUsMjUuNDUtLjQ0LDI5Ljc0LTIuMzMsMS45My0uODUsMy41OS0xLjk4LDUuODItMS4yNFoiLz4KPC9zdmc+Cg==">
 <meta name="viewport" content="width=1280, initial-scale=1">
-<title>5 co. スライド・テンプレート一式（CI準拠）</title>
+<title>__DOC_TITLE__（例：◯◯資料｜5co. CIスライド）</title>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <!--
 ==================================================================================
@@ -13,18 +14,18 @@
     1) このファイルを複製して中身（文言・数値）だけ差し替える。
     2) 1スライド＝1つの <section class="slide ..."> 。要る型をコピペして並べるだけ。
     3) Chrome で開き「印刷 → PDFに保存（用紙=A4横・余白=なし・背景グラフィックON）」で配布用PDF。
-    4) 配色は3色のみ（白 #FFFFFF／水色 #C3D7EE＝PANTONE 545C／濃紺 #101820＝PANTONE 282C）。
+    4) 配色は3色のみ（白 #FFFFFF／水色 #C3D7EE＝PANTONE 2707 C（クリスタル・ブルー）／濃紺 #101820＝リッチブラック CMYK(89.5/83.7/73.8/62.8)）。
        グレー・黒#000・他色相は使わない。濃淡は不透明度か白混ぜ（--powder-pale 等）で。
     5) 数字背景・ロゴは触らない（assets/ を参照）。文言には数字背景を掛けない＝可読性最優先。
 
   ■ スライド型（このファイル内のサンプル順）
-    A 表紙(cover-card)  B 章扉(section)  C リード＋KPI  D 表  E 比較2カラム
+    A 表紙(cover-card)  A2 表紙(cover-full=全面crystal+numfieldヌキ)  B 章扉(section)  C リード＋KPI  D 表  E 比較2カラム
     F タイムライン  G キーメッセージ  H 組織図(現在→将来)  I 対話/傾聴(Listen+memo)
     J 数値ハイライト  K 名刺見せ  L クロージング(裏表紙)
 
   ■ クラス早見
     .slide … 本文はプレーン（数字背景なし=CI v2）   .powder=淡水色地  .center=中央寄せ
-    章扉の数字背景は <div class="numfield-cover"> を section 先頭に置く  .reverse=ダーク地（文字=ice）
+    章扉の数字背景は <div class="numfield-cover"> を section 先頭に置く  .reverse=ダーク地（文字=crystal）
     .kicker / h2 + .accent-bar / .lead … 見出しの定石
     .kpi-grid>.card.kpi(.em) … 数値4枚（.em=濃紺強調）
     .compare>.card(.navy) … 2カラム比較（.navy=濃紺カード）
@@ -34,12 +35,12 @@
 <style>
 /* ===== 5co CI theme（ci-theme.css をインライン） ===== */
 :root{
-  --white:#FFFFFF; --powder:#C3D7EE; /*水色 PANTONE 545C*/ --navy:#101820; /*濃紺 PANTONE 282C*/
-  --powder-pale:#DEE9F6; --powder-soft:#D5E3F3;
+  --white:#FFFFFF; --powder:#C3D7EE; /*水色 PANTONE 2707 C（クリスタル・ブルー）*/ --navy:#101820; /*濃紺 リッチブラック CMYK(89.5/83.7/73.8/62.8)*/
+  --powder-pale:#DEE9F6; --powder-soft:#C3D7EE;
   --navy-85:rgba(16,24,32,.85); --navy-60:rgba(16,24,32,.60); --navy-14:rgba(16,24,32,.14);
   --powder-35:rgba(195,215,238,.35);
   --serif-ja:"Hiragino Mincho ProN","Yu Mincho",serif;
-  --serif-en:"EB Garamond","Garamond",Georgia,serif;
+  --serif-en:"Garamond Premier Pro","EB Garamond","Hiragino Mincho ProN","Yu Mincho",serif;
 }
 *{box-sizing:border-box;}
 html{font-size:19px;}
@@ -73,7 +74,7 @@ body{background:var(--powder-pale);}
 .deck{display:flex;flex-direction:column;align-items:center;gap:32px;padding:32px 0;}
 .slide{box-shadow:0 8px 40px rgba(16,24,32,.14);}
 .slide .fit{transform-origin:top left;width:100%;}
-.corner-logo{position:absolute;top:44px;right:64px;width:104px;color:var(--navy);z-index:3;}
+.corner-logo{position:absolute;top:30px;right:36px;width:64px;color:var(--navy);z-index:3;}
 .slide.reverse .corner-logo,.slide.powder-strong .corner-logo{color:var(--powder);}
 .brand svg{width:100%;height:auto;display:block;fill:currentColor;}
 
@@ -84,6 +85,16 @@ body{background:var(--powder-pale);}
 /* ===== 数字背景（外部SVG・3色のみ・うっすら） ===== */
 .numfield-cover{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url("assets/numfield_slide_16x9.svg");background-size:cover;background-position:center;background-repeat:no-repeat;}
 .slide > .fit, .slide > .cover-content{position:relative;z-index:1;}
+
+
+/* ===== A2 表紙（cover-full：全面crystal＋numfieldヌキ。2026-06-11確立） ===== */
+.cover-full{background:var(--powder);padding:0;}
+.cover-full .numfield-full{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:url("assets/numfield_allover_nuki.svg");background-size:cover;background-position:center;opacity:.75;}
+.cover-full .cf-logo{position:absolute;left:18mm;top:22mm;width:32mm;color:var(--navy);z-index:1;}
+.cover-full .cf-logo svg{width:100%;height:auto;display:block;}
+.cover-full .cf-block{position:absolute;left:18mm;bottom:32mm;z-index:1;}
+.cover-full .cf-block h1{font-size:2.4rem;margin:.4em 0 .6em;}
 
 /* ===== A 表紙：名刺 表面と同じトンマナ（左=ロゴ＋数字／右=明朝の情報） ===== */
 .cover-card{display:flex;align-items:center;padding:0;background:var(--powder);}
@@ -193,6 +204,7 @@ body{counter-reset:page;}
   font-family:var(--serif-en);font-size:11px;letter-spacing:.16em;color:var(--navy-60);z-index:2;}
 .slide.reverse::before,.slide.reverse::after{color:rgba(195,215,238,.65);}
 
+table, th, td, .t-num, .kpi-val, .big, .med {font-variant-numeric: lining-nums tabular-nums;}
 </style>
 </head>
 <body>
@@ -237,6 +249,18 @@ body{counter-reset:page;}
       <p class="note" style="margin-top:14px;">アジェンダ項目1 ／ 項目2 ／ 項目3 ／ 項目4</p>
     </div>
   </section>
+
+  <!-- ============ A2 表紙（cover-full：全面crystal＋numfieldヌキ） ============ -->
+  <section class="slide cover-full">
+    <div class="numfield-full"></div>
+    <div class="cf-logo"><svg viewBox="0 0 50.857 36.507"><use href="#lockup"/></svg></div>
+    <div class="cf-block">
+      <p class="kicker">KICKER / CATEGORY</p>
+      <h1>プレゼンタイトルを<br>ここに入れる</h1>
+      <p class="lead" style="margin:0;">サブタイトル ・ 2026年6月</p>
+    </div>
+  </section>
+
 
   <!-- ============ B 章扉（section divider・濃紺リバース） ============ -->
   <section class="slide reverse section-divider"><div class="numfield-cover"></div>
