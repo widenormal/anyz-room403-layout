@@ -18,35 +18,44 @@
 2. 要る**スライド型 `<section class="slide ...">` をコピペ**して並べ、中の文言・数値を差し替える。
 3. Chrome で開く → **印刷 → PDFに保存**（用紙=**A4横**・余白=**なし**・**背景のグラフィック=ON**）。
 4. 仕上げに「3色以外を使っていないか」を自己チェック。
+5. **検査（必須）**: `slide_overflow_check.py`（はみ出し・隅ロゴ・3色）＋
+   `slide_visual_regression.py`（正本との計算済みスタイル/構造の乖離検出）。
+   テンプレ正本そのものを意図的に変えた場合のみ `--update-baseline` で基準を更新。
 
-## スライド型（12種）
-| 記号 | 型 | 主クラス | 用途 |
-|---|---|---|---|
-| A | 表紙 | `slide cover-card` | タイトル・対象者・アジェンダ |
-| B | 章扉 | `slide numbg-cover reverse section-divider` | セクション区切り |
-| C | リード＋KPI | `slide numbg-content` ＋ `kpi-grid` | 主張＋数値4枚 |
-| D | 表 | `slide numbg-content` ＋ `table`（`tr.me`で強調） | 一覧・構造 |
-| E | 比較2カラム | `compare` ＋ `card`/`card navy` | 現在 vs 目指す姿 |
-| F | タイムライン | `tl`（3カラム） | ロードマップ |
-| G | キーメッセージ | `keymsg` | 一文を大きく |
-| H | 組織図 | `org-compare` | 体制ビフォー/アフター |
-| I | 対話・傾聴 | `listen-tag` ＋ `memo` | 問い＋その場メモ |
-| J | 数値ハイライト | `keymsg`＋大数字 | 記憶に残す数字 |
-| K | 名刺見せ | `meishi`（または実物PNGを`<img>`） | 昇格時の名刺 |
-| L | クロージング | `slide reverse center` | 裏表紙・締め |
+## このテンプレの成り立ち（重要）
 
-## 配色ルール（厳守・3色のみ）
-- 白 `#FFFFFF`／アイスブルー `#C3D7EE`（PANTONE 2707 C）／リッチブラック `#101820`（PANTONE Black 6 C）。
-- 文字・ロゴ＝濃紺、地・面・アクセント＝水色/白。**グレー・黒#000・他色相は禁止**。
-- 濃淡は不透明度か白混ぜ（`--powder-pale` `--navy-60` 等の用意済み変数）で。
-- 強調は `.em`（濃紺カード）・`.navy`（濃紺）・`.me`（薄水色行）・水色の差し色バー。
+`5co_slide_template.html` は **CI v2 正本デッキ（週次レポート）をそのまま複製し、ダミー文/
+サンプル値に差し替えた**正本テンプレ。CSS・レイアウト・スライド構造は正本とバイト一致で、
+**文言・数値は汎用ダミー**（`顧客名`・`X.XX億`・`NN%`・`YYYY年MM月DD日`・`ブランドA`・`EM-1` 等）、
+**顧客ロゴは `.logo-slot`（ブランク枠／"CLIENT LOGO"）** に置換済み。ブランド名・実数・個人情報
+など機密は完全除去（grep 検証済み）。＝「CSSを再構築しない」ので正本との乖離が原理的に起きない。
+隅ロゴ（本文右上）は **64px**、OKR/表ページの罫線は既定値で確定済み。
 
-## よく使う小ワザ
-- **濃紺カードで強調**: `<div class="card kpi em">`／`<div class="card navy">`
-- **表の注目1行**: `<tr class="me">`
-- **問い・傾聴**: `<div class="ask">` ／ `<div class="memo">`（記入欄）
-- **長くて入り切らない本文**: `.fit` で自動縮小されるが、まず文を削る（詰め込みより余白）。
-- **実物名刺を見せる**: `meishi/cards/<社員名>/<key>_front.png` を `<img>` で K 型に差し込む。
+## 構成（正本 V1 と同じ14スライド）
+
+表紙(`slide cover-full`)／本文(`slide`：KPIツリー・ドリルダウン表 等)／章扉(`slide cover-full pd-divider`)／
+サマリ(`slide dark`)／付録扉(`slide dark divider`) 等、**正本の型をそのまま**使う。
+利用可能クラス: `.slide`(`.pale`/`.pale-strong`/`.dark`/`.center`)・`.t-xl…t-note`・`.kicker`・
+`.accent-bar`・`.lead`・`h2.title`・`table`(`.hl`/`.num`)・`.kpis>.kpi`・`.cols`・`.tag`・`.bars` ほか。
+
+## 埋め方
+
+1. `.logo-slot`（"CLIENT LOGO" ブランク枠）に**顧客ロゴ**を差し込む（`<img>` 等）。5co ロックアップ（隅・64px）は既定で入っている。
+2. ダミー文/サンプル値（`顧客名`・`X.XX億`・`NN%`・`ブランドA` 等）を実際の**文言・数値**に置き換える（型・レイアウトは触らない）。
+3. 不要なスライド `<section>` は削除、足りなければ既存型を**コピペして複製**。
+
+## 配色ルール（厳守・3色のみ／CI v2）
+- 白 `#FFFFFF`／crystal `#C3D7EE`（DIC 576 アミ40%）／ink `#101820`（リッチブラック）。
+- 文字・ロゴ＝ink、地・面・アクセント＝crystal/白。**グレー・黒#000・他色相は禁止**。
+- 濃淡は不透明度か白混ぜ（`--crystal-25`=#F0F5FB／`--crystal-55`=#DEE9F6／`--ink-60` 等）。
+- 強調は `.hl`（薄 crystal 行）・`.dark`（ink 面）・`.tag`（crystal チップ）・`.accent-bar`。
+
+## よく使う小ワザ（CI v2）
+- **ink 面で強調**: `<section class="slide dark">`（文字＝crystal）。
+- **表の注目行**: その行の各 `<td class="hl">`（`tr` のゼブラより優先）。数値列は `<td class="num">`。
+- **メモ欄**: `<div class="memo">`（その場記入）。
+- **φタイポ**: `.t-xl/.t-lg/.t-md/.t-body/.t-note`、本文見出しは `h2.title`（22px）。
+- **実物名刺を見せる**: K 型の `<svg>` ロゴを実物 PNG の `<img>` に差し替え可。
 
 ## 機微情報の注意（人事系デッキ）
 - 処遇・グレード・生涯賃金などは**サンプル雛形には実数を入れない**。実数版は KR-1A の所定フォルダで作る。

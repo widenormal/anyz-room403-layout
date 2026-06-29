@@ -1,0 +1,38 @@
+{
+  "_comment": "週次定例デッキ ビルド設定。config.json にコピーして自分の環境・顧客に合わせて書き換える。config.json は .gitignore 済(実IDを共有リポにコミットしない)。",
+
+  "client_name": "顧客名",
+  "client_kicker": "顧客名. ｜ Amazon Retail",
+
+  "_ci_note": "CI基盤はスキル同梱の ci_base_sample.html(SLIDE.md準拠・--ink/--crystal・numfield内蔵・lockup=lk)。スキルが自己完結するためどのクライアント・どの環境でも動く。旧名 --navy/--powder は使わない。",
+  "ci_base_html": "./assets/ci_base_sample.html",
+  "lockup_symbol_id": "lk",
+
+  "client_logo": "./assets/client_logo_placeholder.svg",
+  "_numfield_note": "表紙の数字フィールドは sample.html が内蔵するため空でよい。内蔵しない基盤を使う場合のみ numfield SVG のパスを入れると data URI 埋込される。",
+  "numfield_svg": "",
+
+  "_data_note": "実運用では extract_deck_data.py が出す JSON を data.* に指定。未指定なら sample_data.py のダミーで14枚生成。",
+  "data": {
+    "skyu_full": "",
+    "deck_data": "",
+    "lavon": ""
+  },
+
+  "spreadsheet_id": "REPLACE_WITH_SOURCE_SPREADSHEET_ID",
+  "oauth_token": "~/oauth_token.json",
+  "ranges": {
+    "全体サマリ": "'[資料用]全体サマリ'!A1:P40",
+    "S級_週次": "'[資料用]S級_週次'!A7:N75",
+    "エマージング": "'[資料用]エマージング'!A1:R45",
+    "エマージング_シリーズ": "'[資料用]エマージング_シリーズ'!A1:R45",
+    "DSP": "'[資料用]DSP'!A1:AB40",
+    "SA": "'[資料用]SA'!A1:AB40"
+  },
+
+  "extract_out": "/tmp/deck_data.json",
+  "output_html": "./output/週次デッキ.html",
+  "output_pdf": "./output/週次デッキ.pdf",
+
+  "period_text": "日進捗 <b>NN%</b> ・ 集計期間 YYYY-MM-DD〜MM-DD"
+}
