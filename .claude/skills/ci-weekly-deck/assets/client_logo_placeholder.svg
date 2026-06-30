@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 顧客ロゴ枠(プレースホルダー)。各顧客のロゴ(透過PNG/SVG)に差し替えて使う。
+     config.json の client_logo をその実ファイルへ向ける。配色はCI(白地・紺#101820・水色#C3D7EE)。 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="240" height="64">
+  <rect x="1" y="1" width="238" height="62" rx="6" fill="#FFFFFF" stroke="#101820"
+        stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="14" y="22" width="20" height="20" rx="3" fill="#C3D7EE"/>
+  <text x="44" y="30" font-family="Garamond, 'Times New Roman', serif" font-size="15"
+        letter-spacing="0.06em" fill="#101820">CLIENT LOGO</text>
+  <text x="44" y="47" font-family="'Hiragino Mincho ProN', serif" font-size="11"
+        fill="#101820" opacity="0.6">顧客ロゴをここに差し替え</text>
+</svg>

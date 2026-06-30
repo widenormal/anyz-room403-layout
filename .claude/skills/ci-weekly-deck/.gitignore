@@ -1,0 +1,9 @@
+# 実環境固有・機密（コミットしない）
+config.json
+deck_data.json
+*.local.json
+output/
+# 実顧客ロゴ（プレースホルダーのみ追跡）
+assets/*
+!assets/client_logo_placeholder.svg
+!assets/ci_base_sample.html
