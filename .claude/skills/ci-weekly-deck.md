@@ -22,6 +22,7 @@
 | `scripts/build_deck.py` | worked sample【フル忠実版・14枚】。本文領域を実値に差し替えて使う。 |
 | `config.example.json` | 設定雛形。`config.json` にコピー（git管理外）。 |
 | `assets/client_logo_placeholder.svg` | 顧客ロゴ枠（各顧客ロゴに差し替え）。 |
+| `assets/shoken_draft_template.md` | Step 1.5 所見MDドラフト雛形（実値差し替え前の内容確認用）。 |
 | `README.md` | キット詳細。 |
 
 デッキは元の制作デッキと同じ**14枚構成**（表紙／OKR／S級ドリル／エマージング／PD章扉／PD目標／DSP／SA／まとめ／補助章扉／SAファネル／香調別月別／競合ベンチ／全ブランド一覧）。
@@ -74,6 +75,19 @@ python3 scripts/extract_deck_data.py   # → deck_data.json（FORMATTED_VALUE）
 - **原本シートはコピー不可**（外部コネクタ依存で値が壊れる）。ライブ範囲読みのみ。
 - 香調別月次など別ソースがある場合は `ranges` に追加するか、別JSONを用意する。
 
+### 1.5 所見MDドラフト確認（実値差し替え前・必須）
+
+データ抽出が済んだら、**HTMLに書き込む前に「所見・ナラティブ」を MD で提示してユーザー承認を取る**。
+これは MD→HTML→PPTX フローの「コンテンツ(中身)の最終確認ポイント」を定例エンジンに移植したもの。
+高コストな HTML 生成・差し替えに進む前に、軽い MD 段階で論旨を確定させ手戻りを断つ。
+
+- 雛形：`ci-weekly-deck/assets/shoken_draft_template.md` を作業フォルダにコピーして埋める。
+- 各スライドの **数値ハイライト＋所見（SMART：目標対比/前年対比の実数＋期限）＋次の打ち手** を箇条書きで。
+- POS等の最高機密の生データ・ASIN・個別売上は載せない（**集約値のみ**／機密ルール準拠）。
+- ユーザーが OK したドラフトの所見を、Step 2 の「顧客ごとに書き換える領域」へそのまま反映する。
+
+> 図の型に迷うスライドは、このタイミングで `framework-recommend` を併用（内容に合う図＋発見枠）。
+
 ### 2. 生成
 
 ```bash
@@ -100,10 +114,26 @@ python3 ../../../5co-CI-kit/slide_overflow_check.py output/週次デッキ.html
 原本（前提資料・前週デッキ・PPT）との **数値差異** を Codex 等で確認してから共有する。
 逆転（実績＞着地見込 等）や参照ズレは取消線＋「要確認」で明示し、確定前に担当へ確認する。
 
+### 3.5 PPTX出力（任意・追加出力）
+
+既定の配布形式は **PDF / Googleスライド** のまま。PowerPoint 形式が要る相手には、Step 2 で出した
+**A4横PDF** をそのまま画像ベース PPTX に変換できる（CI完全忠実・決定論的）。
+
+```bash
+python3 ../../../scripts/html_to_pptx.py output/週次デッキ.pdf -o output/週次デッキ.pptx
+# 寸法は PDF のページ寸法（A4横）から自動決定。--aspect は不要。
+```
+
+- 14枚（PDFの各ページ）が1スライド=1ページの PPTX になる。
+- **画像ベース**のため PowerPoint 上でテキスト直接編集は不可。文言・数値・所見の修正は
+  **データ／build_deck.py の本文領域に戻って**やり直す（PPTX側で直さない）。位置・サイズの微調整のみ手作業。
+- 編集可能テキストの PPTX が必要なら Claude Design のエクスポートを使う（本パスはCI忠実な決定論出力）。
+
 ### 4. Drive配置
 
 完成HTMLを共有ドライブの該当フォルダへ。`uploadFile(convertToGoogleFormat=true)` で
 Googleスライド化できる。**原本のコピーは不可**（コネクタ切れ）。配布はライブ抽出→生成の原則を守る。
+PPTX を配る場合は Step 3.5 の出力を同フォルダへ。
 
 ## CI正本（必読）
 

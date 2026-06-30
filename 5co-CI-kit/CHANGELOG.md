@@ -15,6 +15,14 @@
 
 ---
 
+## slide v2.2（準拠 brand v2） — 2026-06-30
+- **隅ロゴ（本文右上）を 102px で確定**（V3 実デッキ準拠・実測 102×73px）。#603 の 64px は**撤回**。
+  - `5co_slide_template.html` の `.corner`/`svg.corner` を 64px→102px。
+  - `slide_overflow_check.py` のロゴ幅ガードを 72px→**112px** 基準へ（正準102px・102pxの誤検知防止）。
+  - 視覚回帰基準 `baseline/template_signature.json` の corner を 64→102（本文12枚／表紙は null）。
+  - `5co_slide_template_standalone.html` の `.corner-logo` も 102px に統一。
+- ※表紙Oracle(numfield)のOL化は #617（slide media は同日反映済み）。
+
 ## slide v2.1（準拠 brand v2） — 2026-06-28
 - 99種 SLIDE-PATTERN を CI v2 化するアダプタ（`ci_pattern_adapter.py`）＋一括QA（`adapt_all_patterns.sh`）。3色QA全合格。
 - フレームワーク・レコメンダ（`framework_recommend.py`）標準搭載。
@@ -22,7 +30,7 @@
 - アダプタ寸法仕様 `docs/SLIDE-PATTERN-CI-ADAPTER-SPEC.md`。
 
 ## slide v2.0（準拠 brand v2） — 2026-06-28
-- CI v2 正本スライドテンプレ：`5co_slide_template.html`（`--crystal/--ink`・A4横297×210mm・隅ロゴ**64px**・φスケール）。
+- CI v2 正本スライドテンプレ：`5co_slide_template.html`（`--crystal/--ink`・A4横297×210mm・隅ロゴ64px【→ v2.2 で 102px に改定】・φスケール）。
 - 視覚回帰 `slide_visual_regression.py` ＋ `baseline/`、はみ出し検査 `slide_overflow_check.py`。
 - 旧 `--powder/--navy`・16:9（1280×720）世代から A4・新トークン名へ移行。
 

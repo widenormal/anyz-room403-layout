@@ -15,6 +15,8 @@ Amazonリテール等の **週次定例デッキ** を 5co. CI v2 準拠のHTML�
 | `scripts/build_deck.py` | worked sample【フル忠実版・14枚】。架空顧客のダミー値で生成。実運用は本文領域を実値に差し替える。 |
 | `config.example.json` | 設定の雛形。`config.json` にコピーして書き換える(`config.json` はgit管理外)。 |
 | `assets/client_logo_placeholder.svg` | 顧客ロゴ枠。各顧客のロゴに差し替える。 |
+| `assets/shoken_draft_template.md` | Step 1.5 所見MDドラフト雛形。実値差し替え前に所見をMDで確定する内容確認用。 |
+| (共有) `scripts/html_to_pptx.py` | A4横PDF→画像ベースPPTX変換(任意の追加出力)。リポジトリ直下 `scripts/`。 |
 
 デッキは元の制作デッキと同じ**14枚**(表紙／OKR／S級ドリル／エマージング／PD章扉／PD目標／DSP／SA／まとめ／補助章扉／SAファネル／香調別月別／競合ベンチ／全ブランド一覧)。
 
@@ -40,12 +42,21 @@ python3 scripts/build_deck.py --pdf         # PDFも出す
 # 1) データ抽出(ライブにする時)
 python3 scripts/extract_deck_data.py        # → deck_data.json(config の data.* に指定)
 
-# 2) build_deck.py の「ここから顧客ごとに書き換える領域」を実値・実ブランド・実所見に差し替える。
+# 1.5) 所見MDドラフト確認(実値差し替え前・必須)
+#    assets/shoken_draft_template.md を作業フォルダにコピーして所見を MD で埋め、ユーザー承認を取る。
+#    高コストな HTML 差し替え前に、軽い MD 段階で論旨を確定させ手戻りを断つ(MD→HTML→PPTX の内容確認点)。
+
+# 2) build_deck.py の「ここから顧客ごとに書き換える領域」を実値・実ブランド・(承認済み)実所見に差し替える。
 #    表は deck_builders、整形は ci_v2_lib のヘルパ(mm/man/f_yen/f_pc 等)を通す。
 
 # 3) はみ出し検査(必須)
 python3 ../../../5co-CI-kit/slide_overflow_check.py output/週次デッキ.html
 #    OVERFLOW が出たら行数・所見量を詰める。LOGO>64px:102px は意図的拡大(元デッキと同じ・許容)。
+
+# 3.5) PPTX出力(任意・追加出力。既定の配布は PDF/Googleスライドのまま)
+python3 ../../../scripts/html_to_pptx.py output/週次デッキ.pdf -o output/週次デッキ.pptx
+#    A4横PDFの各ページを1スライド=1ページの画像ベースPPTXに変換(寸法はPDFから自動・CI完全忠実)。
+#    画像ベースのため文言修正はデータ/build_deck.py に戻る。位置の微調整のみ PowerPoint で。
 ```
 
 ## CI制約(厳守)
