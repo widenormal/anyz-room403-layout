@@ -18,11 +18,11 @@ window.addEventListener('load', () => {
   document.querySelectorAll('.slide').forEach((s, i) => {
     const over = s.scrollHeight - s.clientHeight;
     if (over > 2) out.push((i + 1) + ':+' + over + 'px');
-    // 隅ロゴ幅ガード: 正準=64px（CI v2）。表紙(cover)の cf-logo は除外。
+    // 隅ロゴ幅ガード: 正準=102px（CI v2・V3実デッキ準拠）。表紙(cover)の cf-logo は除外。
     const lg = s.querySelector('svg.corner, .corner-logo, .hd, svg.cc-logo, .lockup');
     if (lg && !s.matches('.cover-full, .cover-card')) {
       const w = Math.round(lg.getBoundingClientRect().width);
-      if (w > 72) logo.push((i + 1) + ':' + w + 'px');
+      if (w > 112) logo.push((i + 1) + ':' + w + 'px');
     }
   });
   document.title = 'OVERFLOW_REPORT[' + out.join(',') + ']!LOGO_REPORT[' + logo.join(',') + ']';
@@ -49,7 +49,7 @@ def check(path: pathlib.Path) -> str:
         if m.group(1):
             msgs.append('OVERFLOW ' + m.group(1))
         if lm and lm.group(1):
-            msgs.append('LOGO>64px ' + lm.group(1))  # 隅ロゴ過大（正準64px・CI v2）
+            msgs.append('LOGO>112px ' + lm.group(1))  # 隅ロゴ過大（正準102px・CI v2/V3準拠）
         # <title> がファイル名の主題と無関係＝head 流用時の更新漏れを検出
         tm = re.search(r'<title>(.*?)</title>', html, re.S)
         if tm:

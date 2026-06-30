@@ -62,7 +62,7 @@ body{background:var(--crystal-25);}
 svg.logo{display:block; color:var(--ink); height:auto;}
 svg.logo, svg.corner, .cf-logo svg, svg.cc-logo{fill:currentColor;} /* パス既定の黒を回避＝colorで着色 */
 .slide.dark svg.logo, .slide.pale-strong svg.logo{color:var(--crystal);}
-.corner{position:absolute; top:30px; right:36px; width:64px; color:var(--ink);}
+.corner{position:absolute; top:30px; right:36px; width:102px; color:var(--ink);}
 h2.title{margin:0; font-size:22px; line-height:1.5; letter-spacing:.04em; max-width:calc(100% - 46mm);} /* 見出し=Grade準拠22px／右上ロゴ衝突回避 */
 .slide.dark h2.title{max-width:none;}
 /* ===== 表紙 cover-full（全面crystal＋Oracle数字背景・正規型） ===== */
@@ -186,10 +186,10 @@ tbody tr:nth-child(even){background:var(--crystal-25);}
 .hdr{display:flex; align-items:center; gap:20px; margin:18px 0 6px;}
 .hdr .client-logo{height:34px; width:auto; display:block;}
 .hdr .kicker{margin:0;}
-/* ヘッダー右上の5coロゴ：左ブロックと天地を揃える(CI 64px上書き)。
+/* ヘッダー右上の5coロゴ：左ブロックと天地を揃える(CI 隅ロゴ正準102px)。
    新CI基盤は右上ロックアップを .corner-logo で絶対配置するが、本ビルダーは .corner をemitするため
    ここで position:absolute を自前指定する(これが無いと左上にインライン表示で崩れる)。 */
-svg.corner{position:absolute; top:30px; right:36px; width:64px; height:auto; display:block;
+svg.corner{position:absolute; top:30px; right:36px; width:102px; height:auto; display:block;
   color:var(--ink); fill:currentColor; z-index:3;}
 /* ダーク地スライド：新CI基盤は .reverse で定義し .slide.dark の地色が無いため自前定義 */
 .slide.dark{background:var(--ink); color:var(--crystal);}
