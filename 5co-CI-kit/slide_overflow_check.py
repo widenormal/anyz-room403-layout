@@ -7,9 +7,32 @@ headless Chrome で実測する。編集後は必ず実行すること（ガイ�
 使い方: python3 slide_overflow_check.py <file.html> [<file2.html> ...]
 出力:   OK or OVERFLOW slide番号:+超過px
 """
-import sys, pathlib, subprocess, tempfile, re, urllib.parse
+import sys, os, glob, shutil, pathlib, subprocess, tempfile, re, urllib.parse
 
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+def find_chrome() -> str:
+    """Chrome/Chromium を自動探索（Mac → Playwright 同梱 → PATH）。
+    従来は Mac パス決め打ちで、ファイナライザ/CI (Linux) では必ず失敗していた。
+    探索順は scripts/html_to_pptx.py / ci-finalize.sh と同一。"""
+    candidates = [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    ]
+    pw = os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "/opt/pw-browsers")
+    candidates += sorted(glob.glob(f"{pw}/chromium-*/chrome-linux/chrome"))
+    candidates += sorted(glob.glob(f"{pw}/chromium_headless_shell-*/chrome-linux/headless_shell"))
+    for c in candidates:
+        if os.path.isfile(c) and os.access(c, os.X_OK):
+            return c
+    for name in ("google-chrome", "chromium", "chromium-browser", "chrome"):
+        p = shutil.which(name)
+        if p:
+            return p
+    sys.exit("ERROR: Chrome/Chromium が見つかりません（Mac は Google Chrome を、"
+             "Linux は chromium か PLAYWRIGHT_BROWSERS_PATH を用意してください）。")
+
+
+CHROME = find_chrome()
 PROBE = """
 <script>
 window.addEventListener('load', () => {
@@ -38,8 +61,9 @@ def check(path: pathlib.Path) -> str:
         tmp = pathlib.Path(tf.name)
     try:
         url = 'file://' + urllib.parse.quote(str(tmp))
-        r = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--dump-dom',
-                            '--virtual-time-budget=4000', url],
+        # --no-sandbox: CI コンテナ等 root 実行時に必須（Mac では無害）
+        r = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox',
+                            '--dump-dom', '--virtual-time-budget=4000', url],
                            capture_output=True, text=True, timeout=60)
         m = re.search(r'OVERFLOW_REPORT\[([^\]]*)\]', r.stdout)
         if not m:

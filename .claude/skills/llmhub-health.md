@@ -5,6 +5,11 @@ description: 5co-hub/llm-hub 配下の全 LLM (Qwen MLX サーバー / Gemini CL
 
 # /llmhub-health — llm-hub 全 LLM 疎通確認
 
+## 前提
+
+**5co-hub/llm-hub リポのルートで実行する**（`.venv` / `scripts/health_check.py` / `logs/` は llm-hub 側にある。
+このテンプレートリポには存在しない）。
+
 ## 実行内容
 
 `scripts/health_check.py` を venv の python で実行し、結果 JSON を `logs/health_<ts>.json` に保存しつつ画面に表示。

@@ -11,12 +11,15 @@ description: llm-hub (5co-hub/llm-hub) の Python ルーターを呼び、タス
 - **このスキル**: 5co-hub/llm-hub の `route_task()` Python 関数経由、機密度ガード + フォールバック chain + 月次予算降格 + audit ログ
 - 使い分け: **手元の単発判断 → `llm-router`** / **業務コードからの API 呼出・大量バッチ → `llmhub-route`**
 
-# /llm-route — 自動ルーティング
+## 前提
+
+**5co-hub/llm-hub リポのルートで実行する**（`.venv` / `llm_hub` パッケージ / `configs/` は llm-hub 側にある。
+このテンプレートリポには存在しない）。
 
 ## 入力形式
 
 ```
-/llm-route <task_type>:<sensitivity>:<prompt>
+/llmhub-route <task_type>:<sensitivity>:<prompt>
 ```
 
 - `task_type`: web_research / code_generation / classification / name_normalization / format_conversion / summarization / orchestration / other

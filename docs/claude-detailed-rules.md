@@ -41,12 +41,21 @@
 |---|---|---|
 | `skill-creator/SKILL.md` | スキルの新規作成・改善（Meta Skill） | 新規・改善・定期レビュー時 |
 | `session-handoff.md` | セッション終了時のコンテキスト永続化 | セッション終了時必須 |
-| `create-brand.md` | ブランド画像生成 | 画像生成時 |
+| `create-brand.md` | 新規ブランドディレクトリの作成（構造・CLAUDE.md・フック一式） | 「新規ブランド作成」「ブランド追加」 |
+| `api-connector.md` | 鍵とレシピ一体の API コネクタ運用（op ＋ `.claude/connectors/*.json`） | 外部 API 呼出・401/400 詰まり時 |
 | `llm-router.md` | マルチLLMオーケストレーションの司令塔 | LLM 振り分け迷い時 |
 | `x-search.md` | Grok 経由の X(Twitter) リアルタイム検索 | X/Twitter 関連調査 |
 | `codex-review.md` | Codex (GPT-5) でのセカンドオピニオン | 戦略判断・レビュー |
-| `qwen-eco.md` | ローカル Qwen での軽処理 | 要約・分類・整形 |
+| `qwen-eco.md` | ローカル Qwen（Ollama）での軽処理 | 要約・分類・整形 |
 | `drive-eco-access.md` | Google Drive 共有フォルダのエコ運用 | Drive MCP ツール使用時 |
+| `llmhub-route.md` / `llmhub-qwen-secure.md` / `llmhub-health.md` / `llmhub-benchmark.md` | 5co-hub/llm-hub（MLX/Python）経由の機密対応ルーティング・疎通・比較 | llm-hub リポでの作業時 |
+| `ci-weekly-deck.md`（＋`ci-weekly-deck/` キット） | 顧客週次定例デッキを CI v2 で決定論生成 | 「週次定例デッキ」「CI v2 で定例資料」 |
+| `framework-recommend/SKILL.md` | スライドの型・フレームワーク図の提案（99種＋発見枠） | CI制作の本文スライド設計時 |
+| `md-html-pptx-flow/SKILL.md` | MD→HTML→PPTX の3段階スライド制作フロー | 「スライド作って」「PPTX で出力」 |
+| `review-loop/SKILL.md` | 5エージェント・ループレビュー | 「ループレビューして」／md-html-pptx-flow Phase 3 |
+| `slide-deck-builder/SKILL.md` | SLIDE-DECK.md（設計書）生成（汎用デッキ用・任意経路） | 「プレゼンの設計書を作って」 |
+| `slide-md-creator/SKILL.md` | デザインシステム SLIDE.md の新規生成（新規ブランド用） | 「SLIDE.md を生成して」 |
+| `slide-pattern-creator/SKILL.md` | レイアウトパターン SLIDE-PATTERN の抽出・生成 | 「スライドパターンを抽出して」 |
 | （プロジェクト固有スキルをここに追記） | | |
 
 ### マルチLLMオーケストレーション
