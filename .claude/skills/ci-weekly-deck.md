@@ -57,7 +57,7 @@
 `ci-weekly-deck/config.example.json` を `config.json` にコピーし、以下を記入する：
 
 - `client_name` / `client_kicker` … 顧客名・表紙キッカー
-- `ci_base_html` … CI正本 **`5co-CI-kit/5co_slide_template.html`**（リポ内・既定で相対参照済み）。`lockup_symbol_id` は基盤の `<symbol>` ID（標準は `lockup`）。CSSは複製せず参照する
+- `ci_base_html` … 既定は**スキル同梱の `assets/ci_base_sample.html`**（`config.example.json` の既定値・`docs/SLIDE-md/SLIDE-md-5co/sample.html` の同一コピー）。`lockup_symbol_id` は基盤の `<symbol>` ID（同梱基盤・`5co-CI-kit/5co_slide_template.html` いずれも `lk`）。CSSは複製せず参照する
 - `client_logo` … 顧客ロゴ（透過PNG/SVG）。未用意なら `assets/client_logo_placeholder.svg` のまま
 - `spreadsheet_id` / `ranges` / `oauth_token` … 抽出元シートID・`[資料用]`各タブ範囲・OAuthトークン
 - `data.skyu_full` / `data.deck_data` / `data.lavon` … 実データJSON（未指定なら `sample_data.py` のダミーで14枚生成）
@@ -141,8 +141,8 @@ PPTX を配る場合は Step 3.5 の出力を同フォルダへ。
 補助として `5co-CI-kit/CI_KICKOFF.md` / `SLIDE_DESIGN_GUIDELINES.md`。
 
 CI基盤は **SLIDE.md 参照の `docs/SLIDE-md/SLIDE-md-5co/sample.html`**（`--ink`/`--crystal` をネイティブ定義・
-数字フィールド内蔵・lockup `symbol id="lk"`）。config の `ci_base_html` がこれを指す（`lockup_symbol_id="lk"`、
-`numfield_svg=""`）。`ci_v2_lib.py` の EXTRA_CSS 先頭の互換 `:root` は、`--ink`/`--crystal` を持たない基盤を
+数字フィールド内蔵・lockup `symbol id="lk"`）。スキルはその**同一コピーを `assets/ci_base_sample.html` として同梱**し、
+config.example.json の `ci_base_html` はこの同梱コピーを指す（`lockup_symbol_id="lk"`、`numfield_svg=""`）。`ci_v2_lib.py` の EXTRA_CSS 先頭の互換 `:root` は、`--ink`/`--crystal` を持たない基盤を
 指定された場合の保険（sample.html ではネイティブ定義と同値で無害）。**旧名 `--navy`/`--powder` は使わない**。
 
 > 注意: この skill は **データ駆動の週次デッキ生成器**。SLIDE.md の「テンプレ複製・文言差し替え」フローは

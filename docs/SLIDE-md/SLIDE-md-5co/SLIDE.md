@@ -76,7 +76,7 @@ colors:
 ```yaml
 typography:
   serif_ja: '"Hiragino Mincho ProN","Yu Mincho",serif'
-  serif_en: '"Garamond Premier Pro","EB Garamond","Hiragino Mincho ProN","Yu Mincho",serif'
+  serif_en: '"Hoefler Text","Baskerville","Palatino","Hiragino Mincho ProN","Yu Mincho",serif'
   scale_phi: { note: "11px", body: "18px", md: "29px", lg: "47px", xl: "76px" }
   baseline_unit_u: "29px"
   numerals: "lining-nums tabular-nums（必須）"

@@ -66,7 +66,7 @@ API 代の節約 + 後段 LLM のレスポンス品質向上の両立。
 - **認証不要**（ローカル動作）
 - Ollama サーバが localhost:11434 で起動している必要がある
 - モデル: `qwen3.5:7b-instruct`（既定）または `qwen3.5:14b-instruct`
-- セットアップは SessionStart フックが自動化（`session-start-multi-llm-setup.sh`）
+- セットアップは SessionStart フックが自動化（`.claude/hooks/session-start-multi-llm-setup.sh`）
 
 ## 注意
 

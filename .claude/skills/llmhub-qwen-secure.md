@@ -11,7 +11,10 @@ description: llm-hub (5co-hub/llm-hub リポ、MLX ベース) のローカル Qw
 - **このスキル**: 5co-hub/llm-hub の Qwen3-32B-4bit (MLX)、機密処理・大規模・Python 経由
 - 使い分け: **Drive 共有フォルダのエコ要約 → `qwen-eco`** / **AMZ-POS など機密 + 大規模 → `llmhub-qwen-secure`**
 
-# /llm-qwen — Qwen 即実行
+## 前提
+
+**5co-hub/llm-hub リポのルートで実行する**（`.venv` / `servers/` / `logs/` は llm-hub 側にある。
+このテンプレートリポには存在しない）。
 
 ## 用途
 
@@ -21,7 +24,7 @@ description: llm-hub (5co-hub/llm-hub リポ、MLX ベース) のローカル Qw
 
 ## 実行手順
 
-ユーザーが `/llm-qwen <prompt>` を呼んだら:
+ユーザーが `/llmhub-qwen-secure <prompt>` を呼んだら:
 
 1. **疎通確認**: `bash servers/status.sh` を実行し、Qwen サーバーが応答するか確認。
    - 応答なし → ユーザーに `bash servers/start_qwen.sh` の実行を案内し停止

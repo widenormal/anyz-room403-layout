@@ -231,7 +231,7 @@ STEP 2〜3で確定したデザイン情報を使い、以下のテンプレー�
 
 ## STEP 5：sample.htmlの生成
 
-SLIDE.mdで定義したデザイントークン（色・フォント・余白）を適用した5ページのHTMLスライドを生成し、STEP 4で作成した `docs/SLIDE-md/SLIDE-md-{source}/` フォルダ内に `sample.html` として保存する。
+SLIDE.mdで定義したデザイントークン（色・フォント・余白）を適用した6ページのHTMLスライドを生成し、STEP 4で作成した `docs/SLIDE-md/SLIDE-md-{source}/` フォルダ内に `sample.html` として保存する。
 
 ### ページ構成（固定）
 

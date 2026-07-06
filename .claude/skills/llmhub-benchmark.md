@@ -5,6 +5,11 @@ description: 5co-hub/llm-hub 経由で同一プロンプトを Qwen MLX / Gemini
 
 # /llmhub-benchmark — llm-hub 4 LLM 横並び比較
 
+## 前提
+
+**5co-hub/llm-hub リポのルートで実行する**（`.venv` / `scripts/benchmark.py` / `logs/` / `configs/` は
+llm-hub 側にある。このテンプレートリポには存在しない）。
+
 ## 実行内容
 
 `scripts/benchmark.py` を venv の python で実行。

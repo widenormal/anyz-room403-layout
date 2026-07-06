@@ -35,7 +35,7 @@
 - 字間: 見出し・欧文 `letter-spacing:.04em`、kicker `.18em`。
 - **リガチャ禁止**: `font-variant-ligatures: none;` を全体に（字間を取る組版で ffi 等が不自然になるため。決定 #13）。
 - **数字＝ライニング（等高）＋タブラー（等幅）必須**: 表・KPI・金額・日付など**データ数字はベースライン揃いの lining figures** で組む。`table, th, td, .t-num, .kpi-val {font-variant-numeric: lining-nums tabular-nums;}` を標準装備。本文中の欧文オールドスタイル数字は装飾として可だが、**マーケティング資料の数表では禁止**（4/7/9 が下に沈み読み比べを阻害する）。
-- **Georgia をフォールバックに置かない（厳禁）**: Georgia はオールドスタイル数字しか持たず、EB Garamond 未導入環境で数表が崩れる事故の原因（2026-06-11 実例）。欧文スタックは `"Garamond Premier Pro","EB Garamond","Hiragino Mincho ProN","Yu Mincho",serif`。
+- **Georgia をフォールバックに置かない（厳禁）**: Georgia はオールドスタイル数字しか持たず、EB Garamond 未導入環境で数表が崩れる事故の原因（2026-06-11 実例）。欧文スタックは `"Hoefler Text","Baskerville","Palatino","Hiragino Mincho ProN","Yu Mincho",serif`。
 - 行送り＝**ベースライングリッド単位 u**: `--u: 29px`（= body 18px × φ）。`line-height` とブロック間マージンは **u の整数倍／半整数倍のみ**。
 
 ## 4. グリッドとマージン — Müller-Brockmann 準拠（名刺で実証）

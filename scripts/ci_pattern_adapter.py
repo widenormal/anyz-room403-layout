@@ -67,7 +67,7 @@ CI_OVERRIDE = """
        --crystal-25:#F0F5FB; --crystal-55:#DEE9F6;
        --ink-60:rgba(16,24,32,.60); --ink-14:rgba(16,24,32,.14);
        --serif-ja:'Hiragino Mincho ProN','Yu Mincho',serif;
-       --serif-en:'Garamond Premier Pro','EB Garamond','Hiragino Mincho ProN',serif; }
+       --serif-en:'Hoefler Text','Baskerville','Palatino','Hiragino Mincho ProN',serif; }
 @page{ size:A4 landscape; margin:0; }
 html,body{ margin:0; }
 .slide-label{ display:none !important; }

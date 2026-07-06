@@ -31,9 +31,9 @@
 - ※色名は推奨。最終は**実Pantoneチップ**で確定。
 
 ## 3. フォント
-- 欧文/数字（セリフ）: **Garamond Premier Pro** → web代替 `'EB Garamond', Garamond, Georgia, serif`
+- 欧文/数字（セリフ）: **Hoefler Text**（macOS 標準）→ フォールバック `'Baskerville','Palatino','Hiragino Mincho ProN', serif`（Georgia は数字が崩れるため不可）
 - 和文: **Hiragino Mincho ProN** → 代替 `'Yu Mincho', serif`
-- タグライン「Strategy, refined.」= Garamondイタリック
+- タグライン「Strategy, refined.」= Hoefler Text イタリック
 
 ## 4. コンセプト / モチーフ
 - **水晶玉**（市場を透視・予測）に「5」が写り込む。創業の五輪書（地水火風空）＝5つの反射。
