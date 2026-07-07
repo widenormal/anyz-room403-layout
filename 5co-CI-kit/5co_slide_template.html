@@ -173,9 +173,10 @@ tbody tr:nth-child(even){background:var(--crystal-25);}
 
 <style>
 /* --- CIトークン互換シム ---
-   5co-CI-kit(新CI)は --navy/--powder 体系。本ビルダー群は旧名 --ink/--crystal を使うため、
-   新CIと同一値(navy=#101820 / powder=#C3D7EE / powder-pale=#DEE9F6)で別名定義する。
-   白混ぜの濃淡(#DEE9F6/#F0F5FB)は3色CIの許容範囲。これが無いと罫線・網掛け・級数が無効化される。 */
+   正規CIのトークンは --ink #101820 / --crystal #C3D7EE。本シムは同値で再定義し、
+   --ink/--crystal を持たない基盤を指定された場合でも罫線・網掛け・級数が無効化されないようにする保険
+   （本テンプレのネイティブ定義と同値で無害）。白混ぜの濃淡(#DEE9F6/#F0F5FB)は3色CIの許容範囲。
+   旧名 --navy/--powder は使わない。 */
 :root{
   --ink:#101820; --ink-14:rgba(16,24,32,.14); --ink-55:rgba(16,24,32,.55);
   --ink-60:rgba(16,24,32,.60); --ink-85:rgba(16,24,32,.85);
