@@ -32,6 +32,13 @@
   - 新検査が正本テンプレ自身の潜在不良（週次テンプレ7枚目 DSP 表・右端列+56px 見切れ）を
     検出 → dsp3 表を 8.5px/padding 1px に修正し解消（描画目視で右端列復元を確認）。
 
+- **正典文書の世代整合（WELLA 世代遅れ調査 2026-07-07・docs/CI調査回答_WELLAスライド劣化_2026-07-07.md）**：
+  WELLA 月次が CI_KICKOFF の旧導線（v2 週次雛形の複製）どおりに組まれ V3.1 タイポ・琥珀を取りこぼした事故を受け、
+  ①CI_KICKOFF.md／SLIDE.md の入口を「VERSION 確認→現行フォーマット」へ改定 ②SLIDE_DESIGN_GUIDELINES.md に
+  V3.1 タイポ（§3）を明文化・旧「明朝統一」記述と隅ロゴ 64px 表記を是正（列グループ縦罫禁止の§3.5は別途本日中に明文化済み・
+  本件では table.sk の格子罫未追従を注記） ③SLIDE.md の EB Garamond 残骸を Hoefler へ統一
+  ④`check-slide-ci-parity.py` に Garamond 系残存の検査を追加。週次雛形 HTML 冒頭に
+  「月次・新規に使わない」警告を焼き込み。フォーマット CSS 自体は不変（文書・検査のみ）。
 - **正典準拠の是正2件（NatureLab準拠規定 2026-07-07 起点）**：
   ①standalone テンプレの旧トークン名 `--powder`/`--navy` を正準 `--crystal`/`--ink` 系へ改名
   （hex不変・クラス名は後方互換で不変・parity checker 適合化） ②**洞察強調色＝琥珀 #f6b44a を正式化**
