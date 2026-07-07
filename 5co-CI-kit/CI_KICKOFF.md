@@ -22,7 +22,7 @@
 ## 要点（これだけで最低限再現できる）
 - 配色は**3色のみ**：白 #FFFFFF ／ アイスブルー #C3D7EE（PANTONE 2707 C）／ リッチブラック #101820（PANTONE Black 6 C）。グレー・黒#000・他色相は禁止。濃淡は3色の不透明度・白混ぜで。
 - 文字・ロゴ＝濃紺、地・面・アクセント＝水色／白。
-- フォント：和文 'Hiragino Mincho ProN','Yu Mincho',serif ／ 欧文 'EB Garamond','Garamond',Georgia,serif（タグラインはイタリック）。字間ゆったり（letter-spacing .04em）。
+- フォント：和文 'Hiragino Mincho ProN','Yu Mincho',serif ／ 欧文 "Hoefler Text","Baskerville","Palatino","Hiragino Mincho ProN","Yu Mincho",serif（macOS標準・タグラインはイタリック）。**Georgia をフォールバックに置かない（厳禁・オールドスタイル数字事故の原因）**。字間ゆったり（letter-spacing .04em）。ブランド原典の Garamond は名刺等の別成果物のみ（#642 でスライドは Hoefler へ移行）。
 - ロゴ＝マーク（水晶玉＝市場を透視する5）＋タグライン「Strategy, refined.」の**固定ロックアップ**。分離・歪み・比率変更しない。color指定で着色。
 - **数字モチーフ**：多彩セリフ数字を粗密でちりばめ密→疎へディゾルブ（アイスブルー・うっすら）。**文字・図表には掛けない**（可読性最優先）。
 - コンセプト：水晶玉で市場を透視し戦略を磨く＝Strategy, Refined.。静謐・上質・余白多め・装飾過多にしない。

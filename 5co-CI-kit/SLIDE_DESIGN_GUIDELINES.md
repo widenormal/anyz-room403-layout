@@ -29,7 +29,7 @@
 
 ## 3. タイポグラフィ
 
-- 書体: 和文 `Hiragino Mincho ProN` ／ 欧文 `EB Garamond`（タグラインはイタリック）。
+- 書体: 和文 `Hiragino Mincho ProN` ／ 欧文 `Hoefler Text`（macOS標準・タグラインはイタリック。ブランド原典の Garamond は名刺等のみ＝#642 で移行）。
 - **φ タイプスケール（厳守）**: 隣接階層の比 = φ(1.618)。基準 `--fs-body: 18px`（1280×720時）。
   `note 11px → body 18px → md 29px → lg 47px → xl 76px`（端数は丸め可・比を崩さない）。
 - 字間: 見出し・欧文 `letter-spacing:.04em`、kicker `.18em`。
@@ -59,7 +59,7 @@
 
 - **左下**: `© 2026 5co. All rights reserved.`
 - **右下**: `CONFIDENTIAL ・ NN`（頁番号は2桁ゼロ詰め。機密でない公開資料は CONFIDENTIAL を外し頁のみ）
-- 仕様: Garamond 11px／字間 .08em（CONFIDENTIAL は .16em）／色 ink-60、**Dark面は ice 65%**／下端から14px・左右36px
+- 仕様: 欧文セリフ（--serif-en＝Hoefler Text）11px／字間 .08em（CONFIDENTIAL は .16em）／色 ink-60、**Dark面は ice 65%**／下端から14px・左右36px
 - 実装: CSSカウンタ（`body{counter-reset:page}` `.slide{counter-increment:page}` ＋ `.slide::before/::after`）。表紙にも付与する。
 - ロックアップは v2 シンボル（`5co-CI-kit/assets/5co_logo_lockup_v2.svg`・viewBox 0 0 50.857 36.507）を使用し、**パスに fill を残さない**（fill:currentColor 継承を阻害するため。Adobe書き出しの `style="fill:#…"` は必ず除去）。
 

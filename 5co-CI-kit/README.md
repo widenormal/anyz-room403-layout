@@ -26,7 +26,7 @@
 ## CI 要点
 - 配色は**3色のみ**：白 #FFFFFF／アイスブルー #C3D7EE（PANTONE 2707 C）／リッチブラック #101820（PANTONE Black 6 C）。
 - 文字・ロゴ＝濃紺、地・面・アクセント＝水色/白。
-- 和文ヒラギノ明朝＋欧文Garamond。ロゴ＝水晶玉＋「Strategy, refined.」固定ロックアップ。
+- 和文ヒラギノ明朝＋欧文 Hoefler Text（macOS標準・スライド実装。ブランド原典 Garamond は名刺等のみ）。ロゴ＝水晶玉＋「Strategy, refined.」固定ロックアップ。
 - 数字背景はうっすら・文字に掛けない。コンセプト＝Strategy, Refined.（水晶玉で市場を透視し戦略を磨く）。
 
 ---
