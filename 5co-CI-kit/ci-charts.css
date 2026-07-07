@@ -33,3 +33,55 @@
    現在→目標の対比は data-2(水色)→data-1(紺)（名刺・スライドの比較と同じ語彙）
    棒/線/ドット本体は系列色、ギャップや矢印など“差分の意味”だけ pos/neg。
 */
+
+/* ====================================================================
+   棒グラフ（縦・複数系列比較）— 上限キャップ＋自動スケール
+   由来: 2026-07-07 現場報告（値の大きい棒がタイトル文言に食い込んだ事故）。
+   構造でハードキャップするため、生成側が値を間違えても絶対にはみ出さない。
+   ==================================================================== */
+.bar-chart{
+  --chart-h: 160px;         /* グラフエリアの固定高さ（この値を超えて伸びない） */
+  display:flex; align-items:flex-end; gap:32px;
+  height:var(--chart-h);
+  margin-top:24px;
+  padding-top:40px;         /* 最大値の値ラベル分の天井余白（タイトルとの衝突を構造的に回避） */
+  box-sizing:content-box;
+}
+.bar-chart .bar-col{
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  height:100%; flex:1; min-width:0;
+}
+.bar-chart .bar{
+  width:100%; max-width:120px;
+  background:var(--data-1);
+  border-radius:3px 3px 0 0;
+  position:relative;
+  /* --v: 0〜100（系列内の最大値を100として生成側が正規化した値）。
+     100 を超える値を渡しても max-height:100% が絶対上限として効き、
+     コンテナからはみ出す・上の要素に重なることは構造的に起きない。 */
+  height:calc(var(--chart-h) * var(--v, 0) / 100);
+  max-height:100%;
+}
+.bar-chart .bar.b2{background:var(--data-2);}
+.bar-chart .bar.b3{background:var(--data-3);}
+.bar-chart .bar.b4{background:var(--data-4);}
+.bar-chart .bar .bar-val{
+  position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+  white-space:nowrap; margin-bottom:6px;
+  font-family:var(--serif-en,inherit); font-variant-numeric:lining-nums tabular-nums;
+  font-size:20px; font-weight:700; color:var(--ink);
+}
+.bar-chart .bar-col .bar-label{
+  margin-top:10px; font-size:12.5px; color:var(--axis); text-align:center; line-height:1.4;
+}
+/* 使い方:
+   <div class="bar-chart">
+     <div class="bar-col"><div class="bar" style="--v:29"><span class="bar-val">約1.0億/年</span></div>
+       <div class="bar-label">フィー型（案:1/案:4）</div></div>
+     <div class="bar-col"><div class="bar b2" style="--v:100"><span class="bar-val">2.0〜3.5億/年</span></div>
+       <div class="bar-label">マージン型（案:2 内製）</div></div>
+   </div>
+   --v は系列内の最大値を 100 として比例配分した値（生成側が算出）。
+   --chart-h を変えたい場合はスライド側で .bar-chart{--chart-h:200px} 等で上書き可
+   （ただしタイトル直下に十分な余白があることを目視確認してから広げる）。
+*/
