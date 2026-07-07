@@ -2,21 +2,26 @@
 
 あなたはこれから 5 co. のCI（トンマナ）に沿って制作します。まず下記の正データを読み、以後すべてこの基準で作ってください。
 
-## スライドは「テンプレ複製」で作る（最優先）
-- **0からCSSを書かない**。`slide/5co_slide_template.html` を複製し、要る型をコピペして**中身（文言・数値）だけ差し替える**。
-- 全12スライド型（表紙/章扉/KPI/表/比較/タイムライン/キーメッセージ/組織図/対話/数値ハイライト/名刺/クロージング）がサンプル文付きで入っている。
-- 仕上がり見本: `slide/5co_slide_template.pdf`。使い方: `slide/SLIDE_TEMPLATE_HANDOFF.md`。
-- A4横・Chromeの「印刷→PDF保存（背景ON）」で配布用PDF。3色以外を使っていないか最後に自己チェック。
+## スライドは「現行版フォーマットの複製」で作る（最優先）
+- **生成前に必ず本ディレクトリの `VERSION` を読む**。現行フォーマット（v3.2 以降＝
+  `ci-format-v3.2.css` 系）とその構成ファイルは `VERSION` に書いてある。**そこに書かれた版で作る**。
+- **0からCSSを書かない**。現行フォーマットのスタイルに**中身（文言・数値）だけ差し替える**。
+  型仕様は `V3.2_FORMAT.md`（8型）、文言は `COPY_GUIDE.md`、検査は `slide_overflow_check.py`。
+- **v3.2 系の書体（V3.1 タイポ）**: 本文＝ゴシック（Hiragino Sans）、表紙・章扉・見出し・欧文ラベルのみセリフ。
+  `ci-format-v3.2.css` の `v31-typography` ブロックがこれを担う（詳細＝`SLIDE_DESIGN_GUIDELINES.md` §3）。
+- `5co_slide_template.html`（週次14枚・v2系雛形＝本文明朝）は**週次ベース資料専用の残置雛形**。
+  月次・新規デッキをこれから作らない（2026-07-07 WELLA 世代遅れ事故の原因）。
+- A4横・出力は `ci-finalize.sh`。3色以外を使っていないか最後に自己チェック。
 
-## 必読ファイル（~/dev/5co-ci-icon/）
-- **slide/5co_slide_template.html … スライドの本体テンプレ（まずこれを複製）**
-- slide/SLIDE_TEMPLATE_HANDOFF.md … テンプレの使い方・型一覧
-- slide/assets/LOGO_HANDOFF.md … ロゴSVG・カラー・フォント・ルール
-- docs/名刺デザイン_社内共有.md … コンセプト・トンマナの背景
-- slide/assets/ci-theme.css … 3色CSSテーマ（:root変数＋クラス）
-- slide/assets/NUMFIELD_HANDOFF.md … 数字背景SVGの使い方
-- ロゴ本体: slide/assets/5co_logo_lockup_currentColor.svg（fill=currentColor）
-- 数字背景: slide/assets/numfield_slide_16x9.svg / numfield_slide_allover.svg / numfield_header.svg ほか
+## 必読ファイル（本ディレクトリ `5co-CI-kit/`）
+- **VERSION … 現行フォーマット宣言（まずこれを読む）**
+- V3.2_FORMAT.md … 現行スライド8型の仕様
+- COPY_GUIDE.md … 文言の正（「問いへの答え」方式）
+- SLIDE_DESIGN_GUIDELINES.md … タイポ・グリッド・ロゴ・表罫線の規範
+- LOGO_HANDOFF.md … ロゴSVG・カラー・フォント・ルール
+- ci-theme.css … 3色CSSテーマ（:root変数＋v2基本クラス。単体では本文明朝＝v2系）
+- NUMFIELD_HANDOFF.md … 数字背景SVGの使い方
+- 5co_slide_template.html … 週次v2雛形（残置。月次・新規には使わない）
 - 完成名刺の実例: meishi/cards/<社員名>/（front/back PNG・.ai）
 
 ## 要点（これだけで最低限再現できる）
@@ -32,4 +37,4 @@
 - 3色以外を使っていないか自己チェックして明記。
 
 ---
-更新: 2026-06-03 / 出典 `~/dev/5co-ci-icon`
+更新: 2026-07-07（VERSION 起点の導線へ改定・WELLA 世代遅れ事故対応）/ 初版出典 `~/dev/5co-ci-icon`

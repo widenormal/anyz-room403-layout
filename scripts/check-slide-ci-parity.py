@@ -11,12 +11,14 @@ SLIDE.md / sample.html が CI v2 の正データから乖離していないか�
   - パレット外の色（グレー・#000・他色相）
   - 旧 hex（#0E1A38 / #A9CFDF）の混入
   - 書体スタックに Georgia フォールバック（数表崩れの原因）
+  - 欧文セリフに Garamond 系が残存（#642 で Hoefler Text へ移行済み。
+    2026-07-07 WELLA/NatureLab 世代遅れ調査で下流残存を確認）
 
 正データ（CI v2・実納品デッキ準拠）:
   palette = 白 #FFFFFF / クリスタル #C3D7EE / 墨 #101820 + ティント #DEE9F6 #F0F5FB
   geometry = A4 landscape 297mm x 210mm
   token names = --crystal / --ink（青は --crystal が正）
-  fonts = Hiragino Mincho ProN / EB Garamond（Georgia フォールバック禁止）
+  fonts = Hiragino Mincho ProN / Hoefler Text（#642 で Garamond→Hoefler・Georgia フォールバック禁止）
 
 使い方:
   python3 scripts/check-slide-ci-parity.py            # 既定対象を検査
@@ -28,7 +30,11 @@ import sys, os, re
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ---- CI v2 正データ（ここが唯一の宣言。変えるときは実納品デッキに合わせる） ----
-PALETTE = {"#FFFFFF", "#C3D7EE", "#101820", "#DEE9F6", "#F0F5FB"}
+# 機能色（意味にのみ使用・ci-charts.css で正典化済み）: 洞察=琥珀 --insight 系（2026-07-07 #699）、
+# 増減 --pos/--neg、チャート中間調 --data-3。装飾への流用は目視レビューで弾く（機械検査は通す）。
+FUNCTIONAL = {"#F6B44A", "#5A3500", "#D97706",   # --insight / -ink / -line
+              "#2F7D6B", "#B23A48", "#5B7C99"}   # --pos / --neg / --data-3
+PALETTE = {"#FFFFFF", "#C3D7EE", "#101820", "#DEE9F6", "#F0F5FB"} | FUNCTIONAL
 DEPRECATED_TOKENS = ["--ice", "--powder", "--navy"]      # 廃止された変数名
 DEPRECATED_HEX = ["#0E1A38", "#A9CFDF"]                  # 旧 CI の色
 A4 = ("297mm", "210mm")
@@ -67,6 +73,9 @@ def check_html(path, t):
     # 5) Georgia フォールバック
     if re.search(r'Georgia', t):
         issues.append("Georgia フォールバックを検出（数表崩れの原因・禁止）")
+    # 6) 欧文セリフの旧世代スタック（#642 で Hoefler Text へ移行済み）
+    if re.search(r'Garamond Premier Pro|EB Garamond', t):
+        issues.append("欧文セリフに Garamond 系を検出（スライドの正は Hoefler Text・#642。名刺等の別成果物のみ Garamond 可）")
     return issues
 
 def check_md(path, t):

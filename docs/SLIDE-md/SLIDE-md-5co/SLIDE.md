@@ -7,9 +7,9 @@
 **「CIスライド作って」と言われたら、Claude Code がこの SLIDE.md と `5co-CI-kit` の
 テンプレ/トークンを読み、A4-HTML を直書きする（生成AIに丸投げしない＝崩れない・再現できる）。**
 
-1. `5co-CI-kit/5co_slide_template.html` を複製し、本仕様のトークン/コンポーネントで文言だけ差し替える（0からCSSを書かない）。
+1. **まず `5co-CI-kit/VERSION` を読み、現行フォーマット**（v3.2 以降＝`ci-format-v3.2.css` 系・型仕様 `V3.2_FORMAT.md`）**に文言だけ差し替える**（0からCSSを書かない）。`5co_slide_template.html` は週次v2雛形（本文明朝）＝週次専用の残置で、月次・新規デッキには使わない（2026-07-07 WELLA 世代遅れ事故の原因）。
 2. 編集後は必ず `python3 5co-CI-kit/slide_overflow_check.py <file.html>` で `OK` を確認。
-3. 配布は Chrome の「印刷→PDF（背景ON）」。
+3. 出力は `5co-CI-kit/ci-finalize.sh`（または Chrome の「印刷→PDF（背景ON）」）。
 
 **Claude Design / `slide-deck-builder` スキルは任意の代替**（速い初稿・Claude Code 非利用者向け）。
 本仕様を `SLIDE-DECK.md` 化して claude.ai/design 等に渡せるが、生成方式のため厳密な再現は決定論パスが上。
@@ -65,7 +65,8 @@ colors:
 
 ## Typography
 
-書体：和文 `Hiragino Mincho ProN` ／ 欧文 `EB Garamond`（タグラインは italic）。**Georgia をフォールバックに置かない**。
+書体：和文 `Hiragino Mincho ProN` ／ 欧文 `Hoefler Text`（macOS標準・タグラインは italic）。**Georgia をフォールバックに置かない**。Garamond 系（Garamond Premier Pro / EB Garamond）はスライドでは廃止（#642・2026-07-06 で Hoefler へ移行。名刺等の別成果物のみ据え置き）。
+v3.2 系デッキは **V3.1 タイポ**（本文＝ゴシック `--sans-ja`・表紙/章扉/見出し/欧文ラベルのみセリフ）を適用する（`ci-format-v3.2.css` の `v31-typography` ブロック・詳細＝`5co-CI-kit/SLIDE_DESIGN_GUIDELINES.md` §3）。
 
 **φ タイプスケール（隣接比 1.618・基準 body 18px）**：`--fs-note 11px / --fs-body 18px / --fs-md 29px / --fs-lg 47px / --fs-xl 76px`。ベースライン単位 `--u 29px`。
 
@@ -127,8 +128,8 @@ layout:
 ## Logo / Footer
 
 - ロックアップ v2（マーク＋「Strategy, refined.」固定・`fill=currentColor`）。色：White/Pale=ink、Dark=crystal。
-- **各ページ右上に corner-logo 64px**（`top:30px; right:36px; width:64px`）。表紙は左上 32mm。
-- **フッター（全スライド共通・厳守）**：左下 `© 2026 5co. All rights reserved.`／右下 `CONFIDENTIAL ・ NN`（2桁ゼロ詰め・公開資料は CONFIDENTIAL を外す）。Garamond 11px・色 `--ink-60`・Dark 面は crystal 65%・下端 15px/左右 36px。CSS カウンタ（`body{counter-reset:page}` `.slide{counter-increment:page}` ＋ `::before/::after`）。
+- **各ページ右上に corner-logo 102px**（`top:30px; right:36px; width:102px`・v2.2 で 102px に確定）。表紙は左上 32mm。
+- **フッター（全スライド共通・厳守）**：左下 `© 2026 5co. All rights reserved.`／右下 `CONFIDENTIAL ・ NN`（2桁ゼロ詰め・公開資料は CONFIDENTIAL を外す）。Hoefler Text 11px・色 `--ink-60`・Dark 面は crystal 65%・下端 15px/左右 36px。CSS カウンタ（`body{counter-reset:page}` `.slide{counter-increment:page}` ＋ `::before/::after`）。
 
 ## コンポーネント（実納品デッキ準拠の主要クラス）
 
@@ -138,7 +139,7 @@ layout:
 | `ul.clean` | 行頭 crystal ドットの箇条書き |
 | `table` / `th`(`.hl`) / `td.num` | 表（見出し行 crystal-55・数字右寄せ lining+tabular） |
 | `.cmp` | 比較表（行間タイト） |
-| `.kpis` / `.kpi .v` `.kpi .l` | KPI カード（数値 Garamond 42px lining+tabular） |
+| `.kpis` / `.kpi .v` `.kpi .l` | KPI カード（数値 Hoefler Text 42px lining+tabular） |
 | `.note-line` | 補足注記（ink-60・12.5px） |
 | `ol.steps` | 番号付きステップ（丸番号は crystal 枠） |
 | `.title-row` | 見出し＋補足の baseline 揃え |
@@ -149,5 +150,5 @@ A4 固定・自動縮小なし。編集後は `python3 5co-CI-kit/slide_overflow
 
 ## Do / Don't
 
-**Do**：2色＋白だけ／A4横で組む／表紙は cover-full＋numfield／Dark 面の文字は crystal／数字 lining+tabular／ロックアップ v2 を color 着色（corner 64px）。
+**Do**：2色＋白だけ／A4横で組む／表紙は cover-full＋numfield／Dark 面の文字は crystal／数字 lining+tabular／ロックアップ v2 を color 着色（corner 102px）。
 **Don't**：グレー・#000・他色相・旧 `--ice/--powder`／16:9 で組む／numfield を本文・図表に掛ける／Dark 面に白文字／Georgia フォールバック／ロゴの分離・歪み・比率変更。
