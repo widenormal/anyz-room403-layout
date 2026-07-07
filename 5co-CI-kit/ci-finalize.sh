@@ -115,7 +115,7 @@ if [ "$DO_OUTLINE" = 1 ]; then
   if command -v gs >/dev/null 2>&1; then
     say "▶ アウトライン版 PDF（テキスト→ベクター）"
     gs -o "$PDF_OL" -sDEVICE=pdfwrite -dNoOutputFonts "$PDF" >/dev/null 2>&1 \
-      && say "  ✓ $PDF_OL（フォント非依存の完全忠実マスター）" || say "  ⚠ Ghostscript 変換に失敗"
+      && say "  ✓ ${PDF_OL}（フォント非依存の完全忠実マスター）" || say "  ⚠ Ghostscript 変換に失敗"
   else
     say "▶ アウトライン: Ghostscript(gs) 未導入のためスキップ（brew install ghostscript）"
   fi

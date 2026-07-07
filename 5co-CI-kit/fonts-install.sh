@@ -31,7 +31,7 @@ EXts='-iname *.otf -o -iname *.ttf -o -iname *.ttc'
 say(){ printf '%s\n' "$*"; }
 die(){ printf '❌ %s\n' "$*" >&2; exit 1; }
 
-[ -d "$SRC" ] || die "フォントフォルダが見つかりません: $SRC（購入フォントを置いて再実行）"
+[ -d "$SRC" ] || die "フォントフォルダが見つかりません: ${SRC}（購入フォントを置いて再実行）"
 
 # 対象フォント収集
 mapfile -t FONTS < <(find "$SRC" -type f \( -iname '*.otf' -o -iname '*.ttf' -o -iname '*.ttc' \) 2>/dev/null | sort)

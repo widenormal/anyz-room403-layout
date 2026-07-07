@@ -141,6 +141,11 @@ tbody tr:nth-child(even){background:var(--crystal-25);}
 .hl{background:var(--crystal-55);}
 
 .cmp td,.cmp th{padding:3px 9px;line-height:1.35;}
+
+/* V3.1: 本文ゴシック（ヘッダー・表紙・扉はセリフ維持。ci-format-v3.2.css L154 と同一実装） */
+section.slide:not(.cover-full), section.slide:not(.cover-full) *{font-family:var(--sans-ja) !important;}
+section.slide:not(.cover-full) .kicker, section.slide:not(.cover-full) .kicker *,section.slide:not(.cover-full) .tagline, section.slide:not(.cover-full) .en{font-family:var(--serif-en) !important;}
+section.slide:not(.cover-full) h2.title, section.slide:not(.cover-full) h2.title *{font-family:var(--serif-ja) !important;}
 </style>
 </head>
 <body>

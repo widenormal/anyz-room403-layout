@@ -26,7 +26,7 @@ LOCAL_KIT="${CI_CANON_LOCAL_KIT:-$PWD/$CANON_SUBDIR}"
 emit() { printf '%s\n' "$*"; }   # additionalContext へ
 
 emit "=== 5co CI 正本（single source of truth） ==="
-emit "正本: $CANON_REPO :: $CANON_SUBDIR（branch=$CANON_BRANCH）／ローカルにフォーク・改変しない"
+emit "正本: ${CANON_REPO} :: ${CANON_SUBDIR}（branch=${CANON_BRANCH}）／ローカルにフォーク・改変しない"
 
 # ---- op / SA トークンの存在確認 ----------------------------------------------
 if ! command -v op >/dev/null 2>&1; then
@@ -57,7 +57,7 @@ for attempt in 1 2 3; do
 done
 if [ -z "$PAT" ]; then
   emit "⚠️ 正本同期スキップ: op に '$PAT_ITEM' が見つからない/空。"
-  emit "   → GitHub で fine-grained・read-only（Contents: Read / 対象 $CANON_REPO）の PAT を発行し、"
+  emit "   → GitHub で fine-grained・read-only（Contents: Read / 対象 ${CANON_REPO}）の PAT を発行し、"
   emit "     1Password vault '$VAULT' の item '$PAT_ITEM'（field credential）に投入してください。"
   exit 0
 fi
@@ -100,7 +100,7 @@ if [ -d "$LOCAL_KIT" ] && [ "$LOCAL_KIT" != "$CANON_KIT" ]; then
   LOCAL_HASH="$(dir_hash "$LOCAL_KIT")"
   if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" != "$CANON_HASH" ]; then
     emit "⚠️ ドリフト検知: ローカル $LOCAL_KIT が正本と不一致（local=${LOCAL_HASH:0:12}）。"
-    emit "   → 制作は正本（$CANON_KIT）を使うこと。ローカルコピーを正本に更新（または削除）推奨。"
+    emit "   → 制作は正本（${CANON_KIT}）を使うこと。ローカルコピーを正本に更新（または削除）推奨。"
   else
     emit "ドリフトなし: ローカル CI-kit は正本と一致。"
   fi

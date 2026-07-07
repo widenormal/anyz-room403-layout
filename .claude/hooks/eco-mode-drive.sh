@@ -48,7 +48,7 @@ case "$TOOL_NAME" in
 esac
 
 cat >&2 <<EOF
-[eco-mode-drive] Drive 共有フォルダ操作を検知しました（tool=$TOOL_NAME）。
+[eco-mode-drive] Drive 共有フォルダ操作を検知しました（tool=${TOOL_NAME}）。
                  ECO_MODE=1 相当の運用に切り替えてください。
 
   推奨ワークフロー:
