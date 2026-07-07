@@ -71,7 +71,7 @@ while IFS='|' read -r raw_name raw_title raw_field; do
     if [ -n "$STRICT" ]; then
       echo "ERROR: field 未投入: $name ($title/$field)" >&2; errors=$((errors+1)); continue
     else
-      echo "# SKIP $name: field '$field' が空/欠落（title=$title）— vault にキー未登録" >&2
+      echo "# SKIP ${name}: field '${field}' が空/欠落（title=${title}）— vault にキー未登録" >&2
       echo "# SKIP $name=op://$VAULT/$id/$field  (field empty)"
       continue
     fi
