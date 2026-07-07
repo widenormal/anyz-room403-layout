@@ -32,6 +32,12 @@
   - 新検査が正本テンプレ自身の潜在不良（週次テンプレ7枚目 DSP 表・右端列+56px 見切れ）を
     検出 → dsp3 表を 8.5px/padding 1px に修正し解消（描画目視で右端列復元を確認）。
 
+- **正典準拠の是正2件（NatureLab準拠規定 2026-07-07 起点）**：
+  ①standalone テンプレの旧トークン名 `--powder`/`--navy` を正準 `--crystal`/`--ink` 系へ改名
+  （hex不変・クラス名は後方互換で不変・parity checker 適合化） ②**洞察強調色＝琥珀 #f6b44a を正式化**
+  （`--insight` 系トークンを ci-charts.css に追加。v3.2 実装 `td.chl`/`.pdstr .c-hi` の追認・
+  意味にのみ使用可＝装飾禁止）。
+
 ## slide v3.2（準拠 brand v2） — 2026-07-06
 - **月次 V3 デッキ形式を正本フォーマット化**：`ci-format-v3.2.css`（全24 styleブロック連結・
   表紙/扉 Oracle 埋込）＋ `V3.2_FORMAT.md`（スライド8型仕様）＋ `VERSION`（現行版宣言）を新設。
