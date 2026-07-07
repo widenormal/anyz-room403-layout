@@ -78,7 +78,9 @@ trap 'rm -rf "$TMP"; rm -f "$INJECTED"' EXIT
 
 # ---- 任意ゲート: はみ出し検査（best-effort・止めない） ----
 if [ -f "$OVF" ] && command -v python3 >/dev/null 2>&1; then
-  say "▶ はみ出し検査（gate・警告のみ）"; python3 "$OVF" "$SRC" 2>&1 | sed 's/^/  /' || say "  ⚠ overflow-check 警告あり（内容を確認）"
+  say "▶ はみ出し検査（gate）"
+  python3 "$OVF" "$SRC" 2>&1 | sed 's/^/  /'
+  [ "${PIPESTATUS[0]}" -eq 0 ] || die "はみ出し検査 NG（V3.2 規定: OK になるまで配布不可。上の行のスライドを修正してから再実行）"
 fi
 
 # ---- 1) HTML → PDF（フォントサブセット自動埋込） ----
