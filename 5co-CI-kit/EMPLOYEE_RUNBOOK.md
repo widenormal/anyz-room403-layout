@@ -9,8 +9,8 @@
 Claude（claude.ai）で Google Drive 連携を ON にし、次のように依頼する：
 
 ```
-共有ドライブ AI-Objective-MGMT の「CI正本(配布)」フォルダにある
-5co_slide_template_standalone.html を正として、
+共有ドライブ AI-Objective-MGMT の「CI正本(配布)」（5co-CI-kit）フォルダの
+VERSION に書かれている現行フォーマット（テンプレ・CSS）を正として、
 今週の集計データ（deck_data.json / 集計シート）から週次定例デッキの HTML を作成してください。
 テンプレの CSS・色・フォント・レイアウトは一切変更せず、文言と数値だけ差し替えてください。
 数値は集計データの値をそのまま使い、推測や丸め直しをしないでください。

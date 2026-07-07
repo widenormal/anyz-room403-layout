@@ -41,6 +41,14 @@ window.addEventListener('load', () => {
   document.querySelectorAll('.slide').forEach((s, i) => {
     const over = s.scrollHeight - s.clientHeight;
     if (over > 2) out.push((i + 1) + ':+' + over + 'px');
+    // 横方向のあふれ（2026-07-07 現場報告: 縦のみ検査の死角でテーブル右列見切れがすり抜けた）
+    const overX = s.scrollWidth - s.clientWidth;
+    if (overX > 2) out.push((i + 1) + ':+' + overX + 'px(横)');
+    // overflow:hidden で「あふれず隠れて切れる」ケース: 固有幅を持つ子孫の右端がスライド右端を越えていないか
+    const sr = s.getBoundingClientRect().right;
+    s.querySelectorAll('table,svg,img').forEach(el => {
+      if (el.getBoundingClientRect().right - sr > 2) out.push((i + 1) + ':clip(' + el.tagName + ')');
+    });
     // 隅ロゴ幅ガード: 正準=102px（CI v2・V3実デッキ準拠）。表紙(cover)の cf-logo は除外。
     const lg = s.querySelector('svg.corner, .corner-logo, .hd, svg.cc-logo, .lockup');
     if (lg && !s.matches('.cover-full, .cover-card')) {
@@ -90,5 +98,12 @@ def check(path: pathlib.Path) -> str:
         tmp.unlink(missing_ok=True)
 
 if __name__ == '__main__':
+    # 幾何学的 NG（はみ出し・ロゴ過大）と検査不能は exit 1（gate として機能させる）。
+    # TITLE? は流用ミスのヒューリスティックなので表示のみ（exit 0）。
+    bad = 0
     for p in sys.argv[1:]:
-        print(f'{pathlib.Path(p).name}: {check(pathlib.Path(p))}')
+        res = check(pathlib.Path(p))
+        print(f'{pathlib.Path(p).name}: {res}')
+        if 'OVERFLOW' in res or 'LOGO>112px' in res or res.startswith('ERROR'):
+            bad = 1
+    sys.exit(bad)
