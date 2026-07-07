@@ -1,6 +1,7 @@
 v3.3
 date: 2026-07-07
-format: ci-format-v3.2.css + ci-cover-light-v3.3.css（ライトバリアント追補：表紙=crystal-55／本文=crystal-25） + V3.2_FORMAT.md
+format: ci-format-v3.2.css + ci-cover-light-v3.3.css（ライトバリアント追補：表紙=crystal-55／本文=crystal-25） + ci-charts.css（機能色・チャート） + V3.2_FORMAT.md
 serif-en: Hoefler Text（macOS標準・Adobe Fonts 依存なし）
+head: 案件ビルダーの正典CSS連結は ci_head.py 経由のみ（CSSコピー・inline再実装禁止・上記 format 宣言を自動追従）
 canonical: 5co-hub/template:5co-CI-kit（唯一の格納場所・CI_SOURCE.md 参照）
 rule: すべてのセッションは生成前に本ファイルを確認し、常にこの最新版でスライドを作成する

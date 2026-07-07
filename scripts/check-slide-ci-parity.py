@@ -33,6 +33,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 機能色（意味にのみ使用・ci-charts.css で正典化済み）: 洞察=琥珀 --insight 系（2026-07-07 #699）、
 # 増減 --pos/--neg、チャート中間調 --data-3。装飾への流用は目視レビューで弾く（機械検査は通す）。
 FUNCTIONAL = {"#F6B44A", "#5A3500", "#D97706",   # --insight / -ink / -line
+              "#FDEACB",                          # --insight-bg（琥珀の淡地・2026-07-07 追認）
               "#2F7D6B", "#B23A48", "#5B7C99"}   # --pos / --neg / --data-3
 PALETTE = {"#FFFFFF", "#C3D7EE", "#101820", "#DEE9F6", "#F0F5FB"} | FUNCTIONAL
 DEPRECATED_TOKENS = ["--ice", "--powder", "--navy"]      # 廃止された変数名
