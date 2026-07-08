@@ -8,7 +8,7 @@ Amazonリテール等の **週次定例デッキ** を 5co. CI v2 準拠のHTML�
 
 | ファイル | 役割 |
 |----------|------|
-| `scripts/ci_v2_lib.py` | 再利用ライブラリ。数値整形(百万円/万円/円/件/%)＋レイアウトヘルパ(表紙/ヘッダ/章扉/OKRノード)＋追加CSS(EXTRA_CSS)＋CI基盤ローダ＋PDF化。**顧客固有情報は持たない**。 |
+| `scripts/ci_v2_lib.py` | 再利用ライブラリ。正典CSS連結(`inject_ci_head`＝`5co-CI-kit/ci_head.py` 経由・fail-closed)＋数値整形(百万円/万円/円/件/%)＋レイアウトヘルパ(表紙/ヘッダ/章扉/OKRノード)＋案件固有CSS(EXTRA_CSS)＋PDF化。**顧客固有情報は持たない**。 |
 | `scripts/deck_builders.py` | 全テーブルビルダー(skyu/DSP/SA/SAファネル/香調別月別/エマージング/PD)。列構成は原本準拠、顧客固有定数(市場辞書/ハイライト/PD行/レシピ)は引数化。 |
 | `scripts/extract_deck_data.py` | 集計用シートの `[資料用]` タブを OAuth直読みで `deck_data.json` に抽出(config駆動)。 |
 | `scripts/sample_data.py` | worked sample 用のダミー構造データ(架空ブランド・原本と同じ列レイアウト)。 |
@@ -22,8 +22,9 @@ Amazonリテール等の **週次定例デッキ** を 5co. CI v2 準拠のHTML�
 
 ## 前提
 
-- **CI基盤は複製しない・参照する**。CSSとロックアップSVGは CI正本 `5co-CI-kit/5co_slide_template.html`
-  から読み込む(`config.json` の `ci_base_html` が既定で相対参照済み)。
+- **CI基盤は複製しない・参照する**。正典CSSは `5co-CI-kit/ci_head.py`（`VERSION` の format: 宣言を
+  連結する唯一の標準方式・V3.2_FORMAT 1.6）でHEADへ自動注入され、正典改定に自動追従する。
+  CI基盤HTML(`config.json` の `ci_base_html`)からは**ロックアップSVG(ブランド資産)のみ**流用する。
   → ルートの CI 運用ルール(`CLAUDE.md` の CI・トンマナ節)に従う。「0からCSSを書かない」。
 - Python: `google-api-python-client` / `google-auth`(抽出に必要)。例 `~/venv-gapi/bin/python3`。
 - 抽出には Sheets 閲覧スコープ付き OAuth トークン(`oauth_token`)が必要。
