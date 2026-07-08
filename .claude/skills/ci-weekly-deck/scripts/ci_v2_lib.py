@@ -4,23 +4,26 @@
 ci_v2_lib.py — 週次定例デッキ(5co. CI v2)を組み立てる再利用ライブラリ。
 
 このファイルは **顧客非依存** の共通部品のみを持つ:
-  - CI基盤HTML(5co-CIスライド/が唯一の正)のHEAD(CSS＋ロックアップsymbol)を読み込むローダ
+  - 正典CSS連結: <!--CI_HEAD--> マーカーを 5co-CI-kit/ci_head.style_block() で置換する
+    inject_ci_head()（V3.2_FORMAT 1.6 の唯一の標準方式・fail-closed）
+  - CI基盤HTMLからロックアップsymbol(ブランド資産)だけを流用するHEADビルダ load_ci_head()
   - IR作法の数値整形ヘルパ(百万円/万円/円/件/%・四捨五入・マイナス△)
   - CI v2レイアウトヘルパ(表紙/ヘッダ/章扉/OKRノード)
-  - CI 3色のみで安全な追加CSS(EXTRA_CSS)
+  - 本デッキ固有の上書きCSS(EXTRA_CSS・正典と重複するルールは持たない)
 
 顧客固有(ブランド名・実数値・所見文・スプレッドシートID・ロゴ)は **一切持たない**。
 それらは build_deck.py 側の「顧客ごとに書き換える領域」と config.json に置く。
 
 CI制約(厳守・SLIDE.md準拠): 配色は 白#FFFFFF / 水色 --crystal #C3D7EE / 紺 --ink #101820 の3色のみ
-(旧名 --navy/--powder・旧hex #A9CFDF/#0E1A38 は廃止)。
+(旧世代のトークン名・旧hexは廃止済み。混入は scripts/check-slide-ci-parity.py が検出)。
 増減セマンティクス(達成/未達)以外で緑・赤・グレー・他色相を使わない。
-CSSは0から書かず CI基盤を複製・参照する(EXTRA_CSSは基盤を壊さない最小の上書きのみ)。
+CSSは0から書かず正典を ci_head 連結で参照する(EXTRA_CSSは正典を壊さない最小の上書きのみ)。
 """
 import re
 import json
 import base64
 import os
+import sys
 import subprocess
 
 
@@ -51,19 +54,65 @@ def img_data_uri(path):
 
 def load_ci_head(ci_base_html, title, lockup_id="lockup"):
     """
-    CI基盤HTML(5co-CIスライド/の標準テンプレ)の先頭〜ロックアップsymbol終端までを
-    HEADとして取り出す。CSS全部＋ロックアップSVGを丸ごと流用する(=テンプレ複製)。
-    title だけ差し替える。
-    lockup_id: 基盤の <symbol id="..."> のID(標準テンプレは "lockup"、旧sampleは "lk")。
+    CI基盤HTMLから **ロックアップsymbol(ブランド資産)だけ** を流用し、CSSは
+    <!--CI_HEAD--> マーカーとして残すHEADを組む。マーカーは inject_ci_head()
+    (＝正典 ci_head.style_block()・V3.2_FORMAT 1.6)で置換してから出力すること。
+    旧方式「基盤HEADのCSSごと複製」は正典改定(Hoefler化・縦罫撤去 等)が自動で
+    届かずWELLA世代遅れ事故の温床だったため廃止(2026-07-07)。
+    lockup_id: 基盤の <symbol id="..."> のID(標準テンプレ・同梱sampleとも "lk")。
     """
     s = open(ci_base_html, encoding="utf-8").read()
     end = s.find("</symbol>")
     if end < 0:
         raise ValueError(f"CI基盤に <symbol> が見つかりません: {ci_base_html}")
-    head = s[: end + len("</symbol>")] + "</svg>\n"
-    m = re.search(r"<title>.*?</title>", head, re.S)
-    head = head.replace(m.group(0) if m else "<title></title>", f"<title>{title}</title>")
-    return head
+    seg = s[: end + len("</symbol>")]
+    start = seg.rfind("<svg")
+    if start < 0:
+        raise ValueError(f"CI基盤の <symbol> を包む <svg> が見つかりません: {ci_base_html}")
+    if f'id="{lockup_id}"' not in seg[start:]:
+        raise ValueError(f"CI基盤の <symbol> に id=\"{lockup_id}\" がありません: {ci_base_html}")
+    symbol_svg = seg[start:] + "</svg>\n"
+    m = re.search(r'<link rel="icon"[^>]*>', s)
+    favicon = (m.group(0) + "\n") if m else ""
+    return (
+        '<!DOCTYPE html>\n<html lang="ja"><head><meta charset="UTF-8">\n'
+        f"{favicon}<title>{title}</title>\n<!--CI_HEAD-->\n</head>\n<body>\n{symbol_svg}"
+    )
+
+
+def find_ci_kit():
+    """正典 5co-CI-kit の場所を解決する(環境変数 CI_KIT_DIR → 本ファイルから親方向へ探索)。
+    見つからなければ例外(fail-closed: 正典CSSなしで黙って組ませない)。"""
+    candidates = []
+    env = os.environ.get("CI_KIT_DIR")
+    if env:
+        candidates.append(os.path.abspath(os.path.expanduser(env)))
+    p = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        candidates.append(os.path.join(p, "5co-CI-kit"))
+        parent = os.path.dirname(p)
+        if parent == p:
+            break
+        p = parent
+    for d in candidates:
+        if os.path.isfile(os.path.join(d, "ci_head.py")):
+            return d
+    raise FileNotFoundError(
+        "5co-CI-kit が見つかりません(正典CSS連結に必須)。リポ直下の 5co-CI-kit を確認するか、"
+        "環境変数 CI_KIT_DIR でkitのパスを指定してください。")
+
+
+def inject_ci_head(html):
+    """<!--CI_HEAD--> を正典CSS連結 ci_head.style_block() で置換する(V3.2_FORMAT 1.6・
+    これ以外の連結方式は禁止)。出力冒頭の版スタンプが「ci_head 経由で組まれた」証跡になる。
+    マーカー不在・kitコピー不完全は fail-closed で例外。"""
+    if "<!--CI_HEAD-->" not in html:
+        raise ValueError("<!--CI_HEAD--> マーカーがありません(load_ci_head を経由してください)")
+    kit = find_ci_kit()
+    if kit not in sys.path:
+        sys.path.insert(0, kit)
+    import ci_head
+    return html.replace("<!--CI_HEAD-->", ci_head.style_block())
 
 
 # ---------------------------------------------------------------- formatters (IR作法)
@@ -236,167 +285,65 @@ def to_pdf(html_path, pdf_path, chrome=None):
     raise RuntimeError("Chromeが見つからずPDF化に失敗。chrome引数で実行パスを指定してください。")
 
 
-# ---------------------------------------------------------------- EXTRA CSS (CI 3色のみ・基盤を壊さない最小上書き)
+# ---------------------------------------------------------------- EXTRA CSS (本デッキ固有のみ・正典重複は持たない)
 EXTRA_CSS = r"""
 <style>
-/* --- CIトークン互換シム ---
-   正規CI(SLIDE.md / sample.html)のトークンは --ink #101820 / --crystal #C3D7EE。本シムは
-   同値で再定義し、--ink/--crystal を持たない基盤を指定された場合でも罫線・網掛け・級数が
-   無効化されないようにする保険(sample.html基盤ではネイティブ定義と同値で無害)。
-   白混ぜの濃淡(#DEE9F6/#F0F5FB)は3色CIの許容範囲。旧名 --navy/--powder は使わない。 */
-:root{
-  --ink:#101820; --ink-14:rgba(16,24,32,.14); --ink-55:rgba(16,24,32,.55);
-  --ink-60:rgba(16,24,32,.60); --ink-85:rgba(16,24,32,.85);
-  --crystal:#C3D7EE; --crystal-55:#DEE9F6; --crystal-25:#F0F5FB;
-  --fs-body:18px; --fs-lg:47px; --fs-note:11px;
-}
-/* ヘッダー＝クライアントロゴ＋キッカーを横並び(ロゴを少し下げ、キッカーは右隣) */
+/* --- 週次デッキ固有の上書き（正典 ci_head 連結の後段に適用） ---
+   正典 ci-format-v3.2.css と宣言まで一致するルールは削除済み（2026-07-07 ci_head 移行）。
+   ここに残すのは (a) 正典に無い案件固有ルール と (b) 週次デッキの確定した見た目を
+   維持する意図的上書き（正典と値が異なる行）のみ。正典改定への追従は ci_head が担う。
+   白混ぜの濃淡(#DEE9F6/#F0F5FB)は3色CIの許容範囲。 */
+/* ヘッダー＝クライアントロゴ＋キッカーを横並び(ロゴを少し下げ、キッカーは右隣)。
+   margin-top 18px は本デッキ確定値（正典は 0） */
 .hdr{display:flex; align-items:center; gap:20px; margin:18px 0 6px;}
 .hdr .client-logo{height:34px; width:auto; display:block;}
-.hdr .kicker{margin:0;}
-/* ヘッダー右上の5coロゴ：左ブロックと天地を揃える(CI 64px上書き)。
-   新CI基盤は右上ロックアップを .corner-logo で絶対配置するが、本ビルダーは .corner をemitするため
-   ここで position:absolute を自前指定する(これが無いと左上にインライン表示で崩れる)。 */
+/* ヘッダー右上の5coロゴ：本ビルダーは .corner をemitするため position:absolute を自前指定
+   (これが無いと左上にインライン表示で崩れる)。top:78px＝左ブロックと天地を揃えた確定位置 */
 svg.corner{position:absolute; top:78px; right:50px; width:102px; height:auto; display:block;
   color:var(--ink); fill:currentColor; z-index:3;}
-/* ダーク地スライド：新CI基盤は .reverse で定義し .slide.dark の地色が無いため自前定義 */
-.slide.dark{background:var(--ink); color:var(--crystal);}
+/* PD章扉の地色＝crystal（週次デッキ確定の見た目。正典は白地＋数字フィールドに改定済みだが
+   本デッキは表紙と同じ crystal 地に数字フィールドをノセる構成を維持する意図的上書き） */
+.cover-full.pd-divider{background:var(--crystal);}
+/* ダーク地スライド：地色・フッターは正典 .slide.dark。子要素の配色のみ本デッキで補完 */
 .slide.dark h1,.slide.dark h2,.slide.dark h3,.slide.dark .title{color:var(--crystal);}
 .slide.dark .kicker,.slide.dark .sub,.slide.dark small,.slide.dark .note{color:rgba(195,215,238,.78);}
 .slide.dark .accent-bar,.slide.dark ul.clean li::before{background:var(--crystal);}
 .slide.dark svg.corner{color:var(--crystal);}
-.slide.dark::before,.slide.dark::after{color:rgba(195,215,238,.65);}
-/* 横長の顧客ロゴは cf-logo 既定32mmでは小さい→表紙で適正サイズに拡大 */
-.cover-full .cf-logo{width:62mm; top:20mm;}
-.cover-full .cf-logo img{width:100%; display:block;}
-/* 表紙テキストブロック・タイトル級数を実デッキに合わせる(bottom:28mm/max-width:64%/h1:46px) */
-.cover-full .cf-block{bottom:28mm; max-width:64%;}
-.cover-full .cf-block h1{font-size:46px; line-height:1.22; letter-spacing:.04em; margin:.3em 0 .5em;}
-/* 表紙の5co正規ロックアップ：右側・集計期間の下端ラインに下揃え */
-.cover-full .cf-corner{position:absolute; right:18mm; bottom:34mm; width:30mm; color:var(--ink); z-index:2;}
-.cover-full .cf-corner svg{width:100%; height:auto; display:block; fill:currentColor;}
-/* 章扉(表紙の数字フィールド背景に扉文字をノセ・明色背景=ink文字) */
-.cover-full.pd-divider .pd-text{position:absolute; left:64px; top:50%; transform:translateY(-50%); z-index:2; display:flex; align-items:center; gap:42px; max-width:74%;}
-.cover-full.pd-divider .dv-bar{width:8px; height:150px; background:var(--ink); flex:none;}
-.cover-full.pd-divider .secno{font-family:var(--serif-en); letter-spacing:.3em; font-size:var(--fs-note); color:var(--ink); opacity:.55; display:block; margin-bottom:16px;}
-.cover-full.pd-divider .dv-title{font-size:var(--fs-lg); line-height:1.2; margin:0; color:var(--ink);}
-.cover-full.pd-divider .dv-sub{font-size:var(--fs-body); color:var(--ink); opacity:.8; margin-top:18px; max-width:62ch;}
-.ok{font-weight:700;} .bh{font-weight:700;}
-.ok::after{content:"○";} .bh::after{content:"△";}
-/* OKRツリー(入れ子ul・コネクタ=ink-14) */
+/* OKRツリー：本デッキ確定の微調整（コネクタ罫1.5px・ラベル/凡例の濃度=ink-60・級数） */
 .okr{--ln:var(--ink-60); text-align:center; margin-top:2px;}
-.okr ul{display:flex; justify-content:center; padding:9px 0 0; margin:0; list-style:none; position:relative;}
-.okr li{position:relative; padding:9px 4px 0;}
 .okr li::before,.okr li::after{content:""; position:absolute; top:0; right:50%; width:50%; height:9px; border-top:1.5px solid var(--ln);}
 .okr li::after{right:auto; left:50%; border-left:1.5px solid var(--ln);}
-.okr li:only-child::before,.okr li:only-child::after{display:none;}
-.okr li:only-child{padding-top:0;}
-.okr li:first-child::before,.okr li:last-child::after{border:0;}
 .okr li:last-child::before{border-right:1.5px solid var(--ln);}
 .okr ul ul::before{content:""; position:absolute; top:0; left:50%; border-left:1.5px solid var(--ln); width:0; height:9px;}
-.okr .nd{display:inline-block; text-align:left; min-width:162px; vertical-align:top;}
 .okr .nm{font-weight:600; font-size:12.5px; display:block; margin-bottom:4px; text-align:center; color:var(--ink); line-height:1.3;}
 .okr .box{border:1pt solid var(--ink-60); border-radius:6px; padding:2px 9px; margin-top:2px; font-size:10.5px; color:var(--ink); line-height:1.4; font-variant-numeric:lining-nums tabular-nums; background:var(--white); white-space:nowrap;}
 .okr .box .lbl{display:inline-block; width:30px; color:var(--ink-60); font-size:9.5px;}
-.okr .box b{font-size:12px;}
-.okr .box.mk{background:var(--crystal-25); font-weight:600;}
-.okr .nd.s .box.mk{background:var(--crystal);}
 .okr .nd.lead{background:var(--ink); border-radius:8px; padding:9px 16px; min-width:0; font-size:inherit; line-height:1.3;}
 .okr .nd.lead .nm{color:var(--crystal); text-align:left;}
 .okr .nd.lead .box{display:block; margin:4px 0 0 0; background:rgba(195,215,238,.12); border-color:rgba(195,215,238,.60); color:var(--crystal);}
-.okr .nd.lead .box .lbl{color:rgba(195,215,238,.7);}
-.okr .nd.lead .box b{color:var(--crystal);}
-.okr-annual-wrap{text-align:center; position:relative;}
-.okr-annual{display:inline-block; background:var(--crystal-25); border:1px solid var(--crystal); color:var(--ink); border-radius:8px; padding:5px 24px; font-size:13px; font-weight:600; letter-spacing:.03em;}
-.okr-annual b{font-size:16px;}
-.okr-sbs{position:relative;}
-.okr-total-side{position:absolute; left:0; top:30px; z-index:2; text-align:left;}
 .okr-annual-wrap::after{content:""; display:block; width:0; height:4px; margin:0 auto; border-left:1.5px solid var(--ink-60);}
 .okr-legend{color:var(--ink-60); font-size:11px; margin:2px 0 3px;}
-.okr .nd.lead .box .pending{font-size:9px; font-weight:600; color:var(--crystal); border:1px solid rgba(195,215,238,.5); border-radius:3px; padding:1px 5px; margin-left:6px; letter-spacing:.04em;}
-.okr-insight{display:flex; align-items:center; gap:14px; background:var(--crystal-25); border-left:6px solid var(--crystal); border-radius:6px; padding:3px 18px;}
 .okr-insight .ins-lbl{flex:none; font-size:11px; font-weight:600; color:var(--ink-60); border:1px solid var(--crystal); border-radius:4px; padding:3px 10px;}
 .okr-insight .ins-txt{font-size:15px; font-weight:700; color:var(--ink); line-height:1.5;}
-.okr ul ul ul{position:relative;}
-.okr ul ul ul > li{padding-top:10px;}
-.okr ul ul ul > li::before,.okr ul ul ul > li::after{height:10px;}
 .okr .sgrp-row{display:flex; gap:8px; justify-content:center; align-items:flex-end; position:relative; padding-top:9px;}
 .okr .sgrp-row::before{content:""; position:absolute; top:0; left:81px; right:81px; border-top:1.5px solid var(--ln);}
-.okr li.emg{padding-top:19px;}
 .okr .nd .shr{display:block; font-size:8.5px; font-weight:600; color:var(--ink-60); margin-top:1px; line-height:1.2; white-space:nowrap; text-align:center;}
-.okr .nd.big{min-width:246px;}
-.okr .nd.big .nm{font-size:16px; margin-bottom:6px;}
 .okr .nd.big .box{font-size:13px; padding:6px 14px; margin-top:5px; border-color:var(--ink-60);}
-.okr .nd.big .box b{font-size:16px;}
-.okr .nd.big .box .lbl{width:36px; font-size:11.5px;}
-.okr .nd.big .box.mk{background:var(--crystal);}
-.okr .nd.mid{min-width:198px;}
-.okr .nd.mid .nm{font-size:14px; margin-bottom:4px;}
-.okr .nd.mid .box{font-size:11.5px; padding:2px 11px; margin-top:2px;}
-.okr .nd.mid .box b{font-size:14px;}
-.okr .nd.mid .box .lbl{width:33px; font-size:10.5px;}
-.okr .nd.cat{min-width:138px;}
-.okr .nd.cat .nm{font-size:11px; margin-bottom:3px;}
-.okr .nd.cat .box{font-size:9.5px; padding:2px 7px;}
-.okr .nd.cat .box b{font-size:11px;}
-.okr .nd.cat .box .lbl{width:27px; font-size:8.5px;}
 .okr .nd.cat .shr{font-size:7.5px;}
-/* フル再現テーブル(小型＋余白) */
-.skyu{margin:4px auto 0; max-width:99%;}
+/* テーブル小見出し・単位注＝ink-60（正典 ink-85 より薄い本デッキ確定濃度） */
 .skyu-h{font-size:11px; color:var(--ink-60); margin:0 0 2px 2px; letter-spacing:.04em;}
 .sk-unit{text-align:right; font-size:9px; color:var(--ink-60); margin:0 2px 3px 0; letter-spacing:.02em; line-height:1.4;}
-/* 実デッキ準拠：密な数表はゴシック(Hiragino Sans)＋10px。明朝(本文serif)を継承させない */
-table.sk{font-size:10px; border-collapse:collapse; width:100%;
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue",Arial,sans-serif;}
-table.sk.wide{font-size:9.5px;}
 table.sk.wide th,table.sk.wide td{padding:1px 2px;}
-table.sk.dsp3{font-size:9px;} table.sk.dsp3 th,table.sk.dsp3 td{padding:1px 2px;}
-table.sk.dense{font-size:9px;} table.sk.dense th,table.sk.dense td{padding:1px 2px;}
-/* 罫線ルール：横線のみ(下罫線)・縦線は使わない。font-family/size:inherit で新CI基盤の
-   th,td{font-size:1.02rem} 直指定を打ち消す(これが無いと明朝・巨大化で列が切れる) */
+table.sk.dsp3 th,table.sk.dsp3 td{padding:1px 2px;}
+/* 罫線ルール：横線のみ(下罫線)・縦線は使わない。font-family/size:inherit で基盤の
+   th,td 直指定を打ち消す(これが無いと明朝・巨大化で列が切れる) */
 table.sk th,table.sk td{border:none; border-bottom:1pt solid var(--ink-60); padding:1px 3px; text-align:right; white-space:nowrap; line-height:1.2; vertical-align:middle; font-size:inherit; font-family:inherit;}
-table.sk th{background:var(--crystal-55); text-align:center; font-weight:600;}
-table.sk th.g{background:var(--crystal);}
-table.sk td.l,table.sk th.l{text-align:left;}
-table.sk td.bd{font-weight:700; font-size:10px; background:var(--white);}
-table.sk tr.tot td{background:var(--crystal-25); font-weight:600;}
-table.sk tr.grand td{background:var(--crystal); font-weight:700; font-size:9px; border-top:2px solid var(--ink-60); border-bottom:1.5px solid var(--ink-60);}
-table.sk tr.grand td.l{font-size:10px;}
 table.sk td.dim{color:var(--ink-60);}
-table.sk tbody tr:nth-child(even){background:transparent;}
-table.sk tr.hl td{background:var(--crystal);}
-table.sk tr.hl td.l{font-weight:600;}
-/* 所見ブロック(構造化) */
-.sho{margin:8px auto 0; max-width:99%;}
-.sho-h{font-weight:600; font-size:13px; color:var(--ink); display:inline-block; border-left:3px solid var(--crystal); padding-left:9px; margin-bottom:3px;}
-ul.clean.sho-l{margin:4px 0 0;}
-ul.clean.sho-l li{font-size:11.5px; margin:3px 0; padding-left:18px; line-height:1.5;}
-ul.clean.sho-l li::before{top:8px; width:6px; height:6px;}
-.sho .hlmk{background:var(--crystal); padding:0 4px; border-radius:3px;}
-/* 考察=スライドの主役：クリスタルカード＋結論リード */
-.sho-card{margin:11px auto 0; max-width:99%; background:var(--crystal-25); border-radius:8px; padding:14px 24px 16px; border-left:6px solid var(--crystal);}
+/* 所見カード見出し＝ink-60（正典 ink-85 より薄い本デッキ確定濃度） */
 .sho-card .sho-h{border-left:0; padding-left:0; font-size:13px; color:var(--ink-60); font-weight:600; letter-spacing:.1em;}
-.sho-lead{font-size:16px; font-weight:700; color:var(--ink); line-height:1.6; margin:3px 0 10px;}
-.sho-card ul.clean.sho-l li{font-size:12.5px; margin:4px 0;}
-.note-c{text-align:center; margin-top:10px;}
-/* 本文スライドのタイトルは実デッキ準拠27px(新CI基盤の h2=2rem≒38px を上書き。これが無いと約4割大きい) */
-h2.title{font-size:27px; line-height:1.5; margin-bottom:2px;}
-.sub{font-size:13px; color:var(--ink-85); margin:6px 0 0;}
-/* キッカー/リードを実デッキ準拠に(新CI基盤の .kicker=.8rem≒15px / .lead=1.3rem≒25px を上書き) */
-.kicker{font-size:13px;}
-.lead{font-size:21px; line-height:1.7;}
-/* 日進捗・集計期間(フッターCONFIDENTIALの左隣に1行・フッター高に揃える) */
+/* 日進捗・集計期間(フッターCONFIDENTIALの左隣に1行)＝ink-60 */
 .period{position:absolute; bottom:15px; left:36px; white-space:nowrap; font-family:var(--serif-en);
   font-size:11px; letter-spacing:.04em; color:var(--ink-60); z-index:3;}
-.period b{color:var(--ink); font-weight:600;}
-.slide::before{left:auto; right:230px;}
-.slide.dark .period{color:rgba(195,215,238,.65);} .slide.dark .period b{color:var(--crystal);}
 .notemk{font-size:11.5px; color:var(--ink-60); margin-top:6px;}
-/* 章扉 divider(dark・左に縦バー) */
-.slide.divider{display:flex; align-items:center; padding:0;}
-.divider .dv-bar{width:8px; height:58%; background:var(--crystal); margin:0 42px 0 64px;}
-.divider .secno{font-family:var(--serif-en); letter-spacing:.3em; font-size:var(--fs-note); color:var(--crystal); opacity:.75; display:block; margin-bottom:16px;}
-.divider .dv-title{font-size:var(--fs-lg); line-height:1.2; margin:0; color:var(--crystal);}
-.divider .dv-sub{font-size:18px; color:var(--crystal); opacity:.85; margin-top:18px; max-width:62ch;}
 </style>
 """

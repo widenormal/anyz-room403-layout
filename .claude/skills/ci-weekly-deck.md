@@ -57,7 +57,7 @@
 `ci-weekly-deck/config.example.json` を `config.json` にコピーし、以下を記入する：
 
 - `client_name` / `client_kicker` … 顧客名・表紙キッカー
-- `ci_base_html` … 既定は**スキル同梱の `assets/ci_base_sample.html`**（`config.example.json` の既定値・`docs/SLIDE-md/SLIDE-md-5co/sample.html` の同一コピー）。`lockup_symbol_id` は基盤の `<symbol>` ID（同梱基盤・`5co-CI-kit/5co_slide_template.html` いずれも `lk`）。CSSは複製せず参照する
+- `ci_base_html` … 既定は**スキル同梱の `assets/ci_base_sample.html`**（`config.example.json` の既定値・`docs/SLIDE-md/SLIDE-md-5co/sample.html` の同一コピー）。`lockup_symbol_id` は基盤の `<symbol>` ID（同梱基盤・`5co-CI-kit/5co_slide_template.html` いずれも `lk`）。基盤からは**ロックアップsymbol（ブランド資産）のみ**流用し、正典CSSは `5co-CI-kit/ci_head.py` 連結（V3.2_FORMAT 1.6）で自動注入・自動追従する
 - `client_logo` … 顧客ロゴ（透過PNG/SVG）。未用意なら `assets/client_logo_placeholder.svg` のまま
 - `spreadsheet_id` / `ranges` / `oauth_token` … 抽出元シートID・`[資料用]`各タブ範囲・OAuthトークン
 - `data.skyu_full` / `data.deck_data` / `data.lavon` … 実データJSON（未指定なら `sample_data.py` のダミーで14枚生成）
@@ -140,10 +140,19 @@ PPTX を配る場合は Step 3.5 の出力を同フォルダへ。
 制作前に **`docs/SLIDE-md/SLIDE-md-5co/SLIDE.md`**（正規仕様・配色/級数/コンポーネント）を必ず読む。
 補助として `5co-CI-kit/CI_KICKOFF.md` / `SLIDE_DESIGN_GUIDELINES.md`。
 
-CI基盤は **SLIDE.md 参照の `docs/SLIDE-md/SLIDE-md-5co/sample.html`**（`--ink`/`--crystal` をネイティブ定義・
-数字フィールド内蔵・lockup `symbol id="lk"`）。スキルはその**同一コピーを `assets/ci_base_sample.html` として同梱**し、
-config.example.json の `ci_base_html` はこの同梱コピーを指す（`lockup_symbol_id="lk"`、`numfield_svg=""`）。`ci_v2_lib.py` の EXTRA_CSS 先頭の互換 `:root` は、`--ink`/`--crystal` を持たない基盤を
-指定された場合の保険（sample.html ではネイティブ定義と同値で無害）。**旧名 `--navy`/`--powder` は使わない**。
+**所見（Step 1.5・`shoken_draft_template.md`）の文体は `5co-CI-kit/COPY_GUIDE.md` が正**
+（2026-07-08 制定・全定例会資料のコメントに採用）。数値ハイライトの羅列で終えず、
+読者の問いに答える一文から書く（原則5・誠実トーンの定型）。定例会資料の読者は
+運用の専門用語に不慣れなことが多い（EC/デジタル初心者を含む）ため、専門用語は
+初出で日常語を併記する（原則4）。
+
+正典CSSは **`5co-CI-kit/ci_head.py` の連結（V3.2_FORMAT 1.6・唯一の標準方式）** でHEADへ注入され、
+`VERSION` の format: 宣言（版上げ）に自動追従する。CI基盤HTML（`ci_base_html`）からは
+**ロックアップ `symbol id="lk"`（ブランド資産）のみ**流用する。スキルは `docs/SLIDE-md/SLIDE-md-5co/sample.html`
+の同一コピーを `assets/ci_base_sample.html` として同梱し、config.example.json の `ci_base_html` は
+この同梱コピーを指す（`lockup_symbol_id="lk"`、`numfield_svg=""`）。`ci_v2_lib.py` の EXTRA_CSS は
+**正典に無い案件固有ルールと意図的上書きのみ**（正典と重複するルールは 2026-07-07 の ci_head 移行で
+削除済み）。**旧世代のトークン名は使わない**。
 
 > 注意: この skill は **データ駆動の週次デッキ生成器**。SLIDE.md の「テンプレ複製・文言差し替え」フローは
 > 静的1枚物向け。本 skill はその CSS/トークンに準拠しつつ、表をシートから自動生成する正規パスです。
