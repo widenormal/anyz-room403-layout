@@ -284,7 +284,7 @@ table.sk.wide{font-size:9.5px;}
 table.sk.dense{font-size:9px;}
 table.sk.dense th,table.sk.dense td{padding:1px 2px;}
 table.sk.wide th,table.sk.wide td{padding:1px 1px; letter-spacing:-0.2px;}
-table.sk th,table.sk td{border:1px solid var(--ink-55); padding:1px 3px; text-align:right; white-space:nowrap; line-height:1.2; vertical-align:middle;}
+table.sk th,table.sk td{border:none; border-bottom:1px solid var(--ink-14); padding:1px 3px; text-align:right; white-space:nowrap; line-height:1.2; vertical-align:middle;}
 table.sk th{background:var(--crystal-55); text-align:center; font-weight:600;}
 table.sk th.g{background:var(--crystal);}
 table.sk td.l,table.sk th.l{text-align:left;}

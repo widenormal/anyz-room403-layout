@@ -112,6 +112,19 @@ done
 [ -z "$VISITED" ] && VISITED="(no exclusion list configured)"
 
 # ──────────────────────────────────────────────
+# ⑦ サブエージェント運用ルール（正典: docs/subagent-orchestration.md）
+# 「適用ルール」節のみ抽出注入（全文注入はトークン浪費のため避ける）。
+# ファイルが無い派生リポでは黙ってスキップ。
+# ──────────────────────────────────────────────
+SUBAGENT_RULES=""
+SUBAGENT_DOC="$PROJ/docs/subagent-orchestration.md"
+if [ -f "$SUBAGENT_DOC" ]; then
+  SUBAGENT_RULES=$(sed -n '/^## 適用ルール/,/^## [^適]/p' "$SUBAGENT_DOC" | sed '$d')
+  [ -n "$SUBAGENT_RULES" ] && SUBAGENT_RULES+=$'\n\n（全文・3軸ランキング表・5co適用注意: docs/subagent-orchestration.md）'
+fi
+[ -z "$SUBAGENT_RULES" ] && SUBAGENT_RULES="(subagent rules doc not present)"
+
+# ──────────────────────────────────────────────
 # ⑥ ツール可用性層：実測されたツール疎通テーブル
 # .claude/hooks/session-start-tool-probe.sh が 24h キャッシュ付きで stdout に出す
 # ──────────────────────────────────────────────
@@ -132,6 +145,7 @@ build_context() {
   printf '=== Resources Inventory ===\n%s\n\n' "$RESOURCES"
   printf '=== Learnings Index (見出し) ===\n%s\n\n' "$LEARNINGS_INDEX"
   printf '=== Visited / Done (除外リスト) ===\n%s\n\n' "$VISITED"
+  printf '=== Subagent Model Rules (適用ルール) ===\n%s\n\n' "$SUBAGENT_RULES"
   printf '=== Tool Availability (実測) ===\n%s\n' "$TOOL_AVAILABILITY"
 }
 
