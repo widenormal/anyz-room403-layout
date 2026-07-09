@@ -29,6 +29,7 @@ ci_head.py — 正典CSS連結の唯一の標準方式（共通HEAD）
   python3 5co-CI-kit/ci_head.py --css      # 生CSSのみ（<style>タグなし）
   python3 5co-CI-kit/ci_head.py --files    # 連結対象ファイル一覧
   python3 5co-CI-kit/ci_head.py --version  # 現行版タグ（例: v3.3）
+  python3 5co-CI-kit/ci_head.py --cover-ci # 表紙CIコンセプトブロック（.cover-ci・全表紙必須）
 
 終了コード: 0=成功 / 1=VERSION不在・宣言CSS欠落（fail-closed: 欠けたまま黙って
 組ませない）
@@ -90,12 +91,39 @@ def style_block() -> str:
     return f"<style>\n{stamp}\n{head_css()}\n</style>"
 
 
+# ---------------------------------------------------------------- 表紙CIコンセプト（正典・単一情報源）
+# 全案件の表紙に載せる「CIコンセプト説明」の正典テキスト。共有ビルダー(ci_v2_lib.cover)も
+# bespoke ビルダー(build_html_monthly.py / build_w1_july.py 等)も、ここを唯一の情報源として
+# 参照する（属人的な手書き＝ドリフト源を禁止）。既定文言はブランド正典 LOGO_HANDOFF.md §4
+# （水晶玉＝市場を透視する5・Strategy, refined.）に基づく。
+# ※ 文言は 5co ブランド概念のみで顧客データを含まない（Tier0 安全・kit へ格納可）。
+#    改定は本リポの PR 経由のみ（VERSION 由来のCSS `.cover-ci` と対で運用）。
+COVER_CI_TAGLINE = "水晶玉で市場を透視し、戦略を磨く。"
+COVER_CI_BODY = (
+    "2026年7月に刷新したロゴマークは、複雑な市場を見通す「水晶玉」と社名の「5」を"
+    "一体にしたシンボルです。<br>曇りのない視点でデータの奥にある本質を捉え、"
+    "戦略を磨き続ける。――「Strategy, refined.」に込めた5coの姿勢を表しています。"
+)
+
+
+def cover_ci_block(tagline: str = COVER_CI_TAGLINE, body: str = COVER_CI_BODY) -> str:
+    """表紙に載せるCIコンセプト説明ブロック（`.cover-ci`）を返す。
+
+    全案件の表紙(cover-full・章扉 pd-divider は除く)に**必須**（V3.2_FORMAT「表紙CIコンセプト」・
+    全CIスライド規則）。正典CSS `.cover-ci` / `.cover-ci-h` に対応する固定マークアップ。
+    既定文言はブランド正典（LOGO_HANDOFF.md §4）。ブランド概念以外の理由で上書きしない。
+    """
+    return f'<div class="cover-ci"><span class="cover-ci-h">{tagline}</span>{body}</div>'
+
+
 def main(argv):
     try:
         if "--version" in argv:
             print(version_tag())
         elif "--files" in argv:
             print("\n".join(css_files()))
+        elif "--cover-ci" in argv:
+            print(cover_ci_block())
         elif "--css" in argv:
             print(head_css())
         else:

@@ -56,7 +56,15 @@ window.addEventListener('load', () => {
       if (w > 112) logo.push((i + 1) + ':' + w + 'px');
     }
   });
-  document.title = 'OVERFLOW_REPORT[' + out.join(',') + ']!LOGO_REPORT[' + logo.join(',') + ']';
+  // 表紙CIコンセプト必須（V3.2_FORMAT・全CIスライド規則）: 表紙(cover-full・章扉 pd-divider 除く)
+  // に .cover-ci があるか。無ければ流用ミス/未対応を表示（TITLE? と同じく非ゲート・目視差し戻し用）。
+  const coverci = [];
+  const slides = [...document.querySelectorAll('.slide')];
+  document.querySelectorAll('.cover-full:not(.pd-divider)').forEach((s) => {
+    if (!s.querySelector('.cover-ci')) coverci.push(slides.indexOf(s) + 1);
+  });
+  document.title = 'OVERFLOW_REPORT[' + out.join(',') + ']!LOGO_REPORT[' + logo.join(',')
+                 + ']!COVERCI_REPORT[' + coverci.join(',') + ']';
 });
 </script>
 """
@@ -77,11 +85,15 @@ def check(path: pathlib.Path) -> str:
         if not m:
             return 'ERROR: report not found'
         lm = re.search(r'LOGO_REPORT\[([^\]]*)\]', r.stdout)
+        cm = re.search(r'COVERCI_REPORT\[([^\]]*)\]', r.stdout)
         msgs = []
         if m.group(1):
             msgs.append('OVERFLOW ' + m.group(1))
         if lm and lm.group(1):
             msgs.append('LOGO>112px ' + lm.group(1))  # 隅ロゴ過大（正準102px・CI v2/V3準拠）
+        if cm and cm.group(1):
+            # 表紙にCIコンセプト(.cover-ci)なし。全CIスライド規則（V3.2_FORMAT）＝表示のみ・要目視差し戻し
+            msgs.append('COVER_CI? 表紙にCIコンセプト(.cover-ci)なし slide:' + cm.group(1))
         # <title> がファイル名の主題と無関係＝head 流用時の更新漏れを検出
         tm = re.search(r'<title>(.*?)</title>', html, re.S)
         if tm:

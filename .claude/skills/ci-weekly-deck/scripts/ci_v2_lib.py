@@ -198,8 +198,24 @@ def header(kicker, title, sub="", *, client_logo_uri, lockup_id="lockup", period
     return h
 
 
-def cover(kicker, title_html, lead_html, *, client_logo_uri, lockup_id="lockup"):
-    """表紙(数字フィールド背景＋顧客ロゴ＋5coロックアップ＋タイトル)。"""
+def _canonical_cover_ci():
+    """正典 ci_head.cover_ci_block() を解決して返す（表紙CIコンセプトの単一情報源）。
+    kit 未検出は fail-closed（find_ci_kit が例外＝コンセプトなしで黙って組ませない）。"""
+    kit = find_ci_kit()
+    if kit not in sys.path:
+        sys.path.insert(0, kit)
+    import ci_head
+    return ci_head.cover_ci_block()
+
+
+def cover(kicker, title_html, lead_html, *, client_logo_uri, lockup_id="lockup",
+          ci_concept_html=None):
+    """表紙(数字フィールド背景＋顧客ロゴ＋5coロックアップ＋タイトル＋CIコンセプト)。
+
+    ci_concept_html を省略すると正典のCIコンセプト(ci_head.cover_ci_block)を必ず載せる
+    ＝**表紙CIコンセプト必須ルール**（V3.2_FORMAT・全CIスライド規則）。ブランド概念以外の
+    理由で上書きしない（属人的な手書き文言はドリフト源）。"""
+    ci_block = _canonical_cover_ci() if ci_concept_html is None else ci_concept_html
     return f"""<section class="slide cover-full">
   <div class="numfield-full"></div>
   <div class="cf-corner"><svg viewBox="0 0 50.857 36.507"><use href="#{lockup_id}"/></svg></div>
@@ -209,6 +225,7 @@ def cover(kicker, title_html, lead_html, *, client_logo_uri, lockup_id="lockup")
     <h1>{title_html}</h1>
     <p class="lead">{lead_html}</p>
   </div>
+{ci_block}
 </section>"""
 
 

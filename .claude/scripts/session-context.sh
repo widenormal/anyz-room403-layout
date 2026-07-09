@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-context.sh: SessionStart hook で 6 ブロック構造の文脈を additionalContext に投入する。
+# session-context.sh: SessionStart hook で 8 ブロック構造の文脈を additionalContext に投入する。
 #
 # 注入するブロック（詳細：docs/active-context-template.md）:
 #   ① 状態層 — memory/active-context.md（進行中タスク・直近の確定事項）
@@ -8,6 +8,8 @@
 #   ④ 除外層 — destinations/visited/ ほか（既消化アイテム・ドメイン依存・任意）
 #   ⑤ 未来層 — 任意（将来の予定・締切等）
 #   ⑥ ツール可用性 — scripts/probe-tools.sh の実測表（op key / wrapper 疎通）
+#   ⑦ サブエージェント規範 — docs/subagent-orchestration.md の「適用ルール」節
+#   ⑧ 肥大化検知 — memory/learnings の行数・サイズ閾値超過警告（超過時のみ・memory-dream 誘導）
 #
 # 失敗時もセッション起動を妨げないため exit 0 で抜ける。
 
@@ -15,6 +17,10 @@ set -u
 
 PROJ="${CLAUDE_PROJECT_DIR:-.}"
 JST_NOW=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M (%a) JST')
+
+# 記憶ファイル肥大化検知（⑧ブロック）の閾値。決定論のみ・LLM 呼び出しなし。
+BLOAT_LINES=300
+BLOAT_BYTES=24576
 
 # ──────────────────────────────────────────────
 # ① 状態層：active-context
@@ -136,6 +142,25 @@ fi
 [ -z "$TOOL_AVAILABILITY" ] && TOOL_AVAILABILITY="(tool availability probe unavailable)"
 
 # ──────────────────────────────────────────────
+# ⑧ 記憶ファイル肥大化検知：決定論のみ・LLM 呼び出しなし
+#   対象: memory/active-context.md, memory/decisions.md, learnings/insights.md（存在するもののみ）
+#   閾値: 行数 $BLOAT_LINES 超 または サイズ $BLOAT_BYTES バイト超
+#   超過ゼロなら MEMORY_BLOAT_LIST は空のまま → build_context で何も出力しない
+# ──────────────────────────────────────────────
+MEMORY_BLOAT_LIST=""
+for bloat_file in memory/active-context.md memory/decisions.md learnings/insights.md; do
+  f="$PROJ/$bloat_file"
+  if [ -f "$f" ]; then
+    bloat_lines=$(wc -l < "$f")
+    bloat_bytes=$(wc -c < "$f")
+    if [ "$bloat_lines" -gt "$BLOAT_LINES" ] || [ "$bloat_bytes" -gt "$BLOAT_BYTES" ]; then
+      bloat_kb=$(( (bloat_bytes + 1023) / 1024 ))
+      MEMORY_BLOAT_LIST+="- ${bloat_file} (${bloat_lines}行 / ${bloat_kb}KB)"$'\n'
+    fi
+  fi
+done
+
+# ──────────────────────────────────────────────
 # JSON 出力（jq が無い環境でも heredoc で対応）
 # ──────────────────────────────────────────────
 build_context() {
@@ -147,6 +172,14 @@ build_context() {
   printf '=== Visited / Done (除外リスト) ===\n%s\n\n' "$VISITED"
   printf '=== Subagent Model Rules (適用ルール) ===\n%s\n\n' "$SUBAGENT_RULES"
   printf '=== Tool Availability (実測) ===\n%s\n' "$TOOL_AVAILABILITY"
+  if [ -n "$MEMORY_BLOAT_LIST" ]; then
+    printf '\n\n=== Memory Bloat Check (肥大化検知) ===\n'
+    printf '⚠ 以下の記憶ファイルが閾値（%s行 or %sKB）を超えています:\n' "$BLOAT_LINES" "$((BLOAT_BYTES / 1024))"
+    printf '%s' "$MEMORY_BLOAT_LIST"
+    printf '記憶の整理（memory-dream）を推奨します。ユーザーに一度だけ提案してください:\n'
+    printf '「記憶ファイルが肥大化しています。memory-dream（4フェーズ consolidation）をサブエージェント（Sonnet 既定）に委譲して剪定PRを起案できます。実行しますか？」\n'
+    printf '承認されたら .claude/skills/memory-dream.md の手順に従い、剪定結果は必ず PR としてレビュー可能な形で出すこと（直接 main へ反映しない）。\n'
+  fi
 }
 
 CTX=$(build_context)

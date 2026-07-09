@@ -411,3 +411,39 @@ section.slide:has(.saF){padding-left:30px;padding-right:30px;}table.sk.saF{font-
 
 /* ---- block 24/24 ---- */
 .budT td, .budT th{font-size:9.5px; padding:3px 6px; border-left:none!important; border-right:none!important;}
+
+/* =========================================================================
+   CI改善6件（slide v3.4・NatureLab 週次デッキ由来・2026-07-09）
+   すべて後方互換の追加。既存セレクタの値は変更しない。
+   非対応環境（auto-phrase 等）では自動的に従来動作へフォールバック。
+   ========================================================================= */
+
+/* C. 枝葉テキストの淡色化：3色規律を守り、独立した色相トークンは足さず
+   墨の不透明度トークン（--ink-60）で「弱く・淡く」を表現する（.fine / .refpg が参照）。 */
+
+/* A-2. 文節単位の改行（日本語の読みやすい改行）
+   Chrome内蔵 BudouX の文節解析で、単語・熟語・助詞の切れ目で折る。
+   対象は文章系要素のみ（表の数値セルは各表の nowrap / break-word 指定を優先）。 */
+p, li, .lead, .sub, .note, .note-line, .t-note, .fine{
+  word-break:auto-phrase;      /* 非対応環境は無視され従来動作 */
+  overflow-wrap:break-word;
+  line-break:strict;           /* 禁則厳格化（行頭の句読点・小書き仮名を禁止） */
+}
+
+/* A-3. 表の分離（PPT準拠の隙間再現）
+   原本PPTで指標群・ブロックが隙間で分離されている表を、1枚の格子に統合せず
+   同じ位置に分離再現する。透明スペーサー列(.gp)・行(tr.brsp)方式＝ヘッダ・列幅整合を保つ。
+   分離を使う表に .skg を付与し、境界に .gp / tr.brsp を挿す。 */
+table.skg td.gp, table.skg th.gp{ border:none!important; background:transparent!important; padding:0!important; width:6px; }
+table.skg tr.brsp td{ border:none!important; background:transparent!important; height:6px; padding:0!important; }
+
+/* B-2. 情報の強弱（1ページ1メッセージ）
+   プレゼン中に読まない枝葉（注記・出典・凡例・単位）は .fine で弱く・淡く。
+   洞察リードは .sho-lead で拡大。※タイトル末尾「｜主張」は COPY_GUIDE 準拠の人手起案。 */
+.fine{ font-size:8.5px; color:var(--ink-60); line-height:1.5; }
+.sho-lead{ font-size:17px; line-height:1.5; }
+
+/* B-3. OKR基準の優先度背景（会議中=白／事前・事後=クリスタルブルー）
+   案件側で参考ページに .refpg を付与する（どのページを参考にするかの分類は案件依存）。 */
+.slide.refpg{ background:var(--crystal-25); print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+.slide.refpg .period::before{ content:"参考（事前・事後読み） ｜ "; color:var(--ink-60); }

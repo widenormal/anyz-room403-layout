@@ -15,7 +15,7 @@
 
 1. **HTML生成**：`5co-CI-kit` の **VERSION 記載の現行フォーマット**に文言・数値のみ差し替え。
    数値は集計データ（{{この案件のデータソース：集計シート名/deck_data.json 等}}）由来のみ。
-   CSS・色・フォント・ロゴ・レイアウトは変更しない。文言は `5co-CI-kit/COPY_GUIDE.md` に従う。
+   CSS・色・フォント・ロゴ・レイアウトは変更しない。文言は `5co-CI-kit/COPY_GUIDE.md`（crystal text＝文言の正）に従う。
 2. **Mac で確認**：Chrome/Safari で開けば忠実表示。PDF は ⌘P で完成。
 3. **仕上げ**：正式な PPTX / Google スライドは HTML を『_仕上げ待ち』経由でファイナライザへ。
 

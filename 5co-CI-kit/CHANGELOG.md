@@ -15,6 +15,52 @@
 
 ---
 
+## slide v3.4（準拠 brand v2） — 2026-07-09
+NatureLab 週次定例デッキ（2026-07-08〜09）で確立・検証した運用改善6件を正典へ取り込み。
+すべて後方互換の追加（既存セレクタ値・レイアウト寸法の変更なし＝既存デッキは不変）。
+
+- **A-1: 文字重なり検査ゲートを新設（`check_text_overlap.py`）**：`slide_overflow_check.py` が拾えない
+  スライド**内**の要素同士の衝突（`position:absolute` の凡例 × 洞察カード等）を headless Chrome で実測し、
+  祖先子孫でないペアが 4px×4px を超えて重なれば `exit 1`。`ci-finalize.sh` にゲート配線（あふれ検査の直後）。
+- **A-2: 文節単位の改行（`ci-format-v3.2.css`）**：文章系要素（`p,li,.lead,.sub,.note,.note-line,.t-note,.fine`）に
+  `word-break:auto-phrase`（Chrome内蔵 BudouX）＋`line-break:strict`。非対応環境は従来動作にフォールバック。
+- **A-3: 表の分離の忠実再現（`.skg`／`V3.2_FORMAT.md §1.5b`）**：原本PPTで隙間分離された指標群・ブロックを、
+  透明スペーサー列(`.gp`)・行(`tr.brsp`)で同位置に再現（1格子へ統合しない）。ヘッダ・列幅整合を保ちはみ出しゲート1表通過。
+- **B-1: ページ参照トークン（`ci_pagerefs.py`）**：`{{PG:タイトル部分文字列}}` をビルド時に実ページ番号へ解決。
+  参照先が無ければ `SystemExit`（参照切れゲート）。並べ替え・増減に自動追従＝参照ズレを構造的に防ぐ。
+- **B-2: 1ページ1メッセージ＋強弱（`COPY_GUIDE.md` 原則1追補・`.fine`/`.sho-lead`）**：タイトル末尾に「｜主張」（人手起案）、
+  枝葉（注記・出典・凡例・単位）は `.fine`＝8.5px・淡い墨で弱く、洞察リードは `.sho-lead`＝17px で強く。
+- **B-3: OKR基準の優先度背景（`.slide.refpg`）**：参考ページ（事前・事後読み）は `--crystal-25` 地＋`.period` に
+  「参考」ラベル。会議中にめくるOKR直結ページは白。どのページを参考にするかの**分類は案件側**（`.refpg` 付与）。
+- **C: 枝葉テキストの淡色化（3色規律遵守）**：`.fine`/`.refpg` の弱いテキストは、独立した色相トークンを
+  足さず墨の不透明度トークン `--ink-60` で表現する（新色相 `--ink-blue #5B7C99` は導入しない＝白/crystal blue/ink の3色を厳守）。
+
+---
+
+## slide v3.5（準拠 brand v2） — 2026-07-09
+> v3.4（CI改善6件・PR #742）に後続する非破壊追加。CSSトークン値・レイアウト寸法は不変。
+
+- **表紙CIコンセプト必須化（全CIスライド規則）**：すべての表紙（`cover-full`・章扉 `pd-divider` 除く）
+  に、CIコンセプト説明ブロック `.cover-ci`（「水晶玉で市場を透視し、戦略を磨く。」＋ロゴ由来）を
+  **必ず**載せるルールを制定。属人的な手書き（NatureLab 週次のみ手入れされていた）を排し、正典化。
+  - **単一情報源＝`ci_head.cover_ci_block()`**（`COVER_CI_TAGLINE`/`COVER_CI_BODY`・由来 `LOGO_HANDOFF.md` §4）。
+    共有ビルダー `ci_v2_lib.cover()` は既定で自動付与（`ci_concept_html` 省略時）。bespoke ビルダーも
+    `import ci_head; ci_head.cover_ci_block()` で同一正典を消費（文言はブランド概念のみ＝Tier0安全）。
+  - **CSS は既存の正典 `.cover-ci`/`.cover-ci-h`**（`ci-format-v3.2.css`・変更なし）。
+  - **検査**：`slide_overflow_check.py` が `.cover-ci` の無い表紙を `COVER_CI?` として表示（非ゲート）。
+  - 反映：`V3.2_FORMAT.md`（不変条件＋「表紙CIコンセプト」節）・`CI_KICKOFF.md`・`SLIDE_DESIGN_GUIDELINES.md`
+    （Do/Don't＋チェックリスト）。
+- **CI用語の呼称統一（水晶玉シリーズで一貫化）**：色＝**crystal blue**（`--crystal`・旧「アイスブルー/シアン/水色/ice」）、
+  濃紺＝**ink**（`--ink`）、数字背景＝**Oracle**（`.numfield-full`・旧「数字フィールド/数字モチーフ」）、
+  マーク＝**crystal ball（水晶玉）**、文言の正（`COPY_GUIDE.md`）＝**crystal text** に統一。
+  - `CI_KICKOFF.md` に「CI用語」表を新設（正式名・CSSトークン・使わない旧称）。
+  - `SLIDE_DESIGN_GUIDELINES.md` は v2 時代の**廃止トークン `--ice` 系を `--crystal` 系へ全面更新**
+    （`check-slide-ci-parity.py` の DEPRECATED と整合）。誤称「シアン」（H198°・廃止色相）も除去。
+  - `LOGO_HANDOFF.md`/`README.md`/`NUMFIELD_HANDOFF.md` のプロースも crystal blue / ink / Oracle に統一。
+  - **CSSトークン値・レイアウト寸法の変更なし**（プロース/ドキュメントの呼称のみ＝非破壊）。
+
+---
+
 ## slide v3.3（準拠 brand v2） — 2026-07-07
 - **共通HEAD＝正典CSS連結の標準方式を制定（`ci_head.py`・data-analysis 依頼 2026-07-07）**：
   案件ビルダーが正典CSSをコピー・inline再実装する運用（正典改定が届かないフォーク化＝WELLA 事故の温床）を
@@ -34,8 +80,8 @@
     （自己完結・opacity非依存＝PDF/PPTX出力でも決定論）。旧マークアップの `img.nf-bg` は自動非表示（互換）。
   - 実機検証: 表紙・本文の描画目視（白地・水色Oracle・ink/カード可読）＋はみ出しゲート OK。
 - **はみ出し検査の横方向対応（現場報告 2026-07-07・クラシエ制作中に発見された死角）**：
-  `slide_overflow_check.py` に ①`scrollWidth` 検査（`+Npx(横)`） ②`overflow:hidden` で
-  「あふれず隠れて切れる」table/svg/img の右端クリップ検査（`clip(TAG)`） ③幾何NG時の
+  `slide_overflow_check.py` に 1:`scrollWidth` 検査（`+Npx(横)`） 2:`overflow:hidden` で
+  「あふれず隠れて切れる」table/svg/img の右端クリップ検査（`clip(TAG)`） 3:幾何NG時の
   **exit 1**（gate として機能・TITLE? ヒューリスティックは表示のみ）を追加。
   `ci-finalize.sh` の検査を「警告のみ」→**NG で停止**（V3.2 規定「OK まで配布不可」を強制）。
   - 新検査が正本テンプレ自身の潜在不良（週次テンプレ7枚目 DSP 表・右端列+56px 見切れ）を
@@ -43,14 +89,14 @@
 
 - **正典文書の世代整合（WELLA 世代遅れ調査 2026-07-07・docs/CI調査回答_WELLAスライド劣化_2026-07-07.md）**：
   WELLA 月次が CI_KICKOFF の旧導線（v2 週次雛形の複製）どおりに組まれ V3.1 タイポ・琥珀を取りこぼした事故を受け、
-  ①CI_KICKOFF.md／SLIDE.md の入口を「VERSION 確認→現行フォーマット」へ改定 ②SLIDE_DESIGN_GUIDELINES.md に
+  1:CI_KICKOFF.md／SLIDE.md の入口を「VERSION 確認→現行フォーマット」へ改定 2:SLIDE_DESIGN_GUIDELINES.md に
   V3.1 タイポ（§3）を明文化・旧「明朝統一」記述と隅ロゴ 64px 表記を是正（列グループ縦罫禁止の§3.5は別途本日中に明文化済み・
-  本件では table.sk の格子罫未追従を注記） ③SLIDE.md の EB Garamond 残骸を Hoefler へ統一
-  ④`check-slide-ci-parity.py` に Garamond 系残存の検査を追加。週次雛形 HTML 冒頭に
+  本件では table.sk の格子罫未追従を注記） 3:SLIDE.md の EB Garamond 残骸を Hoefler へ統一
+  4:`check-slide-ci-parity.py` に Garamond 系残存の検査を追加。週次雛形 HTML 冒頭に
   「月次・新規に使わない」警告を焼き込み。フォーマット CSS 自体は不変（文書・検査のみ）。
 - **正典準拠の是正2件（NatureLab準拠規定 2026-07-07 起点）**：
-  ①standalone テンプレの旧トークン名 `--powder`/`--navy` を正準 `--crystal`/`--ink` 系へ改名
-  （hex不変・クラス名は後方互換で不変・parity checker 適合化） ②**洞察強調色＝琥珀 #f6b44a を正式化**
+  1:standalone テンプレの旧トークン名 `--powder`/`--navy` を正準 `--crystal`/`--ink` 系へ改名
+  （hex不変・クラス名は後方互換で不変・parity checker 適合化） 2:**洞察強調色＝琥珀 #f6b44a を正式化**
   （`--insight` 系トークンを ci-charts.css に追加。v3.2 実装 `td.chl`/`.pdstr .c-hi` の追認・
   意味にのみ使用可＝装飾禁止）。
 
