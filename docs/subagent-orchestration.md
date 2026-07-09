@@ -76,6 +76,22 @@ CLAUDE.md の「コスト管理」節（デフォルト Sonnet・高度推論の
 という軸を、コスト・知性・趣味の良さの3軸評価表として明文化し、
 **「基準に届かなければ黙って upgrade してよい」という標準許可**を追加した。
 
+## 展開経路（このルールがどこに届くか）
+
+1. **git 派生リポ**：`apply-template.sh` の ROOT_FILES に本ファイルを登録済み。加えて
+   `.claude/scripts/session-context.sh` の⑦ブロックが「適用ルール」節を SessionStart で自動注入する。
+   `sync-template` → `merge-template-sync-prs` で全派生リポへ伝播する。
+2. **非 git の Drive 作業場（`AI-Objective-MGMT` 等・GitHub 不要の社員向け）**：本ファイルや
+   `session-context.sh` は Drive フォルダに配布されない。代わりに `scripts/drive-canonical-refresh.sh`
+   が Drive 直下 `CLAUDE.md` の「CI 正本ブロック（マーカー方式）」内・**コスト管理（全セッション必須）節**へ
+   本ルールの要点を**インライン**で焼き込む（毎日 08:00 の cron／手動実行の両方で更新）。Drive フォルダには
+   `docs/…` 参照が存在しないため、リンクではなくルール本体を書き込む設計。これにより「Drive 直下で作業する
+   全社員のセッション」にも、毎ターン注入される CLAUDE.md 経由でルールが届く。
+   - 管理者 Mac で即時反映する場合：`DRY_RUN=1 bash scripts/drive-canonical-refresh.sh` で計画確認 →
+     `bash scripts/drive-canonical-refresh.sh` で本番。`AI-Objective-MGMT` 以外のマウント（例：
+     `自社OKR会/KR-1A`）は自動検出対象外のため、必要なら `DRIVE_ROOT=<パス> bash scripts/drive-canonical-refresh.sh`
+     で個別指定する（CI-kit を持たない作業場では CI-kit 同期分が新規作成される点に留意）。
+
 ## 適用範囲外（例外）
 
 - ユーザーが明示的にモデルを指定した場合はそれに従う（本ルールはデフォルト方針）

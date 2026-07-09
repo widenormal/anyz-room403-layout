@@ -26,6 +26,8 @@ Amazonリテール等の **週次定例デッキ** を 5co. CI v2 準拠のHTML�
   連結する唯一の標準方式・V3.2_FORMAT 1.6）でHEADへ自動注入され、正典改定に自動追従する。
   CI基盤HTML(`config.json` の `ci_base_html`)からは**ロックアップSVG(ブランド資産)のみ**流用する。
   → ルートの CI 運用ルール(`CLAUDE.md` の CI・トンマナ節)に従う。「0からCSSを書かない」。
+- **表紙CIコンセプトは自動付与**。`cover()` は正典 `ci_head.cover_ci_block()` を既定で載せる
+  （全CIスライド規則・V3.2_FORMAT「表紙CIコンセプト」）。手書きで重複追加・削除しない。
 - Python: `google-api-python-client` / `google-auth`(抽出に必要)。例 `~/venv-gapi/bin/python3`。
 - 抽出には Sheets 閲覧スコープ付き OAuth トークン(`oauth_token`)が必要。
 - PDF化は Chrome `--headless --print-to-pdf`(`build_deck.py --pdf` または `ci_v2_lib.to_pdf`)。

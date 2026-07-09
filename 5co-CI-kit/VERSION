@@ -1,7 +1,12 @@
-v3.3
-date: 2026-07-07
+v3.5
+date: 2026-07-09
 format: ci-format-v3.2.css + ci-cover-light-v3.3.css（ライトバリアント追補：表紙=crystal-55／本文=crystal-25） + ci-charts.css（機能色・チャート） + V3.2_FORMAT.md
 serif-en: Hoefler Text（macOS標準・Adobe Fonts 依存なし）
 head: 案件ビルダーの正典CSS連結は ci_head.py 経由のみ（CSSコピー・inline再実装禁止・上記 format 宣言を自動追従）
+gates: 配布前に slide_overflow_check.py（あふれ）＋ check_text_overlap.py（要素の重なり）を通す（ci-finalize.sh が自動ゲート）
+utils: ページ参照は ci_pagerefs.py の {{PG:タイトル}} トークンで解決（直書き禁止・参照切れはビルド失敗）
+cover-ci: 表紙CIコンセプト必須（cover-full・pd-divider除く）。正典＝ci_head.cover_ci_block()（単一情報源・全CIスライド規則）
+naming: 色=crystal blue（--crystal）／濃紺=ink（--ink）／数字背景=Oracle（.numfield-full）で呼称統一（CI_KICKOFF.md「CI用語」）
 canonical: 5co-hub/template:5co-CI-kit（唯一の格納場所・CI_SOURCE.md 参照）
 rule: すべてのセッションは生成前に本ファイルを確認し、常にこの最新版でスライドを作成する
+note: v3.5 はCSS不変（ci-format-v3.2.css/ci-cover-light-v3.3.css そのまま）。v3.4（CI改善6件・PR #742: overlapゲート・ページ参照・表紙CIコンセプト必須・呼称統一の一部）に後続し、表紙CIコンセプト必須ルール・COVER_CI検査・呼称統一（crystal ball/crystal text含む）を追加（非破壊）

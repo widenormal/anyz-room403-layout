@@ -56,6 +56,7 @@
 | `slide-deck-builder/SKILL.md` | SLIDE-DECK.md（設計書）生成（汎用デッキ用・任意経路） | 「プレゼンの設計書を作って」 |
 | `slide-md-creator/SKILL.md` | デザインシステム SLIDE.md の新規生成（新規ブランド用） | 「SLIDE.md を生成して」 |
 | `slide-pattern-creator/SKILL.md` | レイアウトパターン SLIDE-PATTERN の抽出・生成 | 「スライドパターンを抽出して」 |
+| `memory-dream.md` | 記憶階層の consolidation（重複・矛盾・陳腐化の除去） | 「記憶の整理」「dream」指示時／20〜30セッション蓄積時／大規模リファクタ直後 |
 | （プロジェクト固有スキルをここに追記） | | |
 
 ### マルチLLMオーケストレーション

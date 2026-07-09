@@ -21,6 +21,7 @@ SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SELF_DIR/.." && pwd)"
 H2P="$REPO_ROOT/scripts/html_to_pptx.py"
 OVF="$SELF_DIR/slide_overflow_check.py"
+OVL="$SELF_DIR/check_text_overlap.py"
 PARITY="$REPO_ROOT/scripts/check-slide-ci-parity.py"
 
 say(){ printf '%s\n' "$*"; }
@@ -82,6 +83,13 @@ if [ -f "$OVF" ] && command -v python3 >/dev/null 2>&1; then
   say "▶ はみ出し検査（gate）"
   python3 "$OVF" "$SRC" 2>&1 | sed 's/^/  /'
   [ "${PIPESTATUS[0]}" -eq 0 ] || die "はみ出し検査 NG（V3.2 規定: OK になるまで配布不可。上の行のスライドを修正してから再実行）"
+fi
+
+# ---- ゲート: 文字重なり検査（absolute配置要素同士の衝突＝はみ出し検査の死角） ----
+if [ -f "$OVL" ] && command -v python3 >/dev/null 2>&1; then
+  say "▶ 文字重なり検査（gate）"
+  python3 "$OVL" "$SRC" 2>&1 | sed 's/^/  /'
+  [ "${PIPESTATUS[0]}" -eq 0 ] || die "文字重なり検査 NG（要素同士が重なっています。上の行のスライドを修正してから再実行）"
 fi
 
 # ---- ゲート: CIトークン整合検査（廃止トークン --navy/--powder・旧hex・Georgia混入を検出） ----
