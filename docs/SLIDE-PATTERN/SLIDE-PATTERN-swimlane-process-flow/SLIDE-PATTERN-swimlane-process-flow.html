@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-swimlane-process-flow</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      padding: 12px 40px 14px;
+      overflow: hidden;
+      display: flex;
+    }
+    .swimlane-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .lane-title { font-size: 13px; font-weight: bold; fill: #333333; }
+    .box-text   { font-size: 11.5px; fill: #333333; }
+    .box-text-strong { font-size: 11.5px; font-weight: bold; fill: #333333; }
+    .step-num   { font-size: 9px; font-weight: bold; fill: #FFFFFF; }
+    .flow-label { font-size: 10px; fill: #666666; }
+    .note-text  { font-size: 10px; fill: #999999; }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[swimlane-process-flow]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <svg class="swimlane-svg" viewBox="0 0 880 430" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#999999"/>
+          </marker>
+        </defs>
+
+        <!-- レーン背景（横3本） -->
+        <rect x="80" y="0"   width="800" height="140" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+        <rect x="80" y="140" width="800" height="140" fill="#F0F0F0" stroke="#CCCCCC" stroke-width="1"/>
+        <rect x="80" y="280" width="800" height="140" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+
+        <!-- レーンラベル（左端） -->
+        <rect x="0" y="0"   width="80" height="140" fill="#E8E8E8" stroke="#CCCCCC" stroke-width="1"/>
+        <rect x="0" y="140" width="80" height="140" fill="#D8D8D8" stroke="#CCCCCC" stroke-width="1"/>
+        <rect x="0" y="280" width="80" height="140" fill="#E8E8E8" stroke="#CCCCCC" stroke-width="1"/>
+        <text class="lane-title" x="40" y="75"  text-anchor="middle">営業</text>
+        <text class="lane-title" x="40" y="215" text-anchor="middle">審査</text>
+        <text class="lane-title" x="40" y="352" text-anchor="middle">シス<tspan x="40" dy="16">テム</tspan></text>
+
+        <!-- ===== 営業レーンのボックス ===== -->
+        <!-- 1 申込受付 -->
+        <rect x="91" y="48" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="91" cy="48" r="8" fill="#555555"/>
+        <text class="step-num" x="91" y="51" text-anchor="middle">1</text>
+        <text class="box-text" x="150" y="74" text-anchor="middle">申込受付</text>
+        <!-- 2 書類確認 -->
+        <rect x="231" y="48" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="231" cy="48" r="8" fill="#555555"/>
+        <text class="step-num" x="231" y="51" text-anchor="middle">2</text>
+        <text class="box-text" x="290" y="74" text-anchor="middle">書類確認</text>
+        <!-- 5 契約手続き -->
+        <rect x="511" y="48" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="511" cy="48" r="8" fill="#555555"/>
+        <text class="step-num" x="511" y="51" text-anchor="middle">5</text>
+        <text class="box-text" x="570" y="74" text-anchor="middle">契約手続き</text>
+        <!-- 8 利用開始案内 -->
+        <rect x="651" y="48" width="118" height="44" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <circle cx="651" cy="48" r="8" fill="#555555"/>
+        <text class="step-num" x="651" y="51" text-anchor="middle">8</text>
+        <text class="box-text-strong" x="710" y="74" text-anchor="middle">利用開始案内</text>
+
+        <!-- ===== 審査レーンのボックス ===== -->
+        <!-- 3 一次審査 -->
+        <rect x="231" y="192" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="231" cy="192" r="8" fill="#555555"/>
+        <text class="step-num" x="231" y="195" text-anchor="middle">3</text>
+        <text class="box-text" x="290" y="218" text-anchor="middle">一次審査</text>
+        <!-- 4 与信判定（ひし形＝判断分岐） -->
+        <polygon points="430,178 500,214 430,250 360,214" fill="#F5F5F5" stroke="#666666" stroke-width="1.5"/>
+        <circle cx="372" cy="186" r="8" fill="#555555"/>
+        <text class="step-num" x="372" y="189" text-anchor="middle">4</text>
+        <text class="box-text-strong" x="430" y="218" text-anchor="middle">与信判定</text>
+
+        <!-- ===== システムレーンのボックス ===== -->
+        <!-- 6 口座開設処理 -->
+        <rect x="511" y="336" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="511" cy="336" r="8" fill="#555555"/>
+        <text class="step-num" x="511" y="339" text-anchor="middle">6</text>
+        <text class="box-text" x="570" y="362" text-anchor="middle">口座開設処理</text>
+        <!-- 7 開設完了通知 -->
+        <rect x="651" y="336" width="118" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <circle cx="651" cy="336" r="8" fill="#555555"/>
+        <text class="step-num" x="651" y="339" text-anchor="middle">7</text>
+        <text class="box-text" x="710" y="362" text-anchor="middle">開設完了通知</text>
+
+        <!-- ===== 矢印（レーン内・レーンまたぎ） ===== -->
+        <!-- 1→2 -->
+        <line x1="209" y1="70" x2="228" y2="70" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- 2→3（営業→審査へ受け渡し） -->
+        <line x1="290" y1="92" x2="290" y2="189" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- 3→4 -->
+        <line x1="349" y1="214" x2="357" y2="214" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- 4→5 承認（審査→営業へ） -->
+        <line x1="500" y1="214" x2="552" y2="95" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <text class="flow-label" x="536" y="168">承認</text>
+        <!-- 4→2 否認・差戻し（破線で戻る） -->
+        <polyline points="430,178 430,70 352,70" fill="none" stroke="#999999" stroke-width="1.2"
+                  stroke-dasharray="5 4" marker-end="url(#arw)"/>
+        <text class="flow-label" x="438" y="128">否認・差戻し</text>
+        <!-- 5→6（営業→システムへ） -->
+        <line x1="600" y1="92" x2="600" y2="333" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- 6→7 -->
+        <line x1="629" y1="358" x2="648" y2="358" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- 7→8（システム→営業へ） -->
+        <line x1="710" y1="336" x2="710" y2="95" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+
+        <!-- 凡例 -->
+        <text class="note-text" x="878" y="414" text-anchor="end">実線＝進行 ／ 破線＝差戻し ／ ひし形＝判断分岐</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

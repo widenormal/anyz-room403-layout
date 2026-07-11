@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-fishbone-cause-analysis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 48px;
+      overflow: hidden;
+    }
+    svg text {
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[fishbone-cause-analysis]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <svg width="864" height="450" viewBox="0 0 864 450">
+
+        <!-- 背骨（スパイン）と尾 -->
+        <line x1="50" y1="207" x2="50" y2="243" stroke="#999999" stroke-width="2"/>
+        <line x1="50" y1="225" x2="696" y2="225" stroke="#666666" stroke-width="2"/>
+        <polygon points="688,218 700,225 688,232" fill="#666666"/>
+
+        <!-- 魚頭: 問題ボックス -->
+        <rect x="700" y="191" width="164" height="68" fill="#555555"/>
+        <text x="782" y="220" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">受注リードタイムが</text>
+        <text x="782" y="240" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">長い（平均14日）</text>
+
+        <!-- 大骨（カテゴリ4本） -->
+        <line x1="170" y1="60"  x2="300" y2="225" stroke="#999999" stroke-width="1.5"/>
+        <line x1="450" y1="60"  x2="580" y2="225" stroke="#999999" stroke-width="1.5"/>
+        <line x1="170" y1="390" x2="300" y2="225" stroke="#999999" stroke-width="1.5"/>
+        <line x1="450" y1="390" x2="580" y2="225" stroke="#999999" stroke-width="1.5"/>
+
+        <!-- カテゴリラベル -->
+        <rect x="120" y="32" width="100" height="28" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <text x="170" y="50" text-anchor="middle" font-size="12" font-weight="bold" fill="#333333">ヒト</text>
+        <rect x="400" y="32" width="100" height="28" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <text x="450" y="50" text-anchor="middle" font-size="12" font-weight="bold" fill="#333333">プロセス</text>
+        <rect x="120" y="390" width="100" height="28" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <text x="170" y="408" text-anchor="middle" font-size="12" font-weight="bold" fill="#333333">システム</text>
+        <rect x="400" y="390" width="100" height="28" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <text x="450" y="408" text-anchor="middle" font-size="12" font-weight="bold" fill="#333333">環境</text>
+
+        <!-- 小骨: ヒト（3本） -->
+        <line x1="97"  y1="113" x2="212" y2="113" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="196" y="108" text-anchor="end" font-size="11" fill="#333333">承認者が不在がち</text>
+        <line x1="136" y1="162" x2="251" y2="162" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="235" y="157" text-anchor="end" font-size="11" fill="#333333">入力ミスの手戻り</text>
+        <line x1="170" y1="205" x2="285" y2="205" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="269" y="200" text-anchor="end" font-size="11" fill="#333333">業務が属人化</text>
+
+        <!-- 小骨: プロセス（3本） -->
+        <line x1="377" y1="113" x2="492" y2="113" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="476" y="108" text-anchor="end" font-size="11" fill="#333333">承認が5段階ある</text>
+        <line x1="416" y1="162" x2="531" y2="162" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="515" y="157" text-anchor="end" font-size="11" fill="#333333">紙とシステムの二重管理</text>
+        <line x1="449" y1="205" x2="564" y2="205" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="548" y="200" text-anchor="end" font-size="11" fill="#333333">部門間の引継ぎ待ち</text>
+
+        <!-- 小骨: システム（3本） -->
+        <line x1="165" y1="250" x2="280" y2="250" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="264" y="263" text-anchor="end" font-size="11" fill="#333333">手入力の画面が残る</text>
+        <line x1="139" y1="283" x2="254" y2="283" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="238" y="296" text-anchor="end" font-size="11" fill="#333333">在庫反映が翌日になる</text>
+        <line x1="97"  y1="337" x2="212" y2="337" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="196" y="350" text-anchor="end" font-size="11" fill="#333333">旧システムの処理が遅い</text>
+
+        <!-- 小骨: 環境（2本） -->
+        <line x1="414" y1="290" x2="529" y2="290" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="513" y="303" text-anchor="end" font-size="11" fill="#333333">繁忙期に受注が集中</text>
+        <line x1="371" y1="345" x2="486" y2="345" stroke="#AAAAAA" stroke-width="1"/>
+        <text x="470" y="358" text-anchor="end" font-size="11" fill="#333333">拠点間の連携が困難</text>
+
+        <!-- 脚注 -->
+        <text x="0" y="446" font-size="10" fill="#999999">図の読み方: 右端の問題（魚頭）に対して、カテゴリ（大骨）ごとに原因（小骨）を洗い出している。</text>
+
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

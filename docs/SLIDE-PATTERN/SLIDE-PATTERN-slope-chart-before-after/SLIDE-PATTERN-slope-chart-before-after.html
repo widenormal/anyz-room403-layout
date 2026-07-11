@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-slope-chart-before-after</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 48px 10px;
+      gap: 4px;
+      overflow: hidden;
+    }
+    .slope-body {
+      flex: 0 0 auto;
+    }
+    /* 凡例行 */
+    .legend-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-line-bold {
+      width: 28px;
+      height: 0;
+      border-top: 3px solid #333333;
+      flex-shrink: 0;
+    }
+    .legend-line-thin {
+      width: 28px;
+      height: 0;
+      border-top: 2px solid #AAAAAA;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 11px;
+      color: #555555;
+    }
+    .legend-note {
+      font-size: 10px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[slope-chart-before-after]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- スロープチャート本体（SVG） -->
+      <div class="slope-body">
+        <svg width="760" height="380" viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg">
+          <!-- 時点ヘッダー -->
+          <text x="250" y="26" font-size="13" font-weight="bold" fill="#555555" text-anchor="middle">2024年実績</text>
+          <text x="510" y="26" font-size="13" font-weight="bold" fill="#555555" text-anchor="middle">2026年計画</text>
+
+          <!-- 縦軸（左右2本） -->
+          <line x1="250" y1="40" x2="250" y2="340" stroke="#999999" stroke-width="1" />
+          <line x1="510" y1="40" x2="510" y2="340" stroke="#999999" stroke-width="1" />
+
+          <!-- 縮小事業（細線・薄グレー） -->
+          <!-- 受託開発 45 → 40 -->
+          <line x1="250" y1="70" x2="510" y2="102" stroke="#AAAAAA" stroke-width="1.5" />
+          <circle cx="250" cy="70"  r="4" fill="#AAAAAA" />
+          <circle cx="510" cy="102" r="4" fill="#AAAAAA" />
+          <text x="238" y="74"  font-size="11" fill="#666666" text-anchor="end">受託開発 45億円</text>
+          <text x="522" y="106" font-size="11" fill="#666666">受託開発 40億円</text>
+
+          <!-- 保守運用 22 → 17 -->
+          <line x1="250" y1="216" x2="510" y2="248" stroke="#AAAAAA" stroke-width="1.5" />
+          <circle cx="250" cy="216" r="4" fill="#AAAAAA" />
+          <circle cx="510" cy="248" r="4" fill="#AAAAAA" />
+          <text x="238" y="220" font-size="11" fill="#666666" text-anchor="end">保守運用 22億円</text>
+          <text x="522" y="252" font-size="11" fill="#666666">保守運用 17億円</text>
+
+          <!-- ライセンス販売 18 → 15 -->
+          <line x1="250" y1="242" x2="510" y2="261" stroke="#AAAAAA" stroke-width="1.5" />
+          <circle cx="250" cy="242" r="4" fill="#AAAAAA" />
+          <circle cx="510" cy="261" r="4" fill="#AAAAAA" />
+          <text x="238" y="243" font-size="11" fill="#666666" text-anchor="end">ライセンス販売 18億円</text>
+          <text x="522" y="268" font-size="11" fill="#666666">ライセンス販売 15億円</text>
+
+          <!-- 拡大事業（濃グレー太線・強調） -->
+          <!-- クラウド事業 12 → 38 -->
+          <line x1="250" y1="280" x2="510" y2="115" stroke="#333333" stroke-width="3" />
+          <circle cx="250" cy="280" r="5" fill="#333333" />
+          <circle cx="510" cy="115" r="5" fill="#333333" />
+          <text x="238" y="284" font-size="11" font-weight="bold" fill="#333333" text-anchor="end">クラウド事業 12億円</text>
+          <text x="522" y="122" font-size="11" font-weight="bold" fill="#333333">クラウド事業 38億円</text>
+
+          <!-- SaaS事業 8 → 21 -->
+          <line x1="250" y1="305" x2="510" y2="223" stroke="#333333" stroke-width="3" />
+          <circle cx="250" cy="305" r="5" fill="#333333" />
+          <circle cx="510" cy="223" r="5" fill="#333333" />
+          <text x="238" y="311" font-size="11" font-weight="bold" fill="#333333" text-anchor="end">SaaS事業 8億円</text>
+          <text x="522" y="227" font-size="11" font-weight="bold" fill="#333333">SaaS事業 21億円</text>
+        </svg>
+      </div>
+
+      <!-- 凡例行 -->
+      <div class="legend-row">
+        <div class="legend-item">
+          <div class="legend-line-bold"></div>
+          <div class="legend-text">拡大事業（増加）</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line-thin"></div>
+          <div class="legend-text">縮小事業（減少）</div>
+        </div>
+        <div class="legend-note">図の読み方: 右上がりの線＝2年間で伸ばす事業。傾きが急なほど変化が大きい。</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-three-horizons-growth</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 48px;
+      overflow: hidden;
+    }
+    .content-area svg {
+      width: 100%;
+      height: 100%;
+      max-height: 440px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[three-horizons-growth]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <svg viewBox="0 0 864 400" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- 説明ラベルボックス（上部・破線リーダーで曲線に接続） -->
+        <g>
+          <rect x="60" y="8" width="250" height="58" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+          <line x1="72" y1="24" x2="96" y2="24" stroke="#333333" stroke-width="3.5"/>
+          <text x="104" y="28" font-size="13" font-weight="bold" fill="#333333">H1 中核事業</text>
+          <text x="72" y="45" font-size="10" fill="#555555">現在の収益源を守り利益率を高める</text>
+          <text x="72" y="59" font-size="10" fill="#999999">例: 既存SaaSの拡販・保守</text>
+        </g>
+        <g>
+          <rect x="335" y="8" width="250" height="58" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+          <line x1="347" y1="24" x2="371" y2="24" stroke="#888888" stroke-width="3"/>
+          <text x="379" y="28" font-size="13" font-weight="bold" fill="#333333">H2 成長事業</text>
+          <text x="347" y="45" font-size="10" fill="#555555">1〜3年で次の収益の柱に育てる</text>
+          <text x="347" y="59" font-size="10" fill="#999999">例: 海外展開・隣接業種向け新製品</text>
+        </g>
+        <g>
+          <rect x="610" y="8" width="250" height="58" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+          <line x1="622" y1="24" x2="646" y2="24" stroke="#CCCCCC" stroke-width="3"/>
+          <text x="654" y="28" font-size="13" font-weight="bold" fill="#333333">H3 将来の種</text>
+          <text x="622" y="45" font-size="10" fill="#555555">3〜5年以降へ小さく試して選択肢を持つ</text>
+          <text x="622" y="59" font-size="10" fill="#999999">例: AIエージェント事業のリサーチ</text>
+        </g>
+
+        <!-- 破線リーダー -->
+        <line x1="185" y1="66" x2="185" y2="188" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="460" y1="66" x2="460" y2="228" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="735" y1="66" x2="735" y2="178" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3 3"/>
+
+        <!-- 軸 -->
+        <line x1="50" y1="80" x2="50" y2="350" stroke="#666666" stroke-width="1.5"/>
+        <polygon points="50,72 45,84 55,84" fill="#666666"/>
+        <line x1="50" y1="350" x2="844" y2="350" stroke="#666666" stroke-width="1.5"/>
+        <polygon points="852,350 840,345 840,355" fill="#666666"/>
+        <text x="22" y="215" font-size="11" fill="#666666" text-anchor="middle" transform="rotate(-90 22 215)">価値（売上・利益）</text>
+
+        <!-- X軸目盛 -->
+        <line x1="70" y1="350" x2="70" y2="356" stroke="#666666" stroke-width="1"/>
+        <text x="70" y="372" font-size="11" fill="#666666" text-anchor="middle">現在</text>
+        <line x1="400" y1="350" x2="400" y2="356" stroke="#666666" stroke-width="1"/>
+        <text x="400" y="372" font-size="11" fill="#666666" text-anchor="middle">1〜3年</text>
+        <line x1="700" y1="350" x2="700" y2="356" stroke="#666666" stroke-width="1"/>
+        <text x="700" y="372" font-size="11" fill="#666666" text-anchor="middle">3〜5年以降</text>
+        <text x="830" y="372" font-size="11" fill="#999999" text-anchor="middle">時間軸</text>
+
+        <!-- S字曲線3本（H1=濃 / H2=中 / H3=薄） -->
+        <path d="M70,340 C150,220 220,175 380,168 S650,160 845,158" fill="none" stroke="#333333" stroke-width="3.5"/>
+        <path d="M70,343 C260,338 340,275 500,215 S710,140 845,120" fill="none" stroke="#888888" stroke-width="3"/>
+        <path d="M70,346 C420,343 520,315 640,250 S790,140 845,85" fill="none" stroke="#CCCCCC" stroke-width="3"/>
+
+        <!-- 曲線の右端タグ -->
+        <text x="858" y="154" font-size="11" font-weight="bold" fill="#333333" text-anchor="end">H1</text>
+        <text x="858" y="116" font-size="11" font-weight="bold" fill="#888888" text-anchor="end">H2</text>
+        <text x="858" y="81" font-size="11" font-weight="bold" fill="#AAAAAA" text-anchor="end">H3</text>
+
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

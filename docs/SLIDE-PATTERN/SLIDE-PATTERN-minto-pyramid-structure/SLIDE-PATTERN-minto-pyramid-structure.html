@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-minto-pyramid-structure</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12px 48px;
+      overflow: hidden;
+    }
+    /* 頂点: 結論 */
+    .conclusion-row {
+      display: flex;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .conclusion-box {
+      width: 400px;
+      height: 84px;
+      background: #555555;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .layer-tag {
+      font-size: 9px;
+      color: #999999;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .conclusion-box .layer-tag { color: #CCCCCC; }
+    .conclusion-text {
+      font-size: 15px;
+      font-weight: bold;
+      color: #FFFFFF;
+      line-height: 1.5;
+    }
+    /* 接続線（SVG行） */
+    .connector-svg {
+      display: block;
+      flex-shrink: 0;
+    }
+    /* 中段: キーライン（根拠） */
+    .keyline-row {
+      display: flex;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+    .keyline-box {
+      width: 272px;
+      height: 92px;
+      background: #EEEEEE;
+      border: 1px solid #999999;
+      padding: 10px 14px;
+    }
+    .keyline-text {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333333;
+      line-height: 1.5;
+    }
+    /* 下段: ファクト */
+    .fact-row {
+      display: flex;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+    .fact-group {
+      width: 272px;
+      display: flex;
+      gap: 12px;
+    }
+    .fact-box {
+      width: 130px;
+      height: 116px;
+      background: #F5F5F5;
+      border: 1px solid #CCCCCC;
+      padding: 8px 10px;
+    }
+    .fact-text {
+      font-size: 11px;
+      color: #555555;
+      line-height: 1.5;
+    }
+    /* 脚注 */
+    .footnote {
+      flex-shrink: 0;
+      margin-top: 10px;
+      font-size: 10px;
+      color: #999999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[minto-pyramid-structure]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 頂点: 結論 -->
+      <div class="conclusion-row">
+        <div class="conclusion-box">
+          <div class="layer-tag">結論</div>
+          <div class="conclusion-text">海外SaaS市場へ今期中に参入すべきである</div>
+        </div>
+      </div>
+
+      <!-- 結論→キーラインの接続線 -->
+      <svg class="connector-svg" width="864" height="28" viewBox="0 0 864 28">
+        <line x1="432" y1="0"  x2="432" y2="13" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="136" y1="13" x2="728" y2="13" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="136" y1="13" x2="136" y2="28" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="432" y1="13" x2="432" y2="28" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="728" y1="13" x2="728" y2="28" stroke="#AAAAAA" stroke-width="1"/>
+      </svg>
+
+      <!-- 中段: キーライン（根拠3つ） -->
+      <div class="keyline-row">
+        <div class="keyline-box">
+          <div class="layer-tag">根拠 1</div>
+          <div class="keyline-text">市場は年率25%で拡大しており、成長余地が大きい</div>
+        </div>
+        <div class="keyline-box">
+          <div class="layer-tag">根拠 2</div>
+          <div class="keyline-text">自社製品の強みが現地の顧客ニーズに合致している</div>
+        </div>
+        <div class="keyline-box">
+          <div class="layer-tag">根拠 3</div>
+          <div class="keyline-text">競合の現地展開はまだ限定的で、先行者利益を取れる</div>
+        </div>
+      </div>
+
+      <!-- キーライン→ファクトの接続線 -->
+      <svg class="connector-svg" width="864" height="24" viewBox="0 0 864 24">
+        <!-- 根拠1 → ファクト1・2 -->
+        <line x1="136" y1="0"  x2="136" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="65"  y1="12" x2="207" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="65"  y1="12" x2="65"  y2="24" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="207" y1="12" x2="207" y2="24" stroke="#AAAAAA" stroke-width="1"/>
+        <!-- 根拠2 → ファクト3・4 -->
+        <line x1="432" y1="0"  x2="432" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="361" y1="12" x2="503" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="361" y1="12" x2="361" y2="24" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="503" y1="12" x2="503" y2="24" stroke="#AAAAAA" stroke-width="1"/>
+        <!-- 根拠3 → ファクト5・6 -->
+        <line x1="728" y1="0"  x2="728" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="657" y1="12" x2="799" y2="12" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="657" y1="12" x2="657" y2="24" stroke="#AAAAAA" stroke-width="1"/>
+        <line x1="799" y1="12" x2="799" y2="24" stroke="#AAAAAA" stroke-width="1"/>
+      </svg>
+
+      <!-- 下段: ファクト6つ -->
+      <div class="fact-row">
+        <div class="fact-group">
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">対象市場規模は3.2兆円（2026年・調査会社A社）</div>
+          </div>
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">過去3年の年平均成長率は＋25%で加速傾向</div>
+          </div>
+        </div>
+        <div class="fact-group">
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">現地PoC 12社中10社が「継続利用したい」と回答</div>
+          </div>
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">国内導入企業の継続率94%と製品力は実証済み</div>
+          </div>
+        </div>
+        <div class="fact-group">
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">現地上位3社のシェアは計18%にとどまる</div>
+          </div>
+          <div class="fact-box">
+            <div class="layer-tag">ファクト</div>
+            <div class="fact-text">主要競合2社の現地拠点は営業のみで開発が未設置</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 脚注 -->
+      <div class="footnote">図の読み方: 上から下へ「なぜ？」、下から上へ「だから何？」が成立するかで論理を検証する。</div>
+
+    </div>
+  </div>
+</body>
+</html>

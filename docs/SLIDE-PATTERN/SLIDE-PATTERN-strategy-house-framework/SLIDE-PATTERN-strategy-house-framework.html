@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-strategy-house-framework</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 64px;
+      gap: 8px;
+      overflow: hidden;
+    }
+    /* 屋根: ビジョン */
+    .roof {
+      height: 104px;
+      flex-shrink: 0;
+      background: #555555;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+    .roof-label {
+      font-size: 10px;
+      color: #CCCCCC;
+      letter-spacing: 0.15em;
+    }
+    .roof-text {
+      font-size: 15px;
+      font-weight: bold;
+      color: #FFFFFF;
+      margin-top: 3px;
+    }
+    /* 柱: 戦略の柱 */
+    .pillars {
+      flex: 1;
+      display: flex;
+      gap: 16px;
+      padding: 0 40px;
+      min-height: 0;
+    }
+    .pillar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #CCCCCC;
+      background: #FAFAFA;
+    }
+    .pillar-header {
+      background: #666666;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: bold;
+      text-align: center;
+      padding: 8px 6px;
+      flex-shrink: 0;
+    }
+    .pillar-number {
+      font-size: 10px;
+      color: #CCCCCC;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .pillar-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      justify-content: center;
+    }
+    .pillar-item {
+      background: #FFFFFF;
+      border: 1px solid #D8D8D8;
+      font-size: 11px;
+      color: #333333;
+      padding: 7px 8px;
+      text-align: center;
+      border-radius: 2px;
+    }
+    /* 土台: 基盤2層 */
+    .foundation {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .base-band {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #CCCCCC;
+      padding: 7px 16px;
+      height: 34px;
+    }
+    .base-band-1 { background: #D8D8D8; }
+    .base-band-2 { background: #E8E8E8; }
+    .base-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      flex-shrink: 0;
+    }
+    .base-text {
+      font-size: 11px;
+      color: #555555;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[strategy-house-framework]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 屋根: ビジョン -->
+      <div class="roof">
+        <div class="roof-label">ビジョン</div>
+        <div class="roof-text">2030年 地域No.1の食品物流プラットフォームになる</div>
+      </div>
+
+      <!-- 柱: 戦略の柱3本 -->
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-header"><span class="pillar-number">戦略の柱 1</span>既存顧客の深耕</div>
+          <div class="pillar-body">
+            <div class="pillar-item">定期配送プランの拡充</div>
+            <div class="pillar-item">顧客別収益管理の導入</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-header"><span class="pillar-number">戦略の柱 2</span>新規エリア開拓</div>
+          <div class="pillar-body">
+            <div class="pillar-item">隣接2県への拠点展開</div>
+            <div class="pillar-item">地場スーパーとの提携</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-header"><span class="pillar-number">戦略の柱 3</span>物流DXの推進</div>
+          <div class="pillar-body">
+            <div class="pillar-item">配車計画のAI化</div>
+            <div class="pillar-item">倉庫管理システム刷新</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 土台: 基盤2層 -->
+      <div class="foundation">
+        <div class="base-band base-band-1">
+          <span class="base-label">人材基盤</span>
+          <span class="base-text">ドライバー採用強化・多能工化教育</span>
+        </div>
+        <div class="base-band base-band-2">
+          <span class="base-label">経営基盤</span>
+          <span class="base-text">財務規律の維持・安全管理体制の徹底</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-context.sh: SessionStart hook で 8 ブロック構造の文脈を additionalContext に投入する。
+# session-context.sh: SessionStart hook で 9 ブロック構造の文脈を additionalContext に投入する。
 #
 # 注入するブロック（詳細：docs/active-context-template.md）:
 #   ① 状態層 — memory/active-context.md（進行中タスク・直近の確定事項）
@@ -10,6 +10,8 @@
 #   ⑥ ツール可用性 — scripts/probe-tools.sh の実測表（op key / wrapper 疎通）
 #   ⑦ サブエージェント規範 — docs/subagent-orchestration.md の「適用ルール」節
 #   ⑧ 肥大化検知 — memory/learnings の行数・サイズ閾値超過警告（超過時のみ・memory-dream 誘導）
+#   ⑨ CIスライドエンジン版 — 5co-CI-kit/VERSION の版番号・更新日を毎セッション自動アナウンス
+#      （従来 CLIENT_CLAUDE_TEMPLATE.md がセッション起動時に手動で読ませていたものを決定論化）
 #
 # 失敗時もセッション起動を妨げないため exit 0 で抜ける。
 
@@ -161,6 +163,43 @@ for bloat_file in memory/active-context.md memory/decisions.md learnings/insight
 done
 
 # ──────────────────────────────────────────────
+# ⑨ CIスライドエンジン版：5co-CI-kit/VERSION の版番号・更新日を毎セッション自動アナウンス
+#   正データ源＝本ファイルの1行目（vX.Y）と `date:` 行。派生リポでは sync-template 経由の
+#   コピーを同一相対パスで参照する。ファイルが無いリポ（CI と無関係な派生リポ）は
+#   「CI kit未導入」と明記する（他ブロックと同様、常に表示しノイズは増やさない）。
+# ──────────────────────────────────────────────
+CI_VERSION_FILE="$PROJ/5co-CI-kit/VERSION"
+CI_VERSION_ANNOUNCE=""
+if [ -f "$CI_VERSION_FILE" ]; then
+  ci_ver=$(head -1 "$CI_VERSION_FILE")
+  ci_date=$(grep '^date:' "$CI_VERSION_FILE" 2>/dev/null | head -1 | sed 's/^date:[[:space:]]*//')
+  if [ -n "$ci_ver" ]; then
+    CI_VERSION_ANNOUNCE="CIスライドエンジン: ${ci_ver}${ci_date:+（${ci_date}）}"
+  fi
+fi
+[ -z "$CI_VERSION_ANNOUNCE" ] && CI_VERSION_ANNOUNCE="(5co-CI-kit未導入のリポジトリ)"
+
+# 鮮度ハートビート（層2）: Drive 作業場では sync-ci-kit-drive.sh が本番同期の完走ごとに
+# _sync_heartbeat.txt を書く。7日以上更新が無ければ「配送インフラが止まっている」疑い
+# （2026-07-10 の cron 空振り事故の再発検知）。git リポにはこのファイルは無い＝黙ってスキップ。
+CI_HEARTBEAT_FILE="$PROJ/5co-CI-kit/_sync_heartbeat.txt"
+CI_STALE_DAYS=7
+if [ -f "$CI_HEARTBEAT_FILE" ]; then
+  # mtime取得の可搬性: GNU stat は -c %Y、BSD/macOS は -f %m。GNU に -f を先に渡すと
+  # 「ファイルシステム情報」として成功してしまう（複数行のゴミが返る）ため -c を先に試す。
+  hb_epoch=$(stat -c %Y "$CI_HEARTBEAT_FILE" 2>/dev/null || stat -f %m "$CI_HEARTBEAT_FILE" 2>/dev/null || echo 0)
+  case "$hb_epoch" in *[!0-9]*) hb_epoch=0 ;; esac   # 数値以外が混じったら安全側で無効化
+  if [ "$hb_epoch" -gt 0 ]; then
+    hb_days=$(( ($(date +%s) - hb_epoch) / 86400 ))
+    if [ "$hb_days" -gt "$CI_STALE_DAYS" ]; then
+      CI_VERSION_ANNOUNCE+=$'\n'"⚠ Drive 同期の最終実行から ${hb_days} 日経過（_sync_heartbeat.txt）。kit が古い可能性があります。ユーザーへの冒頭報告で「フォーマットが古い可能性」を一度だけ伝え、管理者に drive-canonical-refresh の稼働確認を依頼するよう案内してください。"
+    else
+      CI_VERSION_ANNOUNCE+=$'\n'"最終同期: ${hb_days} 日前（_sync_heartbeat.txt・正常）"
+    fi
+  fi
+fi
+
+# ──────────────────────────────────────────────
 # JSON 出力（jq が無い環境でも heredoc で対応）
 # ──────────────────────────────────────────────
 build_context() {
@@ -172,6 +211,7 @@ build_context() {
   printf '=== Visited / Done (除外リスト) ===\n%s\n\n' "$VISITED"
   printf '=== Subagent Model Rules (適用ルール) ===\n%s\n\n' "$SUBAGENT_RULES"
   printf '=== Tool Availability (実測) ===\n%s\n' "$TOOL_AVAILABILITY"
+  printf '\n\n=== CI Slide Engine Version (5co-CI-kit) ===\n%s\n' "$CI_VERSION_ANNOUNCE"
   if [ -n "$MEMORY_BLOAT_LIST" ]; then
     printf '\n\n=== Memory Bloat Check (肥大化検知) ===\n'
     printf '⚠ 以下の記憶ファイルが閾値（%s行 or %sKB）を超えています:\n' "$BLOAT_LINES" "$((BLOAT_BYTES / 1024))"

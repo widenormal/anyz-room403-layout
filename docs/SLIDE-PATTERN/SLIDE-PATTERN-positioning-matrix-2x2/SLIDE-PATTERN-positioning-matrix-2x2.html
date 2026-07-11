@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-positioning-matrix-2x2</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px;
+      gap: 24px;
+      overflow: hidden;
+    }
+    /* 左側: マトリクス本体 */
+    .matrix-body {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .matrix-with-yaxis {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+      overflow: hidden;
+    }
+    /* Y軸ラベル */
+    .y-axis-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      flex-shrink: 0;
+    }
+    .y-axis-label {
+      font-size: 12px;
+      color: #666;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+    .y-axis-arrows {
+      font-size: 10px;
+      color: #999;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      margin-top: 4px;
+    }
+    /* プロット平面 */
+    .plot-plane {
+      flex: 1;
+      position: relative;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+    }
+    /* 4象限の背景 */
+    .quadrant {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+    }
+    .quad-top-left  { top: 0; left: 0;   background: #F5F5F5; }
+    .quad-top-right { top: 0; left: 50%; background: #EEEEEE; }
+    .quad-bot-left  { top: 50%; left: 0;   background: #FFFFFF; }
+    .quad-bot-right { top: 50%; left: 50%; background: #FAFAFA; }
+    /* 中央の分割線 */
+    .divider-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: #CCCCCC;
+    }
+    .divider-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: #CCCCCC;
+    }
+    /* 象限ラベル */
+    .quadrant-label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: bold;
+      color: #999999;
+      letter-spacing: 0.05em;
+    }
+    .qlabel-top-left  { top: 6px; left: 10px; }
+    .qlabel-top-right { top: 6px; right: 10px; }
+    .qlabel-bot-left  { bottom: 6px; left: 10px; }
+    .qlabel-bot-right { bottom: 6px; right: 10px; }
+    /* プロット項目（円マーカー＋ラベル） */
+    .plot-item {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .plot-marker {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #555555;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 0 1px #999999;
+      flex-shrink: 0;
+    }
+    .plot-item-label {
+      font-size: 11px;
+      color: #333333;
+      background: #FFFFFF;
+      border: 1px solid #D8D8D8;
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    /* X軸ラベル */
+    .axis-ends {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 28px;
+      margin-top: 2px;
+    }
+    .axis-end-label {
+      font-size: 10px;
+      color: #AAAAAA;
+    }
+    .x-axis-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding-left: 28px;
+    }
+    .x-axis-label {
+      font-size: 12px;
+      color: #666;
+      letter-spacing: 0.05em;
+    }
+    /* 右側: 凡例エリア */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-swatch {
+      width: 20px;
+      height: 14px;
+      border: 1px solid #CCCCCC;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555;
+    }
+    .legend-sub {
+      font-size: 10px;
+      color: #999;
+    }
+    .legend-note {
+      margin-top: 8px;
+      font-size: 10px;
+      color: #999;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[positioning-matrix-2x2]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: マトリクス本体 -->
+      <div class="matrix-body">
+        <div class="matrix-with-yaxis">
+          <!-- Y軸ラベル -->
+          <div class="y-axis-wrapper">
+            <span class="y-axis-label">インパクト</span>
+            <span class="y-axis-arrows">↑ 高</span>
+          </div>
+
+          <!-- プロット平面 -->
+          <div class="plot-plane">
+            <!-- 4象限背景 -->
+            <div class="quadrant quad-top-left"></div>
+            <div class="quadrant quad-top-right"></div>
+            <div class="quadrant quad-bot-left"></div>
+            <div class="quadrant quad-bot-right"></div>
+            <div class="divider-v"></div>
+            <div class="divider-h"></div>
+
+            <!-- 象限ラベル -->
+            <span class="quadrant-label qlabel-top-left">大玉</span>
+            <span class="quadrant-label qlabel-top-right">Quick Win</span>
+            <span class="quadrant-label qlabel-bot-left">慎重に</span>
+            <span class="quadrant-label qlabel-bot-right">後回し</span>
+
+            <!-- プロット項目（left=X:実行容易性 / top=Y:インパクト） -->
+            <div class="plot-item" style="left: 78%; top: 22%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">FAQ自動応答の導入</span>
+            </div>
+            <div class="plot-item" style="left: 64%; top: 38%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">見積書テンプレ統一</span>
+            </div>
+            <div class="plot-item" style="left: 24%; top: 16%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">基幹システム刷新</span>
+            </div>
+            <div class="plot-item" style="left: 34%; top: 40%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">新規販路の開拓</span>
+            </div>
+            <div class="plot-item" style="left: 70%; top: 72%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">社内報の月次化</span>
+            </div>
+            <div class="plot-item" style="left: 26%; top: 80%;">
+              <span class="plot-marker"></span>
+              <span class="plot-item-label">オフィス移転</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- X軸ラベル -->
+        <div class="axis-ends">
+          <span class="axis-end-label">低 ←</span>
+          <span class="axis-end-label">→ 高</span>
+        </div>
+        <div class="x-axis-wrapper">
+          <span class="x-axis-label">実行容易性</span>
+        </div>
+      </div>
+
+      <!-- 右側: 凡例エリア -->
+      <div class="legend-area">
+        <div class="legend-title">象限の読み方</div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #EEEEEE;"></div>
+          <div>
+            <div class="legend-text">Quick Win</div>
+            <div class="legend-sub">高インパクト・容易 → 即着手</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #F5F5F5;"></div>
+          <div>
+            <div class="legend-text">大玉</div>
+            <div class="legend-sub">高インパクト・困難 → 計画投資</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #FAFAFA;"></div>
+          <div>
+            <div class="legend-text">後回し</div>
+            <div class="legend-sub">低インパクト・容易 → 隙間対応</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #FFFFFF;"></div>
+          <div>
+            <div class="legend-text">慎重に</div>
+            <div class="legend-sub">低インパクト・困難 → 原則見送り</div>
+          </div>
+        </div>
+        <div class="legend-note">
+          図の読み方: 円の位置が2軸上の評価。右上に近いほど優先度が高い。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-scatter-bubble-positioning</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px;
+      gap: 24px;
+      overflow: hidden;
+    }
+    /* 左側: チャート本体 */
+    .chart-body {
+      flex: 0 0 auto;
+    }
+    /* 右側: 凡例エリア */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding: 8px 0;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legend-circle-dark {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #555555;
+      flex-shrink: 0;
+    }
+    .legend-circle-light {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #CCCCCC;
+      border: 1px solid #AAAAAA;
+      flex-shrink: 0;
+    }
+    .legend-size-pair {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .size-small {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #D8D8D8;
+      border: 1px solid #AAAAAA;
+    }
+    .size-large {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #D8D8D8;
+      border: 1px solid #AAAAAA;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555555;
+    }
+    .legend-note {
+      font-size: 10px;
+      color: #999999;
+      line-height: 1.6;
+      border-top: 1px solid #E8E8E8;
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[scatter-bubble-positioning]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: ポジショニングマップ本体（SVG） -->
+      <div class="chart-body">
+        <svg width="640" height="410" viewBox="0 0 660 416" xmlns="http://www.w3.org/2000/svg">
+          <!-- プロット領域 -->
+          <rect x="44" y="10" width="596" height="346" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1" />
+
+          <!-- 十字参照線（4象限化） -->
+          <line x1="342" y1="10" x2="342" y2="356" stroke="#CCCCCC" stroke-width="1" stroke-dasharray="4 3" />
+          <line x1="44" y1="183" x2="640" y2="183" stroke="#CCCCCC" stroke-width="1" stroke-dasharray="4 3" />
+
+          <!-- 象限コーナーラベル -->
+          <text x="52" y="28" font-size="10" fill="#AAAAAA">高収益・低成長（安定領域）</text>
+          <text x="632" y="28" font-size="10" fill="#AAAAAA" text-anchor="end">高収益・高成長（注力領域）</text>
+          <text x="52" y="348" font-size="10" fill="#AAAAAA">低収益・低成長（撤退検討）</text>
+          <text x="632" y="348" font-size="10" fill="#AAAAAA" text-anchor="end">低収益・高成長（投資判断）</text>
+
+          <!-- バブル: 競合 -->
+          <circle cx="140" cy="80" r="26" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1" />
+          <text x="140" y="84" font-size="11" fill="#555555" text-anchor="middle">A社</text>
+          <text x="140" y="118" font-size="9" fill="#999999" text-anchor="middle">40億円</text>
+
+          <circle cx="500" cy="90" r="46" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1" />
+          <text x="500" y="86" font-size="11" fill="#555555" text-anchor="middle">B社</text>
+          <text x="500" y="102" font-size="9" fill="#777777" text-anchor="middle">120億円</text>
+
+          <circle cx="180" cy="270" r="22" fill="#D8D8D8" stroke="#AAAAAA" stroke-width="1" />
+          <text x="180" y="274" font-size="11" fill="#555555" text-anchor="middle">C社</text>
+          <text x="180" y="304" font-size="9" fill="#999999" text-anchor="middle">25億円</text>
+
+          <circle cx="450" cy="250" r="32" fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1" />
+          <text x="450" y="246" font-size="11" fill="#555555" text-anchor="middle">D社</text>
+          <text x="450" y="262" font-size="9" fill="#777777" text-anchor="middle">60億円</text>
+
+          <circle cx="585" cy="282" r="18" fill="#D8D8D8" stroke="#AAAAAA" stroke-width="1" />
+          <text x="585" y="286" font-size="10" fill="#555555" text-anchor="middle">E社</text>
+          <text x="585" y="312" font-size="9" fill="#999999" text-anchor="middle">15億円</text>
+
+          <circle cx="110" cy="300" r="24" fill="#D8D8D8" stroke="#AAAAAA" stroke-width="1" />
+          <text x="110" y="304" font-size="11" fill="#555555" text-anchor="middle">F社</text>
+          <text x="110" y="335" font-size="9" fill="#999999" text-anchor="middle">30億円</text>
+
+          <!-- バブル: 自社（濃グレー強調） -->
+          <circle cx="290" cy="120" r="40" fill="#555555" />
+          <text x="290" y="118" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">自社</text>
+          <text x="290" y="134" font-size="9" fill="#FFFFFF" text-anchor="middle">85億円</text>
+
+          <!-- X軸 -->
+          <line x1="44" y1="356" x2="640" y2="356" stroke="#999999" stroke-width="1" />
+          <text x="48" y="380" font-size="10" fill="#AAAAAA">低</text>
+          <text x="342" y="380" font-size="12" fill="#666666" text-anchor="middle" letter-spacing="0.05em">市場成長率</text>
+          <text x="636" y="380" font-size="10" fill="#AAAAAA" text-anchor="end">高</text>
+
+          <!-- Y軸 -->
+          <line x1="44" y1="10" x2="44" y2="356" stroke="#999999" stroke-width="1" />
+          <text transform="translate(16,183) rotate(-90)" font-size="12" fill="#666666" text-anchor="middle" letter-spacing="0.05em">収益性</text>
+          <text x="28" y="24" font-size="10" fill="#AAAAAA" text-anchor="middle">高</text>
+          <text x="28" y="352" font-size="10" fill="#AAAAAA" text-anchor="middle">低</text>
+        </svg>
+      </div>
+
+      <!-- 右側: 凡例エリア -->
+      <div class="legend-area">
+        <div class="legend-title">凡例</div>
+        <div class="legend-item">
+          <div class="legend-circle-dark"></div>
+          <div class="legend-text">自社</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-circle-light"></div>
+          <div class="legend-text">競合他社</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-size-pair">
+            <div class="size-small"></div>
+            <div class="size-large"></div>
+          </div>
+          <div class="legend-text">円の大きさ＝売上規模</div>
+        </div>
+        <div class="legend-note">
+          図の読み方: 右上（高成長・高収益）に近いほど有望な立ち位置。自社は高収益だが成長率で B社・D社 に劣後している。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

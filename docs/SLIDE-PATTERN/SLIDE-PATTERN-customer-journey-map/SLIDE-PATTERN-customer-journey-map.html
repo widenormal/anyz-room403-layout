@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-customer-journey-map</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      padding: 14px 36px 16px;
+      overflow: hidden;
+      display: flex;
+    }
+    /* ジャーニーグリッド */
+    .journey-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 88px repeat(5, 1fr);
+      grid-template-rows: 30px 1fr 1fr 54px 1fr 1fr;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+    }
+    .cell {
+      border: 1px solid #E8E8E8;
+      padding: 6px 8px;
+      font-size: 10.5px;
+      color: #555;
+      line-height: 1.45;
+      overflow: hidden;
+    }
+    /* ステージヘッダー */
+    .stage-header {
+      background: #555555;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      letter-spacing: 0.05em;
+      border: 1px solid #666666;
+    }
+    .stage-arrow {
+      font-size: 10px;
+      color: #CCCCCC;
+      font-weight: normal;
+    }
+    .corner-cell {
+      background: #333333;
+      color: #FFFFFF;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #666666;
+    }
+    /* 行ラベル */
+    .row-label {
+      background: #F0F0F0;
+      font-size: 11px;
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid #E8E8E8;
+      line-height: 1.4;
+    }
+    /* 感情曲線行 */
+    .emotion-band {
+      grid-column: 2 / 7;
+      background: #FAFAFA;
+      border: 1px solid #E8E8E8;
+      position: relative;
+      overflow: hidden;
+    }
+    .emotion-band svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .emotion-label {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .emotion-hi-lo {
+      font-size: 9px;
+      color: #999;
+      font-weight: normal;
+    }
+    /* ペインポイントバッジ */
+    .pain-cell {
+      background: #FAFAFA;
+      display: flex;
+      align-items: flex-start;
+    }
+    .pain-badge {
+      background: #666666;
+      color: #FFFFFF;
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 2px;
+      line-height: 1.4;
+    }
+    /* 打ち手行 */
+    .action-cell {
+      background: #F5F5F5;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[customer-journey-map]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <div class="journey-grid">
+
+        <!-- ヘッダー行: 5ステージ -->
+        <div class="corner-cell">ステージ</div>
+        <div class="stage-header">認知 <span class="stage-arrow">→</span></div>
+        <div class="stage-header">検討 <span class="stage-arrow">→</span></div>
+        <div class="stage-header">購入 <span class="stage-arrow">→</span></div>
+        <div class="stage-header">利用 <span class="stage-arrow">→</span></div>
+        <div class="stage-header">推奨</div>
+
+        <!-- 行1: 顧客の行動 -->
+        <div class="row-label">顧客の行動</div>
+        <div class="cell">経費精算の負担を認識し、Web検索で情報収集</div>
+        <div class="cell">3社の機能・料金を比較し、無料トライアルを試す</div>
+        <div class="cell">稟議を通し、年間契約を締結</div>
+        <div class="cell">初期設定を行い、月次の精算業務で利用</div>
+        <div class="cell">社内の他部門や取引先に紹介</div>
+
+        <!-- 行2: タッチポイント -->
+        <div class="row-label">タッチポイント</div>
+        <div class="cell">検索広告／比較サイト／SNS</div>
+        <div class="cell">製品サイト／トライアル／営業デモ</div>
+        <div class="cell">見積書／契約書／営業担当</div>
+        <div class="cell">管理画面／サポート窓口／ヘルプ</div>
+        <div class="cell">導入事例取材／紹介プログラム</div>
+
+        <!-- 行3: 感情曲線（SVG折れ線） -->
+        <div class="row-label emotion-label">
+          <span class="emotion-hi-lo">高</span>
+          感情曲線
+          <span class="emotion-hi-lo">低</span>
+        </div>
+        <div class="emotion-band">
+          <svg viewBox="0 0 790 52" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="26" x2="790" y2="26" stroke="#D8D8D8" stroke-width="1" stroke-dasharray="4 3"/>
+            <polyline points="79,24 237,40 395,12 553,36 711,7"
+                      fill="none" stroke="#666666" stroke-width="2"/>
+            <circle cx="79"  cy="24" r="3.5" fill="#666666"/>
+            <circle cx="237" cy="40" r="3.5" fill="#666666"/>
+            <circle cx="395" cy="12" r="3.5" fill="#666666"/>
+            <circle cx="553" cy="36" r="3.5" fill="#666666"/>
+            <circle cx="711" cy="7"  r="3.5" fill="#666666"/>
+          </svg>
+        </div>
+
+        <!-- 行4: ペインポイント -->
+        <div class="row-label">ペイン<br>ポイント</div>
+        <div class="cell pain-cell"><span class="pain-badge">情報が多く比べにくい</span></div>
+        <div class="cell pain-cell"><span class="pain-badge">比較の軸が定まらない</span></div>
+        <div class="cell pain-cell"><span class="pain-badge">稟議資料の作成が負担</span></div>
+        <div class="cell pain-cell"><span class="pain-badge">初期設定でつまずく</span></div>
+        <div class="cell pain-cell"><span class="pain-badge">紹介の手間・動機が弱い</span></div>
+
+        <!-- 行5: 打ち手 -->
+        <div class="row-label">打ち手</div>
+        <div class="cell action-cell">課題別の比較ガイド記事を整備</div>
+        <div class="cell action-cell">選定チェックリストを無償提供</div>
+        <div class="cell action-cell">稟議用テンプレートを同梱</div>
+        <div class="cell action-cell">初期設定の伴走サポート</div>
+        <div class="cell action-cell">紹介インセンティブ制度</div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

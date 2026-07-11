@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-nine-box-matrix-3x3</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px;
+      gap: 24px;
+      overflow: hidden;
+    }
+    /* 左側: マトリクス本体 */
+    .matrix-body {
+      flex: 3;
+      display: flex;
+      gap: 8px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    /* Y軸ラベル */
+    .y-axis-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      flex-shrink: 0;
+      padding-top: 22px;
+    }
+    .y-axis-label {
+      font-size: 12px;
+      color: #666;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+    /* 行ラベル列 */
+    .row-labels {
+      display: flex;
+      flex-direction: column;
+      width: 18px;
+      flex-shrink: 0;
+      padding-top: 22px;
+    }
+    .row-label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #999;
+    }
+    /* グリッド＋列ヘッダ */
+    .grid-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .col-headers {
+      display: flex;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .col-header {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #999;
+    }
+    .x-axis-caption {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      letter-spacing: 0.05em;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    .nine-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      border: 1px solid #CCCCCC;
+    }
+    .nine-cell {
+      border: 1px solid #CCCCCC;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* ゾーン濃淡（対角3ゾーン） */
+    .zone-invest  { background: #EEEEEE; } /* 投資 */
+    .zone-select  { background: #F5F5F5; } /* 選別 */
+    .zone-harvest { background: #FAFAFA; } /* 撤退・収穫 */
+    /* 事業バブル（大きさ=売上規模） */
+    .bubble {
+      border-radius: 50%;
+      background: #666666;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+    .bubble-l { width: 84px; height: 84px; }
+    .bubble-m { width: 64px; height: 64px; }
+    .bubble-s { width: 48px; height: 48px; }
+    .bubble-name {
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .bubble-s .bubble-name { font-size: 10px; }
+    .bubble-value {
+      font-size: 9px;
+      color: #E8E8E8;
+    }
+    /* 右側: 凡例エリア */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-swatch {
+      width: 20px;
+      height: 14px;
+      border: 1px solid #CCCCCC;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555;
+    }
+    .legend-sub {
+      font-size: 10px;
+      color: #999;
+    }
+    .legend-note {
+      margin-top: 8px;
+      font-size: 10px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .size-samples {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .size-dot {
+      border-radius: 50%;
+      background: #666666;
+      flex-shrink: 0;
+    }
+    .size-dot-l { width: 18px; height: 18px; }
+    .size-dot-m { width: 13px; height: 13px; }
+    .size-dot-s { width: 9px;  height: 9px; }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[nine-box-matrix-3x3]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: マトリクス本体 -->
+      <div class="matrix-body">
+        <!-- Y軸ラベル -->
+        <div class="y-axis-wrapper">
+          <span class="y-axis-label">市場魅力度</span>
+        </div>
+        <!-- 行ラベル（高・中・低） -->
+        <div class="row-labels">
+          <div class="row-label">高</div>
+          <div class="row-label">中</div>
+          <div class="row-label">低</div>
+        </div>
+
+        <!-- 列ヘッダ＋9セルグリッド -->
+        <div class="grid-wrapper">
+          <div class="x-axis-caption">競争力</div>
+          <div class="col-headers">
+            <div class="col-header">強</div>
+            <div class="col-header">中</div>
+            <div class="col-header">弱</div>
+          </div>
+          <div class="nine-grid">
+            <!-- 1行目: 市場魅力度 高 -->
+            <div class="nine-cell zone-invest">
+              <div class="bubble bubble-l">
+                <span class="bubble-name">クラウド</span>
+                <span class="bubble-value">120億円</span>
+              </div>
+            </div>
+            <div class="nine-cell zone-invest">
+              <div class="bubble bubble-s">
+                <span class="bubble-name">新規SaaS</span>
+                <span class="bubble-value">15億円</span>
+              </div>
+            </div>
+            <div class="nine-cell zone-select"></div>
+            <!-- 2行目: 市場魅力度 中 -->
+            <div class="nine-cell zone-invest"></div>
+            <div class="nine-cell zone-select">
+              <div class="bubble bubble-m">
+                <span class="bubble-name">受託開発</span>
+                <span class="bubble-value">80億円</span>
+              </div>
+            </div>
+            <div class="nine-cell zone-harvest"></div>
+            <!-- 3行目: 市場魅力度 低 -->
+            <div class="nine-cell zone-select">
+              <div class="bubble bubble-m">
+                <span class="bubble-name">保守</span>
+                <span class="bubble-value">60億円</span>
+              </div>
+            </div>
+            <div class="nine-cell zone-harvest"></div>
+            <div class="nine-cell zone-harvest">
+              <div class="bubble bubble-s">
+                <span class="bubble-name">印刷</span>
+                <span class="bubble-value">40億円</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側: 凡例エリア -->
+      <div class="legend-area">
+        <div class="legend-title">投資方針ゾーン</div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #EEEEEE;"></div>
+          <div>
+            <div class="legend-text">投資・成長</div>
+            <div class="legend-sub">左上3セル → 積極投資</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #F5F5F5;"></div>
+          <div>
+            <div class="legend-text">選別</div>
+            <div class="legend-sub">対角3セル → 案件ごとに判断</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #FAFAFA;"></div>
+          <div>
+            <div class="legend-text">撤退・収穫</div>
+            <div class="legend-sub">右下3セル → 投資抑制</div>
+          </div>
+        </div>
+        <div class="size-samples">
+          <span class="size-dot size-dot-l"></span>
+          <span class="size-dot size-dot-m"></span>
+          <span class="size-dot size-dot-s"></span>
+          <span class="legend-sub">円の大きさ＝売上規模</span>
+        </div>
+        <div class="legend-note">
+          図の読み方: 左上に近い事業ほど投資優先度が高い。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

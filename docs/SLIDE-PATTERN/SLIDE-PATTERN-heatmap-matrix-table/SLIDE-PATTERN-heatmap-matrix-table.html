@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-heatmap-matrix-table</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 48px 12px;
+      gap: 12px;
+      overflow: hidden;
+    }
+    /* ヒートマップ表 */
+    .heatmap-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    .heatmap-table th,
+    .heatmap-table td {
+      border: 1px solid #CCCCCC;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .heatmap-table th {
+      background: #F5F5F5;
+      color: #555555;
+      font-size: 12px;
+      font-weight: bold;
+      height: 36px;
+      letter-spacing: 0.05em;
+    }
+    .heatmap-table th.col-label {
+      width: 22%;
+    }
+    .heatmap-table td.row-label {
+      background: #FAFAFA;
+      color: #333333;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: left;
+      padding-left: 14px;
+    }
+    .heatmap-table td.score {
+      font-size: 15px;
+      font-weight: bold;
+      height: 60px;
+    }
+    /* スコア→濃淡（5段階） */
+    .s1 { background: #FFFFFF; color: #333333; }
+    .s2 { background: #D8D8D8; color: #333333; }
+    .s3 { background: #AAAAAA; color: #FFFFFF; }
+    .s4 { background: #666666; color: #FFFFFF; }
+    .s5 { background: #333333; color: #FFFFFF; }
+    /* 凡例バー */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .legend-label {
+      font-size: 11px;
+      color: #666666;
+    }
+    .legend-scale {
+      display: flex;
+    }
+    .legend-swatch {
+      width: 44px;
+      height: 20px;
+      border: 1px solid #CCCCCC;
+      border-left-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .legend-swatch:first-child {
+      border-left-width: 1px;
+    }
+    .legend-note {
+      font-size: 10px;
+      color: #999999;
+      margin-left: 12px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[heatmap-matrix-table]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- ヒートマップ表 -->
+      <table class="heatmap-table">
+        <thead>
+          <tr>
+            <th class="col-label">施策</th>
+            <th>期待効果</th>
+            <th>実現性</th>
+            <th>コスト効率</th>
+            <th>緊急度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Web広告強化</td>
+            <td class="score s4">4</td>
+            <td class="score s5">5</td>
+            <td class="score s3">3</td>
+            <td class="score s5">5</td>
+          </tr>
+          <tr>
+            <td class="row-label">会員アプリ改善</td>
+            <td class="score s5">5</td>
+            <td class="score s3">3</td>
+            <td class="score s4">4</td>
+            <td class="score s4">4</td>
+          </tr>
+          <tr>
+            <td class="row-label">法人営業拡大</td>
+            <td class="score s4">4</td>
+            <td class="score s4">4</td>
+            <td class="score s3">3</td>
+            <td class="score s2">2</td>
+          </tr>
+          <tr>
+            <td class="row-label">店舗リニューアル</td>
+            <td class="score s3">3</td>
+            <td class="score s2">2</td>
+            <td class="score s2">2</td>
+            <td class="score s3">3</td>
+          </tr>
+          <tr>
+            <td class="row-label">海外EC展開</td>
+            <td class="score s5">5</td>
+            <td class="score s2">2</td>
+            <td class="score s1">1</td>
+            <td class="score s1">1</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 濃淡スケール凡例バー -->
+      <div class="legend-bar">
+        <span class="legend-label">低評価</span>
+        <div class="legend-scale">
+          <div class="legend-swatch s1">1</div>
+          <div class="legend-swatch s2">2</div>
+          <div class="legend-swatch s3">3</div>
+          <div class="legend-swatch s4">4</div>
+          <div class="legend-swatch s5">5</div>
+        </div>
+        <span class="legend-label">高評価</span>
+        <span class="legend-note">図の読み方: 濃いセルが多い行ほど優先度の高い施策。</span>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

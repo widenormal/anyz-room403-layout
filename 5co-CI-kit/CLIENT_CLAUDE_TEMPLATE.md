@@ -9,6 +9,8 @@
 
 1. Drive ルートの `CLAUDE.md`（CI正本ブロック）を読む — 全社ルールの最新版
 2. `5co-CI-kit/VERSION` を読み、冒頭で「CIスライドエンジン: vX.Y（更新日）」を表示
+   （git ベースの作業環境では `.claude/scripts/session-context.sh` の SessionStart フックが
+   自動アナウンスする＝本項目は手動確認不要。フック未配線の Drive 作業場のみ本項目で手動実施）
 3. `_context/active-context_<自分の名前>.md` と `_context/handoff/` の自分の最新を読む（無ければ作成）
 
 ## 制作の作り方（決定論・3ステップ）
