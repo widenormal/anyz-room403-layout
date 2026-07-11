@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-iceberg-visible-hidden</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      padding: 14px 40px 16px;
+      overflow: hidden;
+      display: flex;
+      gap: 24px;
+    }
+    /* 左: 氷山ビジュアル */
+    .iceberg-visual {
+      flex: 11;
+      overflow: hidden;
+    }
+    .iceberg-visual svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .sv-heading { font-size: 13px; font-weight: bold; fill: #333333; }
+    .sv-body    { font-size: 10.5px; fill: #333333; }
+    .sv-body-w  { font-size: 10.5px; fill: #FFFFFF; }
+    .sv-head-w  { font-size: 12px; font-weight: bold; fill: #FFFFFF; }
+    .sv-note    { font-size: 9.5px; fill: #999999; }
+    /* 右: 説明パネル */
+    .iceberg-panels {
+      flex: 9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .panel {
+      border: 1px solid #CCCCCC;
+      padding: 10px 14px;
+      border-radius: 2px;
+    }
+    .panel-1 { background: #FAFAFA; }
+    .panel-2 { background: #F0F0F0; }
+    .panel-3 { background: #D8D8D8; }
+    .panel-tag {
+      font-size: 9.5px;
+      color: #999;
+      letter-spacing: 0.06em;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+      margin: 2px 0 4px;
+    }
+    .panel-desc {
+      font-size: 10.5px;
+      color: #555;
+      line-height: 1.55;
+    }
+    .panel-arrow {
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      line-height: 1;
+    }
+    .lever-note {
+      margin-top: 4px;
+      font-size: 10px;
+      color: #666;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[iceberg-visible-hidden]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左: 氷山ビジュアル（SVG） -->
+      <div class="iceberg-visual">
+        <svg viewBox="0 0 470 440" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <!-- 水中領域（薄グレー帯） -->
+          <rect x="0" y="150" width="470" height="290" fill="#F5F5F5"/>
+          <!-- 水面線（横破線＋帯） -->
+          <rect x="0" y="148" width="470" height="6" fill="#D8D8D8"/>
+          <line x1="0" y1="150" x2="470" y2="150" stroke="#999999" stroke-width="1.5" stroke-dasharray="8 5"/>
+          <text class="sv-note" x="464" y="142" text-anchor="end">水面 ＝ 見える／見えないの境界</text>
+
+          <!-- 氷山の一角（水面上の小さな三角） -->
+          <polygon points="250,64 196,150 304,150" fill="#EEEEEE" stroke="#999999" stroke-width="1.5"/>
+          <text class="sv-heading" x="250" y="34" text-anchor="middle">見えている事象</text>
+
+          <!-- 事象チップ（2個・引き出し線付き） -->
+          <rect x="14" y="58" width="152" height="26" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1"/>
+          <text class="sv-body" x="90" y="75" text-anchor="middle">若手の離職が増加</text>
+          <line x1="166" y1="71" x2="216" y2="118" stroke="#AAAAAA" stroke-width="1"/>
+
+          <rect x="14" y="94" width="152" height="26" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1"/>
+          <text class="sv-body" x="90" y="111" text-anchor="middle">営業目標の未達が続く</text>
+          <line x1="166" y1="107" x2="224" y2="136" stroke="#AAAAAA" stroke-width="1"/>
+
+          <!-- 氷山本体・上層: 構造 -->
+          <polygon points="196,150 304,150 352,240 316,282 168,282 136,232"
+                   fill="#CCCCCC" stroke="#999999" stroke-width="1.5"/>
+          <text class="sv-heading" x="244" y="185" text-anchor="middle">構造</text>
+          <text class="sv-body" x="244" y="215" text-anchor="middle">評価制度が短期成果に偏重</text>
+          <text class="sv-body" x="244" y="238" text-anchor="middle">部門間で顧客情報が分断</text>
+
+          <!-- 層の区切り（破線） -->
+          <line x1="168" y1="282" x2="316" y2="282" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+          <!-- 氷山本体・下層: メンタルモデル -->
+          <polygon points="168,282 316,282 292,364 242,426 190,360"
+                   fill="#999999" stroke="#777777" stroke-width="1.5"/>
+          <text class="sv-head-w" x="242" y="312" text-anchor="middle">メンタルモデル</text>
+          <text class="sv-body-w" x="242" y="338" text-anchor="middle">「失敗は個人の責任」</text>
+          <text class="sv-body-w" x="242" y="358" text-anchor="middle">という暗黙の前提</text>
+
+          <!-- 深さ＝レバレッジの矢印 -->
+          <defs>
+            <marker id="arw-ib" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#999999"/>
+            </marker>
+          </defs>
+          <line x1="424" y1="170" x2="424" y2="420" stroke="#999999" stroke-width="1.5" marker-end="url(#arw-ib)"/>
+          <text class="sv-note" transform="rotate(90 436 240)" x="436" y="240">深い層ほど 働きかけの効果が大きい</text>
+        </svg>
+      </div>
+
+      <!-- 右: 各層の説明パネル -->
+      <div class="iceberg-panels">
+        <div class="panel panel-1">
+          <div class="panel-tag">LEVEL 1 ── 水面の上</div>
+          <div class="panel-title">見えている事象</div>
+          <div class="panel-desc">観測できる出来事・数字。ここだけに対処すると対症療法にとどまり、同じ問題が再発する。</div>
+        </div>
+        <div class="panel-arrow">▼　なぜ起きるのか</div>
+        <div class="panel panel-2">
+          <div class="panel-tag">LEVEL 2 ── 水面の下</div>
+          <div class="panel-title">構造</div>
+          <div class="panel-desc">事象を繰り返し生み出す制度・プロセス・組織の力学。仕組みを変えることで事象が変わる。</div>
+        </div>
+        <div class="panel-arrow">▼　なぜその構造が保たれるのか</div>
+        <div class="panel panel-3">
+          <div class="panel-tag">LEVEL 3 ── 最深部</div>
+          <div class="panel-title">メンタルモデル</div>
+          <div class="panel-desc">構造を支える暗黙の前提・価値観。ここに働きかけることが根本解決につながる。</div>
+        </div>
+        <div class="lever-note">下の層ほど見えにくいが、変えたときの効果は大きい</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-mekko-market-map</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 14px 48px 12px;
+      gap: 24px;
+      overflow: hidden;
+    }
+    /* 左側: メッコチャート本体 */
+    .mekko-block {
+      flex: 4;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+    .mekko-header-note {
+      font-size: 11px;
+      color: #999999;
+      flex-shrink: 0;
+    }
+    .mekko-body {
+      flex: 1;
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+    }
+    /* Y軸（シェア%） */
+    .y-axis {
+      width: 34px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .y-axis-spacer { height: 38px; flex-shrink: 0; }
+    .y-ticks {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .y-tick {
+      font-size: 10px;
+      color: #AAAAAA;
+      text-align: right;
+      line-height: 1;
+    }
+    /* 可変幅の列（flex-grow ＝ 市場規模） */
+    .mekko-columns {
+      flex: 1;
+      display: flex;
+      gap: 3px;
+      overflow: hidden;
+    }
+    .mekko-col {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .col-cloud    { flex-grow: 1200; }
+    .col-saas     { flex-grow: 800; }
+    .col-security { flex-grow: 500; }
+    .col-ops      { flex-grow: 300; }
+
+    .col-header {
+      height: 38px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 4px;
+      overflow: hidden;
+    }
+    .col-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .col-size {
+      font-size: 10px;
+      color: #666666;
+      white-space: nowrap;
+    }
+    .col-stack {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #CCCCCC;
+    }
+    /* セル（プレイヤー別シェア・全列で濃淡統一） */
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      overflow: hidden;
+    }
+    .cell-own    { background: #333333; color: #FFFFFF; }
+    .cell-comp-a { background: #999999; color: #FFFFFF; }
+    .cell-comp-b { background: #CCCCCC; color: #333333; }
+    .cell-other  { background: #EEEEEE; color: #666666; }
+    /* X軸注記 */
+    .x-axis-note {
+      display: flex;
+      justify-content: space-between;
+      margin-left: 40px;
+      flex-shrink: 0;
+      padding-top: 4px;
+    }
+    .x-note-text {
+      font-size: 10px;
+      color: #AAAAAA;
+    }
+    /* 右側: 凡例 */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-swatch {
+      width: 20px;
+      height: 14px;
+      border: 1px solid #CCCCCC;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555555;
+    }
+    .reading-note {
+      font-size: 10px;
+      color: #999999;
+      line-height: 1.5;
+      margin-top: 8px;
+      border-top: 1px solid #EEEEEE;
+      padding-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[mekko-market-map]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: メッコチャート -->
+      <div class="mekko-block">
+        <div class="mekko-header-note">国内ITサービス市場 計2,800億円（2025年度・セル内はシェア%）</div>
+        <div class="mekko-body">
+          <!-- Y軸（シェア%） -->
+          <div class="y-axis">
+            <div class="y-axis-spacer"></div>
+            <div class="y-ticks">
+              <span class="y-tick">100%</span>
+              <span class="y-tick">75%</span>
+              <span class="y-tick">50%</span>
+              <span class="y-tick">25%</span>
+              <span class="y-tick">0%</span>
+            </div>
+          </div>
+
+          <!-- 可変幅列（幅＝市場規模に比例） -->
+          <div class="mekko-columns">
+            <!-- クラウド基盤 1,200億円 -->
+            <div class="mekko-col col-cloud">
+              <div class="col-header">
+                <div class="col-name">クラウド基盤</div>
+                <div class="col-size">1,200億円（43%）</div>
+              </div>
+              <div class="col-stack">
+                <div class="cell cell-other" style="height: 15%;">15%</div>
+                <div class="cell cell-comp-b" style="height: 20%;">20%</div>
+                <div class="cell cell-comp-a" style="height: 27%;">27%</div>
+                <div class="cell cell-own" style="height: 38%;">38%</div>
+              </div>
+            </div>
+            <!-- 業務SaaS 800億円 -->
+            <div class="mekko-col col-saas">
+              <div class="col-header">
+                <div class="col-name">業務SaaS</div>
+                <div class="col-size">800億円（29%）</div>
+              </div>
+              <div class="col-stack">
+                <div class="cell cell-other" style="height: 15%;">15%</div>
+                <div class="cell cell-comp-b" style="height: 22%;">22%</div>
+                <div class="cell cell-comp-a" style="height: 41%;">41%</div>
+                <div class="cell cell-own" style="height: 22%;">22%</div>
+              </div>
+            </div>
+            <!-- セキュリティ 500億円 -->
+            <div class="mekko-col col-security">
+              <div class="col-header">
+                <div class="col-name">セキュリティ</div>
+                <div class="col-size">500億円（18%）</div>
+              </div>
+              <div class="col-stack">
+                <div class="cell cell-other" style="height: 20%;">20%</div>
+                <div class="cell cell-comp-b" style="height: 35%;">35%</div>
+                <div class="cell cell-comp-a" style="height: 30%;">30%</div>
+                <div class="cell cell-own" style="height: 15%;">15%</div>
+              </div>
+            </div>
+            <!-- 運用サービス 300億円 -->
+            <div class="mekko-col col-ops">
+              <div class="col-header">
+                <div class="col-name">運用</div>
+                <div class="col-size">300億円</div>
+              </div>
+              <div class="col-stack">
+                <div class="cell cell-other" style="height: 12%;">12%</div>
+                <div class="cell cell-comp-b" style="height: 18%;">18%</div>
+                <div class="cell cell-comp-a" style="height: 25%;">25%</div>
+                <div class="cell cell-own" style="height: 45%;">45%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- X軸注記 -->
+        <div class="x-axis-note">
+          <span class="x-note-text">← 横幅＝セグメント市場規模（億円）に比例 →</span>
+          <span class="x-note-text">縦＝各セグメント内シェア（100%積み上げ）</span>
+        </div>
+      </div>
+
+      <!-- 右側: 凡例 -->
+      <div class="legend-area">
+        <div class="legend-title">凡例（プレイヤー）</div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #333333;"></div>
+          <div class="legend-text">自社</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #999999;"></div>
+          <div class="legend-text">競合A社</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #CCCCCC;"></div>
+          <div class="legend-text">競合B社</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #EEEEEE;"></div>
+          <div class="legend-text">その他</div>
+        </div>
+        <div class="reading-note">図の読み方: 列の横幅が市場規模、列内の縦の割合が各プレイヤーのシェア。面積＝おおよその売上規模として市場全体を俯瞰できる。</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-radar-chart-comparison</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px;
+      gap: 24px;
+      overflow: hidden;
+    }
+    .radar-body {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+    }
+    /* 右側: 凡例エリア */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding: 8px 0;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legend-swatch-filled {
+      width: 24px;
+      height: 16px;
+      background: #CCCCCC;
+      border: 1px solid #AAAAAA;
+      flex-shrink: 0;
+    }
+    .legend-swatch-line {
+      width: 24px;
+      height: 0;
+      border-top: 3px solid #333333;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555555;
+    }
+    .legend-sub {
+      font-size: 10px;
+      color: #999999;
+    }
+    .legend-note {
+      font-size: 10px;
+      color: #999999;
+      line-height: 1.6;
+      border-top: 1px solid #E8E8E8;
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[radar-chart-comparison]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: レーダーチャート本体（SVG） -->
+      <div class="radar-body">
+        <svg width="540" height="410" viewBox="0 0 560 416" xmlns="http://www.w3.org/2000/svg">
+          <!-- 放射グリッド（同心六角形・5段階） -->
+          <polygon points="250,171 279,188 279,222 250,239 221,222 221,188" fill="none" stroke="#D8D8D8" stroke-width="1" />
+          <polygon points="250,137 309,171 309,239 250,273 191,239 191,171" fill="none" stroke="#D8D8D8" stroke-width="1" />
+          <polygon points="250,103 338,154 338,256 250,307 162,256 162,154" fill="none" stroke="#D8D8D8" stroke-width="1" />
+          <polygon points="250,69 368,137 368,273 250,341 132,273 132,137" fill="none" stroke="#D8D8D8" stroke-width="1" />
+          <polygon points="250,35 397,120 397,290 250,375 103,290 103,120" fill="none" stroke="#CCCCCC" stroke-width="1" />
+
+          <!-- 軸線（中心から各頂点へ） -->
+          <line x1="250" y1="205" x2="250" y2="35" stroke="#D8D8D8" stroke-width="1" />
+          <line x1="250" y1="205" x2="397" y2="120" stroke="#D8D8D8" stroke-width="1" />
+          <line x1="250" y1="205" x2="397" y2="290" stroke="#D8D8D8" stroke-width="1" />
+          <line x1="250" y1="205" x2="250" y2="375" stroke="#D8D8D8" stroke-width="1" />
+          <line x1="250" y1="205" x2="103" y2="290" stroke="#D8D8D8" stroke-width="1" />
+          <line x1="250" y1="205" x2="103" y2="120" stroke="#D8D8D8" stroke-width="1" />
+
+          <!-- スケール数値（上方向の軸沿い） -->
+          <text x="257" y="174" font-size="9" fill="#AAAAAA">1</text>
+          <text x="257" y="140" font-size="9" fill="#AAAAAA">2</text>
+          <text x="257" y="106" font-size="9" fill="#AAAAAA">3</text>
+          <text x="257" y="72" font-size="9" fill="#AAAAAA">4</text>
+          <text x="257" y="38" font-size="9" fill="#AAAAAA">5</text>
+
+          <!-- 現状ポリゴン（薄グレー塗り） values: 技3 営2 ブ4 価2 サ3 開2 -->
+          <polygon points="250,103 309,171 368,273 250,273 162,256 191,171"
+                   fill="#CCCCCC" stroke="#AAAAAA" stroke-width="1" />
+
+          <!-- 目標ポリゴン（濃グレー線・塗りなし） values: 技4 営4 ブ5 価4 サ4 開4 -->
+          <polygon points="250,69 368,137 397,290 250,341 132,273 132,137"
+                   fill="none" stroke="#333333" stroke-width="2.5" />
+          <circle cx="250" cy="69"  r="4" fill="#333333" />
+          <circle cx="368" cy="137" r="4" fill="#333333" />
+          <circle cx="397" cy="290" r="4" fill="#333333" />
+          <circle cx="250" cy="341" r="4" fill="#333333" />
+          <circle cx="132" cy="273" r="4" fill="#333333" />
+          <circle cx="132" cy="137" r="4" fill="#333333" />
+
+          <!-- 軸ラベル（各軸の外側端） -->
+          <text x="250" y="24"  font-size="12" fill="#555555" text-anchor="middle">技術力</text>
+          <text x="405" y="112" font-size="12" fill="#555555">営業力</text>
+          <text x="405" y="300" font-size="12" fill="#555555">ブランド力</text>
+          <text x="250" y="397" font-size="12" fill="#555555" text-anchor="middle">価格競争力</text>
+          <text x="95"  y="300" font-size="12" fill="#555555" text-anchor="end">サポート体制</text>
+          <text x="95"  y="112" font-size="12" fill="#555555" text-anchor="end">開発スピード</text>
+        </svg>
+      </div>
+
+      <!-- 右側: 凡例エリア -->
+      <div class="legend-area">
+        <div class="legend-title">凡例</div>
+        <div class="legend-item">
+          <div class="legend-swatch-filled"></div>
+          <div>
+            <div class="legend-text">現状</div>
+            <div class="legend-sub">2026年上期 自己評価</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch-line"></div>
+          <div>
+            <div class="legend-text">目標</div>
+            <div class="legend-sub">2027年度末の到達水準</div>
+          </div>
+        </div>
+        <div class="legend-note">
+          5段階評価・外側ほど高評価。<br>
+          図の読み方: 塗りと線の差が「埋めるべきギャップ」。最大ギャップは営業力・価格競争力・開発スピード（いずれも +2）。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

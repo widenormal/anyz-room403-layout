@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-issue-logic-tree</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 48px 12px;
+      overflow: hidden;
+    }
+    /* カラム見出し */
+    .col-headers {
+      display: flex;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .col-header {
+      font-size: 10px;
+      color: #999999;
+      letter-spacing: 0.08em;
+    }
+    .col-header.h1 { width: 206px; }
+    .col-header.h2 { width: 196px; }
+    .col-header.h3 { flex: 1; }
+    /* ツリー本体 */
+    .tree {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .q-col {
+      width: 170px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .q-box {
+      width: 100%;
+      background: #555555;
+      color: #FFFFFF;
+      padding: 18px 14px;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+    .root-stub {
+      width: 16px;
+      height: 1px;
+      background: #AAAAAA;
+      align-self: center;
+      flex-shrink: 0;
+    }
+    /* 第1階層カラム（縦連結線つき） */
+    .l1-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-left: 20px;
+    }
+    .l1-col::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 21.4%;
+      bottom: 14.3%;
+      width: 1px;
+      background: #AAAAAA;
+    }
+    /* 論点グループ（第1階層1個＋そのサブ論点） */
+    .group {
+      display: flex;
+      position: relative;
+    }
+    .group::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      width: 20px;
+      height: 1px;
+      background: #AAAAAA;
+    }
+    .group.g3 { flex: 3; }
+    .group.g2 { flex: 2; }
+    .l1-box {
+      width: 160px;
+      flex-shrink: 0;
+      align-self: center;
+      background: #EEEEEE;
+      border: 1px solid #CCCCCC;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      line-height: 1.5;
+    }
+    .l1-stub {
+      width: 16px;
+      height: 1px;
+      background: #AAAAAA;
+      align-self: center;
+      flex-shrink: 0;
+    }
+    /* 第2階層カラム（縦連結線つき） */
+    .l2-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      position: relative;
+      padding-left: 20px;
+    }
+    .l2-col.n2::before,
+    .l2-col.n3::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 1px;
+      background: #AAAAAA;
+    }
+    .l2-col.n3::before { top: calc(100% / 6); bottom: calc(100% / 6); }
+    .l2-col.n2::before { top: calc(100% / 4); bottom: calc(100% / 4); }
+    .l2-box {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      background: #F5F5F5;
+      border: 1px solid #CCCCCC;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: #555555;
+      line-height: 1.4;
+      position: relative;
+    }
+    .l2-box::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      width: 20px;
+      height: 1px;
+      background: #AAAAAA;
+    }
+    /* 脚注 */
+    .footnote {
+      flex-shrink: 0;
+      margin-top: 8px;
+      font-size: 10px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[issue-logic-tree]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- カラム見出し -->
+      <div class="col-headers">
+        <div class="col-header h1">問い（イシュー）</div>
+        <div class="col-header h2">論点（第1階層）</div>
+        <div class="col-header h3">サブ論点（第2階層）</div>
+      </div>
+
+      <!-- ツリー本体 -->
+      <div class="tree">
+
+        <!-- 左端: 問い -->
+        <div class="q-col">
+          <div class="q-box">営業利益を3年で2倍にするには何をすべきか？</div>
+        </div>
+        <div class="root-stub"></div>
+
+        <!-- 第1階層＋第2階層 -->
+        <div class="l1-col">
+
+          <!-- 論点1（サブ論点3つ） -->
+          <div class="group g3">
+            <div class="l1-box">売上を伸ばせるか</div>
+            <div class="l1-stub"></div>
+            <div class="l2-col n3">
+              <div class="l2-box">既存顧客の単価を上げられるか</div>
+              <div class="l2-box">新規顧客を獲得できるか</div>
+              <div class="l2-box">新チャネルを開拓できるか</div>
+            </div>
+          </div>
+
+          <!-- 論点2（サブ論点2つ） -->
+          <div class="group g2">
+            <div class="l1-box">コストを下げられるか</div>
+            <div class="l1-stub"></div>
+            <div class="l2-col n2">
+              <div class="l2-box">調達コストを圧縮できるか</div>
+              <div class="l2-box">業務プロセスを自動化できるか</div>
+            </div>
+          </div>
+
+          <!-- 論点3（サブ論点2つ） -->
+          <div class="group g2">
+            <div class="l1-box">事業構成を変えられるか</div>
+            <div class="l1-stub"></div>
+            <div class="l2-col n2">
+              <div class="l2-box">低収益事業から撤退できるか</div>
+              <div class="l2-box">高収益領域へ投資を移せるか</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 脚注 -->
+      <div class="footnote">図の読み方: 左の問いを、モレなくダブりなく（MECE）論点→サブ論点へ分解している。</div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-layered-pyramid-hierarchy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 48px;
+      overflow: hidden;
+    }
+    /* ピラミッド＋説明の複合キャンバス */
+    .pyramid-canvas {
+      position: relative;
+      width: 864px;
+      height: 400px;
+      flex-shrink: 0;
+    }
+    .pyramid-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    /* 右側: 各層の説明 */
+    .layer-desc {
+      position: absolute;
+      left: 484px;
+      width: 380px;
+      transform: translateY(-50%);
+    }
+    .layer-desc-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 3px;
+    }
+    .layer-desc-text {
+      font-size: 11px;
+      color: #666666;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[layered-pyramid-hierarchy]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <div class="pyramid-canvas">
+
+        <!-- ピラミッド本体（SVG・4層） -->
+        <svg class="pyramid-svg" width="470" height="400" viewBox="0 0 470 400">
+          <!-- 第1層（頂点）: 理念 -->
+          <polygon points="220,0 275,100 165,100" fill="#D8D8D8" stroke="#999999" stroke-width="1"/>
+          <!-- 第2層: 戦略 -->
+          <polygon points="165,100 275,100 330,200 110,200" fill="#E8E8E8" stroke="#999999" stroke-width="1"/>
+          <!-- 第3層: 施策 -->
+          <polygon points="110,200 330,200 385,300 55,300" fill="#F0F0F0" stroke="#999999" stroke-width="1"/>
+          <!-- 第4層（基盤）: 日常業務 -->
+          <polygon points="55,300 385,300 440,400 0,400" fill="#FAFAFA" stroke="#999999" stroke-width="1"/>
+
+          <!-- 層ラベル -->
+          <text x="220" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#333333">理念</text>
+          <text x="220" y="155" text-anchor="middle" font-size="13" font-weight="bold" fill="#333333">戦略</text>
+          <text x="220" y="255" text-anchor="middle" font-size="13" font-weight="bold" fill="#333333">施策</text>
+          <text x="220" y="355" text-anchor="middle" font-size="13" font-weight="bold" fill="#333333">日常業務</text>
+
+          <!-- 引き出し線（各層の右辺中点 → 右端） -->
+          <line x1="248" y1="50"  x2="466" y2="50"  stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="303" y1="150" x2="466" y2="150" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="358" y1="250" x2="466" y2="250" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="413" y1="350" x2="466" y2="350" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+
+        <!-- 右側: 各層の説明（引き出し線の高さに揃える） -->
+        <div class="layer-desc" style="top: 50px;">
+          <div class="layer-desc-name">理念（ミッション・ビジョン）</div>
+          <div class="layer-desc-text">「地域の中小企業のDXを支える」。全階層の判断のよりどころとなる最上位概念。</div>
+        </div>
+        <div class="layer-desc" style="top: 150px;">
+          <div class="layer-desc-name">戦略</div>
+          <div class="layer-desc-text">3年で受託中心からクラウドサービス中心へ事業構成を転換する基本方針。</div>
+        </div>
+        <div class="layer-desc" style="top: 250px;">
+          <div class="layer-desc-name">施策</div>
+          <div class="layer-desc-text">SaaS製品の開発投資、パートナー販路の開拓、カスタマーサクセス組織の新設。</div>
+        </div>
+        <div class="layer-desc" style="top: 350px;">
+          <div class="layer-desc-name">日常業務</div>
+          <div class="layer-desc-text">週次の解約予兆レビュー、問い合わせ対応SLAの計測など、施策を支える日々の運用。</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

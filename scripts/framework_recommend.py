@@ -3,7 +3,7 @@
 """フレームワーク・レコメンダ（CIスライド制作の標準搭載AGENT用の決定論アシスト）。
 
 目的: 制作中のスライドの「言いたいこと/戦略/内容」を渡すと、SLIDE-PATTERN-INDEX.md の
-99 パターンから (1)内容に合う図 と (2)未経験かもしれないフレームワーク図(発見枠) を
+128 パターンから (1)内容に合う図 と (2)未経験かもしれないフレームワーク図(発見枠) を
 ショートリスト出力する。最終的な「この戦略に効く理由」の一言はスキル(Claude)が付ける。
 
 設計: 外部LLM不要・INDEXのメタデータ(概要/適したシーン)だけで日本語キーワード重なりスコア。
@@ -20,11 +20,15 @@ INDEX = pathlib.Path(__file__).resolve().parent.parent / "docs/SLIDE-PATTERN/SLI
 
 # 「戦略フレームワーク図」寄りのカテゴリ（発見枠で優先的に拾う＝未経験に触れさせる）
 FRAMEWORK_CATEGORIES = {"フロー・ステップ", "図解・ダイアグラム", "グラフ・データ",
-                        "テーブル・比較", "KPI・まとめ"}
+                        "テーブル・比較", "KPI・まとめ", "フレームワーク・分析"}
 # 名称に含まれるとフレームワーク性が高い語（2x2・サイクル・ファネル等）
-FRAMEWORK_NAME_HINTS = ["matrix", "quadrant", "2x2", "2x3", "2x4", "cycle", "hub", "spoke",
+FRAMEWORK_NAME_HINTS = ["matrix", "quadrant", "2x2", "2x3", "2x4", "3x3", "cycle", "hub", "spoke",
                         "funnel", "roadmap", "pyramid", "venn", "staircase", "timeline",
-                        "pdca", "tree", "flow", "step", "dashboard", "kpi", "kgi", "polygon"]
+                        "pdca", "tree", "flow", "step", "dashboard", "kpi", "kgi", "polygon",
+                        "waterfall", "bridge", "mekko", "tornado", "butterfly", "scatter",
+                        "radar", "slope", "heatmap", "harvey", "concentric", "chain",
+                        "horizons", "canvas", "journey", "swimlane", "fishbone", "iceberg",
+                        "positioning", "house"]
 
 
 def parse_index(path: pathlib.Path) -> list[dict]:

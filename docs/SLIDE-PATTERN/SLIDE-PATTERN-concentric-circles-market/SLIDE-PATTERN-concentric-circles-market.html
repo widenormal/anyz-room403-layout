@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-concentric-circles-market</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 48px;
+      overflow: hidden;
+    }
+    /* 同心円＋説明の複合キャンバス */
+    .circles-canvas {
+      position: relative;
+      width: 864px;
+      height: 410px;
+      flex-shrink: 0;
+    }
+    .circles-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    /* 右側: 各円の説明 */
+    .circle-desc {
+      position: absolute;
+      left: 500px;
+      width: 364px;
+      transform: translateY(-50%);
+    }
+    .circle-desc-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333333;
+    }
+    .circle-desc-value {
+      font-size: 12px;
+      color: #555555;
+      margin: 2px 0 3px;
+    }
+    .circle-desc-text {
+      font-size: 11px;
+      color: #666666;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[concentric-circles-market]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <div class="circles-canvas">
+
+        <!-- 同心円本体（SVG・下端揃えの入れ子3円） -->
+        <svg class="circles-svg" width="480" height="410" viewBox="0 0 480 410">
+          <!-- 外円: TAM（外ほど薄いグレー） -->
+          <circle cx="215" cy="210" r="195" fill="#F5F5F5" stroke="#AAAAAA" stroke-width="1"/>
+          <!-- 中円: SAM -->
+          <circle cx="215" cy="275" r="130" fill="#E8E8E8" stroke="#AAAAAA" stroke-width="1"/>
+          <!-- 内円: SOM -->
+          <circle cx="215" cy="337" r="68" fill="#D8D8D8" stroke="#999999" stroke-width="1"/>
+
+          <!-- 円内ラベル（市場名＋金額） -->
+          <text x="215" y="76" text-anchor="middle" font-size="14" font-weight="bold" fill="#555555">TAM</text>
+          <text x="215" y="94" text-anchor="middle" font-size="12" fill="#666666">5,000億円</text>
+          <text x="215" y="201" text-anchor="middle" font-size="14" font-weight="bold" fill="#555555">SAM</text>
+          <text x="215" y="219" text-anchor="middle" font-size="12" fill="#666666">1,200億円</text>
+          <text x="215" y="330" text-anchor="middle" font-size="14" font-weight="bold" fill="#333333">SOM</text>
+          <text x="215" y="348" text-anchor="middle" font-size="12" fill="#333333">150億円</text>
+
+          <!-- 引き出し線（各円の右端 → キャンバス右端） -->
+          <line x1="362" y1="85"  x2="476" y2="85"  stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="328" y1="210" x2="476" y2="210" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="282" y1="337" x2="476" y2="337" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+
+        <!-- 右側: 各円の詳細説明（引き出し線の高さに揃える） -->
+        <div class="circle-desc" style="top: 85px;">
+          <div class="circle-desc-name">TAM — 獲得可能な市場全体</div>
+          <div class="circle-desc-value">5,000億円</div>
+          <div class="circle-desc-text">国内バックオフィスSaaS市場の総額。理論上の最大市場規模。</div>
+        </div>
+        <div class="circle-desc" style="top: 210px;">
+          <div class="circle-desc-name">SAM — 自社が狙えるセグメント</div>
+          <div class="circle-desc-value">1,200億円</div>
+          <div class="circle-desc-text">従業員300名以下の中小企業向けセグメント。自社製品の対象範囲。</div>
+        </div>
+        <div class="circle-desc" style="top: 337px;">
+          <div class="circle-desc-name">SOM — 現実的に獲得できる市場</div>
+          <div class="circle-desc-value">150億円</div>
+          <div class="circle-desc-text">3年以内に自社の販路・営業体制で到達可能な範囲。事業計画の根拠。</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

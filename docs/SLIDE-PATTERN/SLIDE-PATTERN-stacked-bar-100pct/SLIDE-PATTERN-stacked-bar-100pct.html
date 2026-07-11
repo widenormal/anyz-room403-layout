@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-stacked-bar-100pct</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px 14px;
+      gap: 28px;
+      overflow: hidden;
+    }
+    /* 左側: チャート */
+    .chart-block {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+    .unit-label {
+      font-size: 11px;
+      color: #999999;
+      flex-shrink: 0;
+      padding-left: 40px;
+    }
+    .chart-body {
+      flex: 1;
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .y-axis {
+      width: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .y-tick {
+      font-size: 10px;
+      color: #AAAAAA;
+      text-align: right;
+      line-height: 1;
+    }
+    .plot {
+      flex: 1;
+      position: relative;
+      border-left: 1px solid #CCCCCC;
+      border-bottom: 1px solid #999999;
+    }
+    .gridline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #EEEEEE;
+    }
+    .bars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: stretch;
+    }
+    .bar {
+      width: 84px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #CCCCCC;
+      border-bottom: none;
+    }
+    /* セグメント（上から: その他 → 新規事業 → 海外事業 → 国内事業） */
+    .seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      overflow: hidden;
+    }
+    .seg-other    { background: #EEEEEE; color: #666666; }
+    .seg-new      { background: #CCCCCC; color: #333333; }
+    .seg-overseas { background: #999999; color: #FFFFFF; }
+    .seg-domestic { background: #333333; color: #FFFFFF; }
+    /* X軸ラベル */
+    .x-labels {
+      display: flex;
+      justify-content: space-around;
+      margin-left: 40px;
+      flex-shrink: 0;
+    }
+    .x-label {
+      width: 84px;
+      text-align: center;
+      font-size: 11px;
+      color: #555555;
+      padding-top: 4px;
+    }
+    /* 右側: 凡例 */
+    .legend-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+    .legend-title {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-swatch {
+      width: 20px;
+      height: 14px;
+      border: 1px solid #CCCCCC;
+      flex-shrink: 0;
+    }
+    .legend-text {
+      font-size: 12px;
+      color: #555555;
+    }
+    .reading-note {
+      font-size: 10px;
+      color: #999999;
+      line-height: 1.5;
+      margin-top: 8px;
+      border-top: 1px solid #EEEEEE;
+      padding-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[stacked-bar-100pct]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: 100%積み上げ棒チャート -->
+      <div class="chart-block">
+        <div class="unit-label">売上構成比（%）</div>
+        <div class="chart-body">
+          <!-- Y軸目盛 -->
+          <div class="y-axis">
+            <span class="y-tick">100%</span>
+            <span class="y-tick">75%</span>
+            <span class="y-tick">50%</span>
+            <span class="y-tick">25%</span>
+            <span class="y-tick">0%</span>
+          </div>
+          <!-- プロット領域 -->
+          <div class="plot">
+            <div class="gridline" style="bottom: 25%;"></div>
+            <div class="gridline" style="bottom: 50%;"></div>
+            <div class="gridline" style="bottom: 75%;"></div>
+
+            <div class="bars">
+              <!-- 2022年度 -->
+              <div class="bar">
+                <div class="seg seg-other" style="height: 6%;">6%</div>
+                <div class="seg seg-new" style="height: 8%;">8%</div>
+                <div class="seg seg-overseas" style="height: 24%;">24%</div>
+                <div class="seg seg-domestic" style="height: 62%;">62%</div>
+              </div>
+              <!-- 2023年度 -->
+              <div class="bar">
+                <div class="seg seg-other" style="height: 6%;">6%</div>
+                <div class="seg seg-new" style="height: 11%;">11%</div>
+                <div class="seg seg-overseas" style="height: 28%;">28%</div>
+                <div class="seg seg-domestic" style="height: 55%;">55%</div>
+              </div>
+              <!-- 2024年度 -->
+              <div class="bar">
+                <div class="seg seg-other" style="height: 6%;">6%</div>
+                <div class="seg seg-new" style="height: 15%;">15%</div>
+                <div class="seg seg-overseas" style="height: 31%;">31%</div>
+                <div class="seg seg-domestic" style="height: 48%;">48%</div>
+              </div>
+              <!-- 2025年度 -->
+              <div class="bar">
+                <div class="seg seg-other" style="height: 6%;">6%</div>
+                <div class="seg seg-new" style="height: 20%;">20%</div>
+                <div class="seg seg-overseas" style="height: 33%;">33%</div>
+                <div class="seg seg-domestic" style="height: 41%;">41%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- X軸ラベル -->
+        <div class="x-labels">
+          <span class="x-label">2022年度</span>
+          <span class="x-label">2023年度</span>
+          <span class="x-label">2024年度</span>
+          <span class="x-label">2025年度</span>
+        </div>
+      </div>
+
+      <!-- 右側: 凡例 -->
+      <div class="legend-area">
+        <div class="legend-title">凡例</div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #333333;"></div>
+          <div class="legend-text">国内事業</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #999999;"></div>
+          <div class="legend-text">海外事業</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #CCCCCC;"></div>
+          <div class="legend-text">新規事業</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background: #EEEEEE;"></div>
+          <div class="legend-text">その他</div>
+        </div>
+        <div class="reading-note">図の読み方: 各棒は年度売上を100%とした構成比。棒の高さは同じで、セグメントの割合の変化を年度間で比較する。</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

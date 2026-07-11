@@ -37,6 +37,30 @@ NatureLab 週次定例デッキ（2026-07-08〜09）で確立・検証した運�
 
 ---
 
+## slide v3.6（準拠 brand v2） — 2026-07-11
+> v3.5 に後続する非破壊追加。CSS（`ci-format-v3.2.css`/`ci-cover-light-v3.3.css`/`ci-charts.css`）・
+> トークン値・レイアウト寸法はすべて不変。SLIDE-PATTERN ライブラリの拡張のみ。
+
+- **SLIDE-PATTERN を 99種 → 128種へ拡張（コンサルフレームワーク29種追加）**：トップコンサル
+  （McKinsey・BCG・Bain・Porter系）の正典約120型を3並列Webリサーチで照合したギャップ分析
+  （`docs/SLIDE-PATTERN/FRAMEWORK-GAP-RESEARCH.md`）に基づき、欠落していた「分析を語る図」を補充。
+  - **定量チャート10種**：waterfall-bridge-chart・stacked-bar-100pct・mekko-market-map・
+    tornado-sensitivity-chart・butterfly-comparison-chart・scatter-bubble-positioning・
+    radar-chart-comparison・slope-chart-before-after・heatmap-matrix-table・funnel-conversion-stages
+  - **ロジック・ツリー5種**：issue-logic-tree・kpi-driver-tree・minto-pyramid-structure・
+    decision-tree-options・fishbone-cause-analysis
+  - **マトリクス・構造10種**：positioning-matrix-2x2（汎用2軸＝SWOT/Ansoff/優先度を1型でカバー）・
+    nine-box-matrix-3x3・harvey-ball-comparison-table・layered-pyramid-hierarchy・
+    concentric-circles-market（TAM/SAM/SOM）・venn-three-circle-overlap・value-chain-porter・
+    strategy-house-framework・three-horizons-growth・business-model-canvas-grid
+  - **プロセス・体験4種**：customer-journey-map・swimlane-process-flow・phase-workstream-roadmap・
+    iceberg-visible-hidden
+  - **品質ゲート**：全128種で `ci_pattern_adapter.py` CI v2 変換＋3色QA合格（pass=128/fail=0）、
+    新規29種は DOM 実測の枠内収まり検査（Playwright・NG=0）も通過。グレースケール hex のみで作図
+    （rgb()/色名/emoji 不使用）＝アダプタの3色畳み込みと完全整合。
+  - **INDEX にカテゴリ「🧠 フレームワーク・分析」を新設**し、`framework_recommend.py` の発見枠
+    加点対象に追加（未経験の型に触れさせる導線を強化）。
+
 ## slide v3.5（準拠 brand v2） — 2026-07-09
 > v3.4（CI改善6件・PR #742）に後続する非破壊追加。CSSトークン値・レイアウト寸法は不変。
 

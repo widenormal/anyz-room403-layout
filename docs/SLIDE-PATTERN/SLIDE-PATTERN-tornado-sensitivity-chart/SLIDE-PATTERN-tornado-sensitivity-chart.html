@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-tornado-sensitivity-chart</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 48px 12px;
+      gap: 8px;
+      overflow: hidden;
+    }
+    /* ヘッダ行: 基準値＋凡例 */
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .base-note {
+      font-size: 11px;
+      color: #666666;
+    }
+    .legend {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #555555;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border: 1px solid #CCCCCC;
+    }
+    /* 行グリッド: 変数名 | 左ゾーン | 右ゾーン */
+    .tornado-grid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .t-row {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 150px 1fr 1fr;
+      align-items: center;
+      min-height: 0;
+    }
+    .t-header {
+      flex: 0 0 auto;
+      height: 22px;
+    }
+    .t-header .zone-left, .t-header .zone-right {
+      font-size: 11px;
+      font-weight: bold;
+      color: #666666;
+      display: flex;
+      align-items: center;
+    }
+    .t-header .zone-left { justify-content: flex-start; padding-left: 4px; }
+    .t-header .zone-right { justify-content: flex-end; padding-right: 4px; }
+    .var-name {
+      font-size: 12px;
+      color: #333333;
+      padding-right: 10px;
+      line-height: 1.3;
+    }
+    .var-range {
+      font-size: 10px;
+      color: #999999;
+    }
+    /* 左右ゾーン（中央基準線＝右ゾーンの左罫線） */
+    .zone-left {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+    }
+    .zone-right {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      border-left: 2px solid #333333;
+      min-width: 0;
+    }
+    .bar {
+      height: 20px;
+    }
+    .bar-down { background: #666666; }  /* 下振れ（減少） */
+    .bar-up   { background: #CCCCCC; border: 1px solid #AAAAAA; }  /* 上振れ（増加） */
+    .bar-value {
+      font-size: 11px;
+      font-weight: bold;
+      color: #555555;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    /* X軸 */
+    .x-axis {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 150px 1fr 1fr;
+    }
+    .x-zero {
+      grid-column: 2 / 4;
+      display: flex;
+      justify-content: center;
+      font-size: 10px;
+      color: #999999;
+    }
+    .x-unit {
+      grid-column: 2 / 4;
+      text-align: center;
+      font-size: 11px;
+      color: #666666;
+      padding-top: 2px;
+    }
+    .reading-note {
+      font-size: 11px;
+      color: #999999;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[tornado-sensitivity-chart]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- ヘッダ行 -->
+      <div class="chart-header">
+        <span class="base-note">基準値: 2026年度計画 営業利益 250億円（中央線＝基準からの乖離ゼロ）</span>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-swatch" style="background: #666666;"></span>下振れシナリオ</div>
+          <div class="legend-item"><span class="legend-swatch" style="background: #CCCCCC;"></span>上振れシナリオ</div>
+        </div>
+      </div>
+
+      <!-- 左右ゾーンの見出し -->
+      <div class="t-row t-header">
+        <div></div>
+        <div class="zone-left" style="border: none;">← 下振れ（営業利益の減少）</div>
+        <div class="zone-right" style="border-left: 2px solid #333333;">上振れ（営業利益の増加）→</div>
+      </div>
+
+      <!-- 行: 影響度の大きい順（バー幅 = 影響額/最大42億円 × 90%） -->
+      <div class="tornado-grid">
+        <div class="t-row">
+          <div class="var-name">販売数量 <span class="var-range">（±10%）</span></div>
+          <div class="zone-left"><span class="bar-value">−42</span><div class="bar bar-down" style="width: 90%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 90%;"></div><span class="bar-value">+42</span></div>
+        </div>
+        <div class="t-row">
+          <div class="var-name">販売単価 <span class="var-range">（±5%）</span></div>
+          <div class="zone-left"><span class="bar-value">−35</span><div class="bar bar-down" style="width: 75%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 81%;"></div><span class="bar-value">+38</span></div>
+        </div>
+        <div class="t-row">
+          <div class="var-name">原材料費 <span class="var-range">（±8%）</span></div>
+          <div class="zone-left"><span class="bar-value">−28</span><div class="bar bar-down" style="width: 60%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 54%;"></div><span class="bar-value">+25</span></div>
+        </div>
+        <div class="t-row">
+          <div class="var-name">為替レート <span class="var-range">（±5円/ドル）</span></div>
+          <div class="zone-left"><span class="bar-value">−18</span><div class="bar bar-down" style="width: 39%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 43%;"></div><span class="bar-value">+20</span></div>
+        </div>
+        <div class="t-row">
+          <div class="var-name">人件費 <span class="var-range">（±3%）</span></div>
+          <div class="zone-left"><span class="bar-value">−12</span><div class="bar bar-down" style="width: 26%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 21%;"></div><span class="bar-value">+10</span></div>
+        </div>
+        <div class="t-row">
+          <div class="var-name">物流費 <span class="var-range">（±5%）</span></div>
+          <div class="zone-left"><span class="bar-value">−8</span><div class="bar bar-down" style="width: 17%;"></div></div>
+          <div class="zone-right"><div class="bar bar-up" style="width: 15%;"></div><span class="bar-value">+7</span></div>
+        </div>
+      </div>
+
+      <!-- X軸 -->
+      <div class="x-axis">
+        <div></div>
+        <div class="x-zero" style="grid-column: 2 / 4;">0</div>
+        <div class="x-unit" style="grid-column: 2 / 4;">営業利益への影響額（億円）</div>
+      </div>
+
+      <!-- 図の読み方 -->
+      <div class="reading-note">図の読み方: 中央の縦線が基準値。各変数が振れた場合の営業利益への影響幅を、上から影響の大きい順に並べている（棒が長い変数ほど重点管理対象）。</div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-kpi-driver-tree</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 48px 12px;
+      overflow: hidden;
+    }
+    /* カラム見出し */
+    .col-headers {
+      display: flex;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .col-header {
+      font-size: 10px;
+      color: #999999;
+      letter-spacing: 0.08em;
+    }
+    .col-header.h1 { width: 216px; }
+    .col-header.h2 { width: 216px; }
+    .col-header.h3 { flex: 1; }
+    /* ツリー本体 */
+    .tree {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .root-col {
+      width: 180px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .stub {
+      width: 16px;
+      height: 1px;
+      background: #AAAAAA;
+      align-self: center;
+      flex-shrink: 0;
+    }
+    /* KPIノード */
+    .node {
+      background: #F5F5F5;
+      border: 1px solid #CCCCCC;
+      padding: 8px 12px;
+    }
+    .node .metric {
+      font-size: 11px;
+      color: #666666;
+      margin-bottom: 2px;
+    }
+    .node .value {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333333;
+    }
+    .node.root {
+      width: 100%;
+      background: #EEEEEE;
+      border: 1px solid #999999;
+      padding: 14px 12px;
+    }
+    .node.root .value { font-size: 20px; }
+    /* 効くレバー（末端の強調ノード） */
+    .node.lever {
+      background: #555555;
+      border: 1px solid #555555;
+    }
+    .node.lever .metric { color: #CCCCCC; }
+    .node.lever .value { color: #FFFFFF; }
+    .lever-tag {
+      display: inline-block;
+      font-size: 9px;
+      color: #FFFFFF;
+      border: 1px solid #AAAAAA;
+      padding: 0 4px;
+      margin-left: 6px;
+      vertical-align: 2px;
+    }
+    /* 第1階層カラム */
+    .l1-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-left: 20px;
+    }
+    .l1-col::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(100% / 4);
+      bottom: calc(100% / 4);
+      width: 1px;
+      background: #AAAAAA;
+    }
+    /* 親階層の演算子（縦連結線の中点に置く） */
+    .l1-col > .op {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .op {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid #999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333333;
+      z-index: 1;
+    }
+    /* KPIグループ（第1階層1個＋その分解先） */
+    .group {
+      flex: 1;
+      display: flex;
+      position: relative;
+    }
+    .group::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      width: 20px;
+      height: 1px;
+      background: #AAAAAA;
+    }
+    .group > .node {
+      width: 180px;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    /* 第2階層カラム */
+    .l2-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      position: relative;
+      padding-left: 20px;
+    }
+    .l2-col::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(100% / 4);
+      bottom: calc(100% / 4);
+      width: 1px;
+      background: #AAAAAA;
+    }
+    .l2-col > .op {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .l2-col > .node {
+      height: 60px;
+      position: relative;
+    }
+    .l2-col > .node::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      width: 20px;
+      height: 1px;
+      background: #AAAAAA;
+    }
+    /* 凡例・脚注 */
+    .footer-row {
+      flex-shrink: 0;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .legend-swatch {
+      width: 18px;
+      height: 12px;
+      background: #555555;
+      flex-shrink: 0;
+    }
+    .footer-text {
+      font-size: 10px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[kpi-driver-tree]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- カラム見出し -->
+      <div class="col-headers">
+        <div class="col-header h1">最上位KPI</div>
+        <div class="col-header h2">第1階層</div>
+        <div class="col-header h3">第2階層（ドライバー）</div>
+      </div>
+
+      <!-- ツリー本体 -->
+      <div class="tree">
+
+        <!-- 左端: 最上位KPI -->
+        <div class="root-col">
+          <div class="node root">
+            <div class="metric">営業利益（今期実績）</div>
+            <div class="value">1.2億円</div>
+          </div>
+        </div>
+        <div class="stub"></div>
+
+        <!-- 第1階層（売上 − コスト） -->
+        <div class="l1-col">
+          <div class="op">−</div>
+
+          <!-- 売上グループ -->
+          <div class="group">
+            <div class="node">
+              <div class="metric">売上高</div>
+              <div class="value">8.0億円</div>
+            </div>
+            <div class="stub"></div>
+            <div class="l2-col">
+              <div class="op">×</div>
+              <div class="node">
+                <div class="metric">年間購入客数</div>
+                <div class="value">24.0万人</div>
+              </div>
+              <div class="node lever">
+                <div class="metric">客単価<span class="lever-tag">効くレバー</span></div>
+                <div class="value">3,330円</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- コストグループ -->
+          <div class="group">
+            <div class="node">
+              <div class="metric">総コスト</div>
+              <div class="value">6.8億円</div>
+            </div>
+            <div class="stub"></div>
+            <div class="l2-col">
+              <div class="op">＋</div>
+              <div class="node">
+                <div class="metric">固定費</div>
+                <div class="value">4.2億円</div>
+              </div>
+              <div class="node lever">
+                <div class="metric">変動費<span class="lever-tag">効くレバー</span></div>
+                <div class="value">2.6億円</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 凡例・脚注 -->
+      <div class="footer-row">
+        <div class="legend-swatch"></div>
+        <div class="footer-text">濃色＝打ち手で動かせる「効くレバー」。図の読み方: 営業利益 ＝ 売上 − コスト、売上 ＝ 客数 × 客単価、コスト ＝ 固定費 ＋ 変動費 と右へ分解している。</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

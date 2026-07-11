@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-funnel-conversion-stages</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 48px 10px;
+      gap: 8px;
+      overflow: hidden;
+    }
+    .funnel-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    /* 左: ファネル本体（clip-path 台形スタック） */
+    .funnel-col {
+      width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .stage {
+      height: 66px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .stage-1 {
+      background: #E8E8E8;
+      clip-path: polygon(0% 0%, 100% 0%, 92% 100%, 8% 100%);
+    }
+    .stage-2 {
+      background: #CCCCCC;
+      clip-path: polygon(8% 0%, 92% 0%, 84% 100%, 16% 100%);
+    }
+    .stage-3 {
+      background: #AAAAAA;
+      clip-path: polygon(16% 0%, 84% 0%, 76% 100%, 24% 100%);
+    }
+    .stage-4 {
+      background: #666666;
+      clip-path: polygon(24% 0%, 76% 0%, 69% 100%, 31% 100%);
+    }
+    .stage-5 {
+      background: #333333;
+      clip-path: polygon(31% 0%, 69% 0%, 63% 100%, 37% 100%);
+    }
+    .stage-name {
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+    .stage-value {
+      font-size: 12px;
+    }
+    .stage-1 .stage-name, .stage-2 .stage-name { color: #333333; }
+    .stage-1 .stage-value, .stage-2 .stage-value { color: #555555; }
+    .stage-3 .stage-name, .stage-4 .stage-name, .stage-5 .stage-name { color: #FFFFFF; }
+    .stage-3 .stage-value, .stage-4 .stage-value, .stage-5 .stage-value { color: #F0F0F0; }
+    /* 右: 段間転換率の注記列 */
+    .rate-col {
+      width: 220px;
+      position: relative;
+      height: 370px;   /* 66×5 + 10×4 */
+    }
+    .rate-item {
+      position: absolute;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rate-item-1 { top: 54px; }
+    .rate-item-2 { top: 130px; }
+    .rate-item-3 { top: 206px; }
+    .rate-item-4 { top: 282px; }
+    .rate-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333333;
+      white-space: nowrap;
+    }
+    .rate-caption {
+      font-size: 10px;
+      color: #999999;
+      white-space: nowrap;
+    }
+    /* フッター注記 */
+    .footer-note {
+      font-size: 10px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[funnel-conversion-stages]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <div class="funnel-wrap">
+        <!-- 左: ファネル本体 -->
+        <div class="funnel-col">
+          <div class="stage stage-1">
+            <div class="stage-name">リード獲得</div>
+            <div class="stage-value">4,800件</div>
+          </div>
+          <div class="stage stage-2">
+            <div class="stage-name">商談化</div>
+            <div class="stage-value">1,540件</div>
+          </div>
+          <div class="stage stage-3">
+            <div class="stage-name">提案</div>
+            <div class="stage-value">620件</div>
+          </div>
+          <div class="stage stage-4">
+            <div class="stage-name">見積提示</div>
+            <div class="stage-value">280件</div>
+          </div>
+          <div class="stage stage-5">
+            <div class="stage-name">受注</div>
+            <div class="stage-value">98件</div>
+          </div>
+        </div>
+
+        <!-- 右: 段間転換率 -->
+        <div class="rate-col">
+          <div class="rate-item rate-item-1">
+            <span class="rate-value">→ 32%</span>
+            <span class="rate-caption">リード → 商談</span>
+          </div>
+          <div class="rate-item rate-item-2">
+            <span class="rate-value">→ 40%</span>
+            <span class="rate-caption">商談 → 提案</span>
+          </div>
+          <div class="rate-item rate-item-3">
+            <span class="rate-value">→ 45%</span>
+            <span class="rate-caption">提案 → 見積</span>
+          </div>
+          <div class="rate-item rate-item-4">
+            <span class="rate-value">→ 35%</span>
+            <span class="rate-caption">見積 → 受注</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- フッター注記 -->
+      <div class="footer-note">
+        図の読み方: 下段ほど濃色＝最終成果に近い。転換率が最も低い「リード → 商談（32%）」が改善の優先箇所。
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

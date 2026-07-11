@@ -1,6 +1,6 @@
 # SLIDE-PATTERN → CI v2 アダプタ寸法仕様
 
-> 99 種の `docs/SLIDE-PATTERN/`（16:9・グレースケール・sans-serif）を **CI v2（A4横・3色・φ）** へ
+> 128 種の `docs/SLIDE-PATTERN/`（16:9・グレースケール・sans-serif）を **CI v2（A4横・3色・φ）** へ
 > 変換するための唯一の寸法正。出典：`5co-CI-kit/SLIDE_DESIGN_GUIDELINES.md §3/§4` ＋
 > `docs/SLIDE-md/SLIDE-md-5co/SLIDE.md §Layout` ＋ リポ実装 `5co-CI-kit/ci-theme.css`。
 
@@ -59,7 +59,7 @@
 ## 7. 実装と検証状況
 
 - **実装**: `scripts/ci_pattern_adapter.py`（配色マッピング＋フォント置換＋A4ページ化＋幅合わせscale＋什器注入）。
-- **99種 一括変換＋3色QA合格（pass=99 / fail=0）**: `scripts/adapt_all_patterns.sh` で全件を CI v2 化し、
+- **128種 一括変換＋3色QA合格（pass=128 / fail=0・2026-07-11 再実測）**: `scripts/adapt_all_patterns.sh` で全件を CI v2 化し、
   3色（白/crystal/ink/tint）以外の hex 残存ゼロを自動確認。emoji 数値文字参照(`&#NNNN;`)は除外判定。
 - **目視検証済み（headless Chrome）**: `four-step-flow`/`goal-kgi-kpi-dashboard`/`hub-spoke-diagram`/
   `risk-matrix-2x2`/`six-card-2x3-grid` を実機レンダリングし **A4横・3色・明朝・隅ロゴ・什器帯**で成立。

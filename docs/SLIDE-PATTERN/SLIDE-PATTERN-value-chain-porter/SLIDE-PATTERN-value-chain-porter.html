@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-value-chain-porter</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      padding: 16px 48px;
+      gap: 8px;
+      overflow: hidden;
+    }
+    /* 左側: チェーン本体 */
+    .chain-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .section-label {
+      font-size: 11px;
+      color: #999;
+      letter-spacing: 0.08em;
+    }
+    /* 支援活動: 横帯4層 */
+    .support-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .support-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #CCCCCC;
+      padding: 6px 14px;
+      height: 34px;
+    }
+    .support-row:nth-child(odd)  { background: #F5F5F5; }
+    .support-row:nth-child(even) { background: #F0F0F0; }
+    .support-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+    }
+    .support-comment {
+      font-size: 11px;
+      color: #666666;
+    }
+    /* 主活動: 矢羽5連 */
+    .primary-row {
+      flex: 1;
+      display: flex;
+      gap: 4px;
+      min-height: 0;
+    }
+    .chevron {
+      flex: 1;
+      background: #EEEEEE;
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 20px 10px 24px;
+      text-align: center;
+    }
+    .chevron:first-child {
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+      padding-left: 20px;
+    }
+    .chevron-strong { background: #D8D8D8; }
+    .chevron-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333333;
+    }
+    .chevron-comment {
+      font-size: 10px;
+      color: #555555;
+      line-height: 1.4;
+    }
+    /* 右側: マージン三角 */
+    .margin-area {
+      width: 96px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .margin-area svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .margin-label {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      font-size: 13px;
+      font-weight: bold;
+      color: #555555;
+      letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[value-chain-porter]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+
+      <!-- 左側: バリューチェーン本体 -->
+      <div class="chain-body">
+
+        <!-- 支援活動（4層の横帯） -->
+        <div class="section-label">支援活動</div>
+        <div class="support-rows">
+          <div class="support-row">
+            <span class="support-name">全般管理（インフラ）</span>
+            <span class="support-comment">強み：意思決定が速い</span>
+          </div>
+          <div class="support-row">
+            <span class="support-name">人事・労務管理</span>
+            <span class="support-comment">弱み：採用力が不足</span>
+          </div>
+          <div class="support-row">
+            <span class="support-name">技術開発</span>
+            <span class="support-comment">強み：特許3件保有</span>
+          </div>
+          <div class="support-row">
+            <span class="support-name">調達</span>
+            <span class="support-comment">弱み：仕入先が1社集中</span>
+          </div>
+        </div>
+
+        <!-- 主活動（右向き矢羽5連） -->
+        <div class="section-label" style="margin-top: 4px;">主活動</div>
+        <div class="primary-row">
+          <div class="chevron">
+            <div class="chevron-name">購買物流</div>
+            <div class="chevron-comment">弱み：在庫過多</div>
+          </div>
+          <div class="chevron chevron-strong">
+            <div class="chevron-name">製造</div>
+            <div class="chevron-comment">強み：不良率0.1%</div>
+          </div>
+          <div class="chevron chevron-strong">
+            <div class="chevron-name">出荷物流</div>
+            <div class="chevron-comment">強み：翌日納品</div>
+          </div>
+          <div class="chevron">
+            <div class="chevron-name">販売・マーケ</div>
+            <div class="chevron-comment">弱み：新規開拓弱い</div>
+          </div>
+          <div class="chevron chevron-strong">
+            <div class="chevron-name">サービス</div>
+            <div class="chevron-comment">強み：継続率95%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右端: マージンの三角 -->
+      <div class="margin-area">
+        <svg viewBox="0 0 96 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="0,0 96,200 0,400" fill="#E8E8E8" stroke="#999999" stroke-width="1"/>
+        </svg>
+        <span class="margin-label">マージン</span>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-decision-tree-options</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 14px 48px;
+      overflow: hidden;
+    }
+    /* 座標キャンバス（864×450固定） */
+    .canvas {
+      position: relative;
+      width: 864px;
+      height: 450px;
+      flex-shrink: 0;
+    }
+    .canvas > svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    /* 判断ノード（四角） */
+    .decision-node {
+      position: absolute;
+      left: 0;
+      top: 195px;
+      width: 150px;
+      height: 60px;
+      background: #555555;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px 10px;
+    }
+    /* 確率ノード（円） */
+    .chance-node {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #F0F0F0;
+      border: 1px solid #999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #666666;
+    }
+    .chance-1 { left: 336px; top: 93px; }
+    .chance-2 { left: 336px; top: 313px; }
+    /* 枝ラベル（条件） */
+    .branch-label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: bold;
+      color: #333333;
+      background: #FFFFFF;
+      padding: 0 4px;
+    }
+    /* 確率ラベル */
+    .prob-label {
+      position: absolute;
+      font-size: 10px;
+      color: #666666;
+      background: #FFFFFF;
+      padding: 0 3px;
+    }
+    /* 期待値バッジ */
+    .ev-badge {
+      position: absolute;
+      font-size: 11px;
+      padding: 3px 8px;
+      border: 1px solid #999999;
+      background: #FFFFFF;
+      color: #333333;
+    }
+    .ev-badge.best {
+      background: #555555;
+      border-color: #555555;
+      color: #FFFFFF;
+      font-weight: bold;
+    }
+    /* 結果ボックス */
+    .result-box {
+      position: absolute;
+      left: 560px;
+      width: 304px;
+      height: 76px;
+      background: #F5F5F5;
+      border: 1px solid #CCCCCC;
+      padding: 8px 12px;
+    }
+    .result-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 2px;
+    }
+    .result-amount {
+      font-size: 13px;
+      color: #555555;
+    }
+    .result-ev {
+      font-size: 10px;
+      color: #999999;
+      margin-top: 2px;
+    }
+    /* 凡例 */
+    .legend {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10px;
+      color: #999999;
+    }
+    .legend-square {
+      width: 12px;
+      height: 12px;
+      background: #555555;
+      flex-shrink: 0;
+    }
+    .legend-circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #F0F0F0;
+      border: 1px solid #999999;
+      flex-shrink: 0;
+    }
+    .legend span { display: flex; align-items: center; gap: 4px; }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[decision-tree-options]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <div class="canvas">
+
+        <!-- 枝（L字罫線） -->
+        <svg width="864" height="450" viewBox="0 0 864 450">
+          <!-- 判断ノード → 確率ノード1（投資する） -->
+          <polyline points="150,225 200,225 200,115 336,115" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+          <!-- 判断ノード → 確率ノード2（投資しない） -->
+          <polyline points="150,225 200,225 200,335 336,335" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+          <!-- 確率ノード1 → 結果1・2 -->
+          <polyline points="380,115 440,115 440,60 560,60" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+          <polyline points="380,115 440,115 440,170 560,170" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+          <!-- 確率ノード2 → 結果3・4 -->
+          <polyline points="380,335 440,335 440,280 560,280" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+          <polyline points="380,335 440,335 440,390 560,390" fill="none" stroke="#AAAAAA" stroke-width="1"/>
+        </svg>
+
+        <!-- 判断ノード -->
+        <div class="decision-node">判断：新規事業へ投資するか</div>
+
+        <!-- 確率ノード -->
+        <div class="chance-node chance-1">確率</div>
+        <div class="chance-node chance-2">確率</div>
+
+        <!-- 枝ラベル（条件） -->
+        <div class="branch-label" style="left: 206px; top: 96px;">投資する（投資 2.0億円）</div>
+        <div class="branch-label" style="left: 206px; top: 316px;">投資しない（現状維持）</div>
+
+        <!-- 確率ラベル -->
+        <div class="prob-label" style="left: 452px; top: 44px;">成功 60%</div>
+        <div class="prob-label" style="left: 452px; top: 154px;">失敗 40%</div>
+        <div class="prob-label" style="left: 452px; top: 264px;">需要増 30%</div>
+        <div class="prob-label" style="left: 452px; top: 374px;">現状維持 70%</div>
+
+        <!-- 期待値バッジ（枝ごと） -->
+        <div class="ev-badge best" style="left: 300px; top: 145px;">期待値 ＋1.4億円</div>
+        <div class="ev-badge" style="left: 297px; top: 365px;">期待値 ＋0.11億円</div>
+
+        <!-- 結果ボックス -->
+        <div class="result-box" style="top: 22px;">
+          <div class="result-title">成功：シェア獲得</div>
+          <div class="result-amount">営業利益 ＋3.0億円／年</div>
+          <div class="result-ev">期待値への寄与 ＋1.80億円（3.0 × 60%）</div>
+        </div>
+        <div class="result-box" style="top: 132px;">
+          <div class="result-title">失敗：撤退</div>
+          <div class="result-amount">損失 −1.0億円（投資回収不能分）</div>
+          <div class="result-ev">期待値への寄与 −0.40億円（−1.0 × 40%）</div>
+        </div>
+        <div class="result-box" style="top: 242px;">
+          <div class="result-title">需要増：機会損失が発生</div>
+          <div class="result-amount">逸失利益 −0.8億円／年</div>
+          <div class="result-ev">期待値への寄与 −0.24億円（−0.8 × 30%）</div>
+        </div>
+        <div class="result-box" style="top: 352px;">
+          <div class="result-title">現状維持：既存事業のみ</div>
+          <div class="result-amount">営業利益 ＋0.5億円／年</div>
+          <div class="result-ev">期待値への寄与 ＋0.35億円（0.5 × 70%）</div>
+        </div>
+
+        <!-- 凡例 -->
+        <div class="legend">
+          <span><span class="legend-square"></span>判断ノード（選択できる）</span>
+          <span><span class="legend-circle"></span>確率ノード（選択できない）</span>
+          <span>濃色バッジ＝期待値が最大の選択肢</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

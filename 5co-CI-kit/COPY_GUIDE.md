@@ -1,5 +1,10 @@
 # crystal text — スライド文言ガイド「問いへの答え」方式（正本）
 
+> ⚠️ **「crystal text」は色の指定ではありません**。文字を crystal blue 色にする・配色を変える等の
+> 意味は一切持ちません（色は本ガイドの範囲外＝`V3.2_FORMAT.md`／`ci-format-v3.2.css` が正）。
+> 「crystal text」は**文言（コピー）の書き方ガイド名**＝「問いへの答え」方式のニックネームです。
+> 実務指示は「crystal text で」ではなく「**COPY_GUIDE.md の方式で文言を書き直して**」と伝えてください。
+>
 > **別名 crystal text（クリスタルテキスト）＝文言の正**。水晶玉シリーズ（背景=Oracle／色=crystal blue／
 > マーク=crystal ball）の**言葉レイヤー**。透視した像を曇りなく言葉にする正本（`CI_KICKOFF.md`「CI用語」）。
 > 採用: 2026-07-07（クラシエ薬品 DSP効果SIM 12枚で実証・発案者承認済み）。
