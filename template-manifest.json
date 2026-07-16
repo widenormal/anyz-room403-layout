@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "template_version": "2026.07.2",
+  "released_at": "2026-07-16",
+  "notes": "2026.07.2: sync 運用改善（sol 提案採用）— apply-template.sh に --print-synced 追加・sync の偽成功修正・一括マージの安全条件強化・local-sync の dirty 配布停止。2026.07.1 = バージョン管理の初版（baseline・既存 capability の introduced_in は管理開始点）。運用ルール = docs/template-versioning.md",
+  "capabilities": {
+    "template-version-tracking": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": "docs/template-versioning.md"
+    },
+    "subagent-orchestration": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": "docs/subagent-orchestration.md"
+    },
+    "multi-llm-router": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": ".claude/skills/llm-router.md"
+    },
+    "llm-model-auto-update": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": "scripts/llm-models.conf"
+    },
+    "x-search": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": ".claude/skills/x-search.md",
+      "requires": ["x-api-credentials (op: claude-code-secrets)"]
+    },
+    "codex-second-opinion": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": ".claude/skills/codex-review.md",
+      "requires": ["openai-api-key (op: claude-code-secrets/OpenAI API Key)"]
+    },
+    "ci-slide-kit": {
+      "introduced_in": "2026.07.1",
+      "status": "stable",
+      "entrypoint": "5co-CI-kit/CI_KICKOFF.md",
+      "version_file": "5co-CI-kit/VERSION"
+    }
+  }
+}

@@ -81,7 +81,7 @@ Dreams は人間の REM 睡眠による記憶定着のメタファ。過去セ�
 
 ## 参考
 
-- [Dreams — Claude API Docs](platform.claude.com/docs/en/manage…)（公式。`managed-agents-2026-04-01` + `dreaming-2026-04-21` beta header、Opus 4.7 / Sonnet 4.6、最大 100 セッション、`instructions` 4096 文字）
+- [Dreams — Claude API Docs](platform.claude.com/docs/en/manage…)（公式。`managed-agents-2026-04-01` + `dreaming-2026-04-21` beta header、Opus 4.7 / Sonnet 4.6 ※記事当時の例示モデル名（現行モデルとは異なる）、最大 100 セッション、`instructions` 4096 文字）
 - [What Is Claude Dreaming? (MindStudio)](mindstudio.ai/blog/what-is-c…)
 - [Claude Code Dreams: Auto Dream guide (Supalaunch)](supalaunch.com/blog/claude-co…)
 - [Auto-dream mechanics (claudefa.st)](claudefa.st/blog/guide/mec…)

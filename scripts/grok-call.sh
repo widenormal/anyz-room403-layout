@@ -6,7 +6,9 @@
 #   2. OP_SERVICE_ACCOUNT_TOKEN 設定済 → op run で .env.xai のシークレット参照を解決
 #   3. どちらも未設定 → エラー
 #
-# 既定モデルは grok-4-1-fast（$0.20/Mtoken クラス）。--model で上書き可。
+# 既定モデルは llm-models.conf の GROK_DEFAULT_MODEL（申請制で自動更新）。
+# xAI 直が失敗（クレジット枯渇等）した場合は GROK_OPENROUTER_MODEL:online に
+# 自動フォールバックする。X ネイティブ検索データが必要なら x-search.sh を先に使う。
 # 既存の TS スクリプト（scripts/grok_context_research.ts）も同じ XAI_API_KEY を使う。
 #
 # 使い方:
@@ -15,7 +17,10 @@
 
 set -euo pipefail
 
-MODEL="grok-4-1-fast"
+# モデル既定値は llm-models.conf（正データ・申請制で自動更新）から解決
+_CONF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/llm-models.conf"
+[ -f "$_CONF" ] && . "$_CONF"
+MODEL="${GROK_MODEL:-${GROK_DEFAULT_MODEL:-grok-4-1-fast}}"
 PROMPT=""
 
 while [ $# -gt 0 ]; do
@@ -86,16 +91,44 @@ PAYLOAD=$(jq -n \
 RESPONSE=$(curl -fsS https://api.x.ai/v1/responses \
   -H "Authorization: Bearer $XAI_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "$PAYLOAD")
+  -d "$PAYLOAD" 2>/dev/null || true)
 
-echo "$RESPONSE" | jq -r '
-  .output[]?
-  | select(.type == "message")
-  | .content[]?
-  | select(.type == "output_text")
-  | .text
-'
+if [ -n "$RESPONSE" ]; then
+  echo "$RESPONSE" | jq -r '
+    .output[]?
+    | select(.type == "message")
+    | .content[]?
+    | select(.type == "output_text")
+    | .text
+  '
+  USAGE=$(echo "$RESPONSE" | jq -r '.usage | "\(.input_tokens // 0)/\(.output_tokens // 0)"')
+  echo "" >&2
+  echo "[grok-call] model=$MODEL tokens=$USAGE" >&2
+  exit 0
+fi
 
-USAGE=$(echo "$RESPONSE" | jq -r '.usage | "\(.input_tokens // 0)/\(.output_tokens // 0)"')
+# ── xAI 直が失敗（クレジット枯渇等）→ OpenRouter 経由の Grok にフォールバック ──
+# X ネイティブ検索（x_search）は OpenRouter では使えない。X データが必要な場合は
+# x-search.sh（X API 直・クレジット不要）で取得してから本ラッパーに渡すこと。
+OR_MODEL="${GROK_OPENROUTER_MODEL:-x-ai/grok-4.5}"
+echo "[grok-call] xAI 直が失敗 → OpenRouter フォールバック (${OR_MODEL}:online)。X 検索は x-search.sh を使用" >&2
+
+if [ -z "${OPENROUTER_API_KEY:-}" ] && [ -n "${OP_SERVICE_ACCOUNT_TOKEN:-}" ] && command -v op >/dev/null 2>&1; then
+  OPENROUTER_API_KEY="$(op item get 'OpenRouter Fusion' --vault claude-code-secrets --fields credential --reveal 2>/dev/null || true)"
+fi
+if [ -z "${OPENROUTER_API_KEY:-}" ]; then
+  echo "ERROR: xAI 直も OpenRouter フォールバックも認証不能。クレジット/キーを確認" >&2
+  exit 1
+fi
+
+OR_PAYLOAD=$(jq -n --arg model "${OR_MODEL}:online" --arg prompt "$PROMPT" \
+  '{model: $model, messages: [{role: "user", content: $prompt}]}')
+OR_RESPONSE=$(curl -fsS https://openrouter.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$OR_PAYLOAD")
+
+echo "$OR_RESPONSE" | jq -r '.choices[0].message.content // empty'
+USAGE=$(echo "$OR_RESPONSE" | jq -r '.usage | "\(.prompt_tokens // 0)/\(.completion_tokens // 0)"')
 echo "" >&2
-echo "[grok-call] model=$MODEL tokens=$USAGE" >&2
+echo "[grok-call] model=${OR_MODEL}:online (openrouter fallback) tokens=$USAGE" >&2

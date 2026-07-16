@@ -7,21 +7,26 @@
 #   2. OP_SERVICE_ACCOUNT_TOKEN 設定済 → op read で動的取得
 #   3. どちらも未設定 → エラー
 #
-# 既定モデルは gpt-5.4-mini（戦略判断には gpt-5.4 を推奨）。
+# 既定モデルは llm-models.conf の CODEX_DEFAULT_MODEL（申請制で自動更新）。
+# 重い判断は --frontier で CODEX_FRONTIER_MODEL に切替。
 #
 # 使い方:
 #   bash scripts/codex-call.sh "この PR の設計をレビュー" < diff.txt
-#   echo "Q: SEO 戦略の優先順位は?" | bash scripts/codex-call.sh --model gpt-5.4
+#   echo "Q: SEO 戦略の優先順位は?" | bash scripts/codex-call.sh --frontier
 
 set -euo pipefail
 
-MODEL="gpt-5.4-mini"
+# モデル既定値は llm-models.conf（正データ・申請制で自動更新）から解決
+_CONF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/llm-models.conf"
+[ -f "$_CONF" ] && . "$_CONF"
+MODEL="${CODEX_MODEL:-${CODEX_DEFAULT_MODEL:-gpt-5.6-terra}}"
 SYSTEM="You are a careful code & strategy reviewer. Answer concisely in Japanese unless asked otherwise. Identify risks, edge cases, and unstated assumptions."
 PROMPT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --model) MODEL="${2:-}"; shift 2 ;;
+    --frontier) MODEL="${CODEX_FRONTIER_MODEL:-gpt-5.6-sol}"; shift ;;
     --system) SYSTEM="${2:-}"; shift 2 ;;
     -h|--help) sed -n '2,16p' "$0"; exit 0 ;;
     *) PROMPT="${PROMPT}${PROMPT:+ }$1"; shift ;;
@@ -94,10 +99,17 @@ PAYLOAD=$(jq -n \
     ]
   }')
 
-RESPONSE=$(curl -fsS https://api.openai.com/v1/chat/completions \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d "$PAYLOAD")
+# 一時的な 401/429/5xx に備えて最大3回リトライ（2s/4s バックオフ）。
+# 2026-07-14 実測: gpt-5.6-sol で断続的 401（再試行で解消）が複数回観測されたため。
+RESPONSE=""
+for _try in 1 2 3; do
+  RESPONSE=$(curl -fsS https://api.openai.com/v1/chat/completions \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$PAYLOAD") && break
+  [ "$_try" -lt 3 ] && { echo "[codex-call] HTTP エラー → リトライ ${_try}/2" >&2; sleep $((2 ** _try)); }
+done
+[ -n "$RESPONSE" ] || { echo "[codex-call] 3回失敗。認証・クレジット・モデル権限を確認" >&2; exit 1; }
 
 echo "$RESPONSE" | jq -r '.choices[0].message.content // empty'
 

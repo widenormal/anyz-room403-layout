@@ -22,6 +22,7 @@ REPO_ROOT="$(cd "$SELF_DIR/.." && pwd)"
 H2P="$REPO_ROOT/scripts/html_to_pptx.py"
 OVF="$SELF_DIR/slide_overflow_check.py"
 OVL="$SELF_DIR/check_text_overlap.py"
+NEG="$SELF_DIR/graph_node_edge_check.py"
 PARITY="$REPO_ROOT/scripts/check-slide-ci-parity.py"
 
 say(){ printf '%s\n' "$*"; }
@@ -90,6 +91,13 @@ if [ -f "$OVL" ] && command -v python3 >/dev/null 2>&1; then
   say "▶ 文字重なり検査（gate）"
   python3 "$OVL" "$SRC" 2>&1 | sed 's/^/  /'
   [ "${PIPESTATUS[0]}" -eq 0 ] || die "文字重なり検査 NG（要素同士が重なっています。上の行のスライドを修正してから再実行）"
+fi
+
+# ---- ゲート: ノード・エッジ図検査（.ne-graph のノード重なり・矢印接続＝DOM検査の死角） ----
+if [ -f "$NEG" ] && command -v python3 >/dev/null 2>&1; then
+  say "▶ ノード・エッジ図検査（gate）"
+  python3 "$NEG" "$SRC" 2>&1 | sed 's/^/  /'
+  [ "${PIPESTATUS[0]}" -eq 0 ] || die "ノード・エッジ図検査 NG（ノードの重なり/浮いた矢印。グリッド座標系＝V3.2_FORMAT.md「ノード・エッジ型グラフ図」に従い修正してから再実行）"
 fi
 
 # ---- ゲート: CIトークン整合検査（廃止トークン --navy/--powder・旧hex・Georgia混入を検出） ----

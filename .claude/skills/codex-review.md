@@ -1,7 +1,8 @@
 # Skill: Codex セカンドオピニオン（GPT-5 系）
 
 > Claude が「実行する側」、Codex が「判断する側」。
-> 戦略・設計・リスクチェックの最終確認に使う。コードレビューは副次的用途。
+> 戦略・設計・リスクチェックの最終確認と、行き詰まったデバッグの委譲に使う。
+> モデル既定値は `scripts/llm-models.conf`（申請制で自動更新）が正。
 
 ## トリガー
 
@@ -9,6 +10,7 @@
 - 設計レビュー: アーキ判断、API 設計、DB マイグレーション安全性
 - 戦略相談: SEO 改善、ローンチ準備、交流会の優先順位
 - リスクチェック: 800 人講座のような大規模イベント前の網羅的チェック
+- デバッグ委譲: Claude が2回修正しても直らない不具合（下記「デバッグ委譲」節）
 
 ## 実行コマンド
 
@@ -21,13 +23,58 @@ bash scripts/codex-call.sh \
   --system "あなたは経営アドバイザー。リスクを網羅して優先順位付けしてください。" \
   "5月の交流会、参加優先度を教えて: A社、B社、C社"
 
-# モデル切替（重い判断は gpt-5.4 フル）
-bash scripts/codex-call.sh --model gpt-5.4 "DB マイグレーション 0042 の安全性を確認"
+# モデル切替（重い判断はフラッグシップ = conf の CODEX_FRONTIER_MODEL）
+bash scripts/codex-call.sh --frontier "DB マイグレーション 0042 の安全性を確認"
 ```
+
+## デバッグ委譲（エスカレーション型）
+
+「デバッグ＝常に Codex」ではなく、行き詰まりの段階で委譲する。根拠は Claude Code
+チーム公式の loops ガイド「レビューは文脈を持たない第二エージェントに（fresh
+context はバイアスがない）」と、公式モデル位置づけ（Terra=日常デバッグ／Sol=難所）。
+
+1. **一次対応 = Claude Code**（文脈を持っている側が最速）
+2. **Claude が2回修正しても直らない／症状と原因が離れている**
+   → Codex に委譲。既定モデル（conf の `CODEX_DEFAULT_MODEL`）で:
+   ```bash
+   bash scripts/codex-call.sh "この不具合の根本原因を特定して最小の修正案を出して" < 再現ログ.txt
+   ```
+3. **複数コンポーネント横断・並行処理/競合・CI でのみ失敗・根本原因不明**
+   → `--frontier`（conf の `CODEX_FRONTIER_MODEL`）に昇格:
+   ```bash
+   bash scripts/codex-call.sh --frontier "再現手順と関連コードを添付。競合状態の可能性を含め根本原因を特定して" < context.txt
+   ```
+   codex CLI が入っている環境ではリポ探索込みの委譲が上位互換（read-only で安全）:
+   ```bash
+   codex exec --sandbox read-only "テスト X が CI でだけ落ちる。根本原因を調査して" 
+   ```
+4. **完了条件は決定論で渡す**（「対象テストが green」「再現スクリプトが exit 0」）。
+   「直った気がする」で止まるのを防ぐ。Codex の指摘は鵜呑みにせず、
+   **採用／却下（根拠付き）／延期／未検証** の4分類で処理して Claude 側で検証する
+
+## 完成時検品（システム開発の完了ゲート）
+
+システム開発タスクで「完成しました」と報告する**前**に、別系統の Codex による
+検品を通す（CLAUDE.md 自己検証ルール2「完了報告は実証ベース」の開発版）。
+作った本人（Claude）に「これでいい？」と聞いても自分の成果物には甘い——
+fresh context の別モデルが検品する。
+
+- **PR がある開発**: draft → ready 化（または「検品」ラベル付与）で
+  `.github/workflows/codex-inspection.yml` が自動発火し、検品結果を PR コメントに投稿
+- **セッション内で完結する開発**: 完了報告の前に手動で:
+  ```bash
+  . scripts/llm-models.conf && codex exec review --base origin/main -m "$CODEX_FRONTIER_MODEL"   # CLI がある環境（リポ探索込み）
+  bash scripts/codex-call.sh --frontier "完了条件との照合・エッジケース・実装方針の妥当性を検品" < diff.txt
+  ```
+- 検品観点: ①当初の完了条件をすべて満たすか（未実装の完了宣言がないか）
+  ②敵対的視点（エッジケース・エラー処理・セキュリティ境界・そもそもの方針）
+  ③検証の実在（tests/lint が実際に通った証跡）
+- 指摘は**採用／却下（根拠付き）／延期／未検証**の4分類で処理し、鵜呑み採用しない
 
 ## 認証
 
-- 1Password Vault: `claude-code-secrets` / Item: `OpenAI API Key (Template)` / field: `credential`
+- 1Password Vault: `claude-code-secrets` / Item: `OpenAI API Key` / field: `credential`
+  （旧記載の `OpenAI API Key (Template)` は誤り。vault の実 title に合わせ 2026-07-14 修正）
 - ローカル env 直接: `OPENAI_API_KEY`
 
 ## 効果的な依頼パターン
@@ -45,6 +92,7 @@ bash scripts/codex-call.sh --model gpt-5.4 "DB マイグレーション 0042 の
 | 実装の別視点・コードの違うバイアス | Gemini |
 | マルチモーダル・画像・デザイン | Gemini |
 | Twitter リアルタイム情報 | Grok |
+| 一般 Web 調査（リンク特定・出典付き調査） | Brave / OpenRouter（`llm-router.md` 参照・第一選択） |
 
 ## 注意
 

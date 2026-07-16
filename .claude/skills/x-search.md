@@ -1,40 +1,46 @@
-# Skill: X(Twitter) 検索 — Grok 経由
+# Skill: X(Twitter) 検索・取得（「目」役）
 
-> Claude Code 単体では X のツイート本文を取得できない。
-> X のリアルタイム情報・トレンド・特定アカウント調査は **Grok（xAI）** に振る。
+> X のデータ取得は**構造化 API（XMCP / x-search.sh）が第一選択**、Grok は取得結果の
+> 要約・解釈に使う（2026-07-14 再構成。旧「Grok 直行」から変更・decisions.md 参照）。
 
 ## トリガー
 
-- 「X で…調べて」「Twitter で○○が話題か確認」
-- 「自分のアカウントへのリプライを拾って」
-- 「昨晩バズった投稿」
-- 競合・話題の人物・特定ハッシュタグの調査
+- 「X で調べて」「バズってる投稿」「トレンド」「このポストの内容」「X の記事を読んで」
+- X の URL（x.com/…/status/…）が貼られたとき
 
-## 実行コマンド
+## 優先順位（この順に試す）
 
-```bash
-# シンプルクエリ
-bash scripts/grok-call.sh "claude-code 関連で昨晩バズった投稿 (impression 1000+)"
+1. **XMCP**（X 公式ホスト型 MCP・`/mcp` の `xmcp`）
+   - `search_posts_all`（全アーカイブ検索）・`get_trends_by_woeid`（日本=woeid 23424856）・
+     `search_news`・タイムライン・ユーザー等 200+ ツール
+   - 接続は `.mcp.json`＋`.claude/scripts/xmcp-launch.sh`（token は op 自動解決・env 注入不要）
+2. **`scripts/x-search.sh`**（X API v2 直。XMCP 未接続時・CLI 一発で済む時）
+   ```bash
+   bash scripts/x-search.sh "claude code lang:ja -is:retweet" -n 10   # 直近7日の検索
+   bash scripts/x-search.sh --tweet <id>    # ポスト全文（X Articles 本文 plain_text 含む）
+   ```
+3. **要約・解釈・意味検索が必要な時だけ Grok**
+   ```bash
+   bash scripts/grok-call.sh "この10件の投稿から傾向を3点で要約" < 取得結果.txt
+   ```
+   xAI 直が失敗（クレジット枯渇等）しても OpenRouter へ自動フォールバックする。
+   X ネイティブデータは 1/2 で取得してから渡すこと（フォールバック時は x_search 不可）。
 
-# モデル指定（推論強化）
-bash scripts/grok-call.sh --model grok-4-1-reasoning "AI 業界の今週の動向"
+## 課金・制約（実測 2026-07-14）
 
-# 既存 TS スクリプト（複数トピック・ファイル出力対応）
-npx tsx scripts/grok_context_research.ts "OpenAI GPT-5" --output research.md
-```
+- XMCP / x-search.sh は**同じ X API プラン枠**（検索 450 リクエスト/15分・xAI クレジット不要）
+- **X Articles（長文記事）はログイン不要で全文取得可**（`--tweet` の ARTICLE 出力＝
+  `article.plain_text`。ミラー検索や Grok 経由より確実）
+- 429 が続く場合はプラン上限。時間を置くか X API プラン／xAI 直経路の復活を検討
+- 高度な X リサーチの既存 TS（`scripts/grok_context_research.ts`）は XAI_API_KEY 使用＝要クレジット
 
 ## 認証
 
-- 1Password Vault: `claude-code-secrets` / Item: `Grok API Key (Template)` / field: `credential`
-- ローカル env 直接指定: `XAI_API_KEY`
-- `OP_SERVICE_ACCOUNT_TOKEN` 設定時はラッパーが op 経由で自動取得
+- x-search.sh: 1Password「X Bearer Token」（`X_BEARER_TOKEN` env でも可・op 自動解決）
+- grok-call.sh: 1Password「Grok API Key (Template)」→ 失敗時 OpenRouter「OpenRouter Fusion」
 
-## 出力の使い方
+## 関連
 
-- Grok の応答は出典 URL を含む。**そのままユーザーに見せて OK**
-- 大量の情報を取得した場合は **scripts/qwen-call.sh --task summarize** で要約してから Claude に渡す（トークン節約）
-
-## 注意
-
-- API は従量課金（grok-4-1-fast で $0.20/Mtoken クラス）
-- Drive 共有フォルダから呼ばれた場合（ECO_MODE=1）は qwen に先に整形させる運用
+- `memory/decisions.md` 2026-07-14（「目」の再構成・XMCP 採用・xAI クレジット不購入）
+- `docs/multi-llm-orchestration.md` XMCP 節（接続構成・実測値・ゼロタッチ認証）
+- `.claude/skills/llm-router.md`（全体のルーティング）

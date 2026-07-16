@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-context.sh: SessionStart hook で 9 ブロック構造の文脈を additionalContext に投入する。
+# session-context.sh: SessionStart hook で 10 ブロック構造の文脈を additionalContext に投入する。
 #
 # 注入するブロック（詳細：docs/active-context-template.md）:
 #   ① 状態層 — memory/active-context.md（進行中タスク・直近の確定事項）
@@ -12,6 +12,12 @@
 #   ⑧ 肥大化検知 — memory/learnings の行数・サイズ閾値超過警告（超過時のみ・memory-dream 誘導）
 #   ⑨ CIスライドエンジン版 — 5co-CI-kit/VERSION の版番号・更新日を毎セッション自動アナウンス
 #      （従来 CLIENT_CLAUDE_TEMPLATE.md がセッション起動時に手動で読ませていたものを決定論化）
+#   ⑩ テンプレ未カスタマイズ検知 — CLAUDE.md / README.md の {{プレースホルダ}} 残置を検出
+#      （bootstrap 後に置換されないまま運用される派生リポ対策・超過時のみ表示）
+#   ⑪ テンプレ版 — .claude/.template-state.json（apply-template.sh が書く版マーカー）の
+#      版番号・source SHA を毎セッション自動アナウンス。「適用済み」と「整合性確認済み」は
+#      別物のため integrity は not checked と明示（検査 = apply-template.sh --verify）。
+#      詳細 = docs/template-versioning.md
 #
 # 失敗時もセッション起動を妨げないため exit 0 で抜ける。
 
@@ -27,14 +33,19 @@ BLOAT_BYTES=24576
 # ──────────────────────────────────────────────
 # ① 状態層：active-context
 #
+#   担当者キー（SHORTNAME）の決定:
+#     - env `ACTIVE_CONTEXT_USER` があればそれを使う（推奨。各自 .claude/settings.local.json
+#       の env に設定。共有コンテナで $HOME が全員同じ環境でも個人を識別できる）
+#     - 無ければ basename $HOME にフォールバック（後方互換）
+#
 #   優先順位（user-aware loading）:
-#     1. memory/active-context/<basename $HOME>.md があれば、それ 1 件だけ読む
+#     1. memory/active-context/<SHORTNAME>.md があれば、それ 1 件だけ読む
 #     2. なければ memory/active-context/ 配下の `_` で始まらない全 .md を concat（旧挙動）
 #     3. それも空なら旧形式の単一ファイル memory/active-context.md にフォールバック
 #
 #   `_README.md` / `_template.md` 等の運用文書は常に除外。
 # ──────────────────────────────────────────────
-SHORTNAME=$(basename "$HOME")
+SHORTNAME="${ACTIVE_CONTEXT_USER:-$(basename "$HOME")}"
 USER_CTX_FILE="$PROJ/memory/active-context/${SHORTNAME}.md"
 
 STATE=""
@@ -200,6 +211,59 @@ if [ -f "$CI_HEARTBEAT_FILE" ]; then
 fi
 
 # ──────────────────────────────────────────────
+# ⑩ テンプレ未カスタマイズ検知：{{プレースホルダ}} 残置の警告
+#   対象: CLAUDE.md / README.md（template 由来の {{...}} が残っていれば未 adopt とみなす）
+#   template リポ自身（origin が 5co-hub/template）ではプレースホルダが正であるため黙ってスキップ
+# ──────────────────────────────────────────────
+PLACEHOLDER_WARN=""
+origin_url=$(git -C "$PROJ" remote get-url origin 2>/dev/null || true)
+case "$origin_url" in
+  *5co-hub/template*|*5co-hub/template.git*) : ;;  # template 本体では警告しない
+  *)
+    for ph_file in CLAUDE.md README.md; do
+      f="$PROJ/$ph_file"
+      if [ -f "$f" ] && grep -qE '\{\{[^}]+\}\}' "$f" 2>/dev/null; then
+        ph_sample=$(grep -oE '\{\{[^}]+\}\}' "$f" | sort -u | head -3 | tr '\n' ' ')
+        PLACEHOLDER_WARN+="- ${ph_file}: ${ph_sample}"$'\n'
+      fi
+    done
+    ;;
+esac
+
+# ──────────────────────────────────────────────
+# ⑪ テンプレ版：.claude/.template-state.json の版番号・source SHA をアナウンス
+#   マーカーは決定的値のみ（適用日時なし）。integrity は毎起動で検査しない（起動コスト回避）ため
+#   「not checked」と明示する＝「適用済み」を「改変なし」と誤読させない。
+#   マーカーが無い展開先は legacy 扱いとし、ファイル有無から版を推定しない。
+#   ※ マーカーはデータとして sed 抽出のみ（eval / source 禁止＝改変マーカーによる注入防止）
+# ──────────────────────────────────────────────
+TEMPLATE_STATE_FILE="$PROJ/.claude/.template-state.json"
+TEMPLATE_VERSION_ANNOUNCE=""
+# マーカー値は形式検証を通ったものだけ表示する（CalVer / 40hex SHA）。
+# 改変マーカー経由の制御文字・長大文字列・指示文の注入をコンテキストに通さない（fail-closed）。
+TPL_VER_RE='^[0-9]{4}\.[0-9]{2}\.[0-9]+$'
+TPL_SRC_RE='^([0-9a-f]{40}(-dirty)?|unknown)$'
+if [ -f "$TEMPLATE_STATE_FILE" ]; then
+  tpl_ver=$(sed -n 's/^  "template_version": "\(.*\)",\{0,1\}$/\1/p' "$TEMPLATE_STATE_FILE" | head -1)
+  tpl_src=$(sed -n 's/^  "source_revision": "\(.*\)",\{0,1\}$/\1/p' "$TEMPLATE_STATE_FILE" | head -1)
+  if printf '%s' "$tpl_ver" | grep -qE "$TPL_VER_RE" && printf '%s' "$tpl_src" | grep -qE "$TPL_SRC_RE"; then
+    TEMPLATE_VERSION_ANNOUNCE="テンプレ版: ${tpl_ver}（source: ${tpl_src:0:12}・integrity: not checked）"
+    TEMPLATE_VERSION_ANNOUNCE+=$'\n'"capability一覧 = template-manifest.json／整合性検査 = template側で apply-template.sh <このdir> --verify"
+  else
+    TEMPLATE_VERSION_ANNOUNCE="⚠ 版マーカーが形式不正（改変・破損の可能性。値は表示しない）。apply-template.sh --repair で再生成を"
+  fi
+elif [ -f "$PROJ/template-manifest.json" ] && git -C "$PROJ" remote get-url origin 2>/dev/null | grep -qE '[:/]5co-hub/template(\.git)?$'; then
+  tpl_ver=$(sed -n 's/^  "template_version": "\(.*\)",\{0,1\}$/\1/p' "$PROJ/template-manifest.json" | head -1)
+  printf '%s' "$tpl_ver" | grep -qE "$TPL_VER_RE" || tpl_ver="unknown"
+  TEMPLATE_VERSION_ANNOUNCE="テンプレ版: ${tpl_ver}（正本リポ 5co-hub/template — マーカーなしが正）"
+else
+  TEMPLATE_VERSION_ANNOUNCE="(版マーカーなし＝バージョン管理導入前の展開 = legacy。版をファイル有無から推定しないこと。apply-template.sh --repair で導入)"
+fi
+if [ -f "$PROJ/.claude/.sync-disabled" ]; then
+  TEMPLATE_VERSION_ANNOUNCE+=$'\n'"sync: disabled（.claude/.sync-disabled = 自動同期 opt-out。最新版とは限らない）"
+fi
+
+# ──────────────────────────────────────────────
 # JSON 出力（jq が無い環境でも heredoc で対応）
 # ──────────────────────────────────────────────
 build_context() {
@@ -212,6 +276,7 @@ build_context() {
   printf '=== Subagent Model Rules (適用ルール) ===\n%s\n\n' "$SUBAGENT_RULES"
   printf '=== Tool Availability (実測) ===\n%s\n' "$TOOL_AVAILABILITY"
   printf '\n\n=== CI Slide Engine Version (5co-CI-kit) ===\n%s\n' "$CI_VERSION_ANNOUNCE"
+  printf '\n=== Template Version (template-manifest) ===\n%s\n' "$TEMPLATE_VERSION_ANNOUNCE"
   if [ -n "$MEMORY_BLOAT_LIST" ]; then
     printf '\n\n=== Memory Bloat Check (肥大化検知) ===\n'
     printf '⚠ 以下の記憶ファイルが閾値（%s行 or %sKB）を超えています:\n' "$BLOAT_LINES" "$((BLOAT_BYTES / 1024))"
@@ -219,6 +284,13 @@ build_context() {
     printf '記憶の整理（memory-dream）を推奨します。ユーザーに一度だけ提案してください:\n'
     printf '「記憶ファイルが肥大化しています。memory-dream（4フェーズ consolidation）をサブエージェント（Sonnet 既定）に委譲して剪定PRを起案できます。実行しますか？」\n'
     printf '承認されたら .claude/skills/memory-dream.md の手順に従い、剪定結果は必ず PR としてレビュー可能な形で出すこと（直接 main へ反映しない）。\n'
+  fi
+  if [ -n "$PLACEHOLDER_WARN" ]; then
+    printf '\n\n=== Template Placeholder Check (未カスタマイズ検知) ===\n'
+    printf '⚠ template 由来の {{プレースホルダ}} が置換されないまま残っています:\n'
+    printf '%s' "$PLACEHOLDER_WARN"
+    printf 'このリポは bootstrap 後のカスタマイズ（README「セットアップ」手順 2-4）が未完了の可能性があります。\n'
+    printf 'ユーザーに一度だけ提案してください:「CLAUDE.md/README.md にテンプレのプレースホルダが残っています。このリポの用途に合わせて置換・不要ルールの削ぎ落としを行いますか？」\n'
   fi
 }
 
