@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "template_version": "2026.07.2",
+  "template_version": "2026.07.3",
   "released_at": "2026-07-16",
-  "source_revision": "9134631d53b83f1678cf7055d87333573cc03fa9",
+  "source_revision": "48e759ed5466b2b87c751bf869abb63a65f5c65b",
   "target": "github",
-  "managed_content_digest": "sha256:a996505fb568b7aa8a9933ba009df7eaa647e745ffb5781d9a1b570ede366121",
+  "managed_content_digest": "sha256:030d0a0434312765a47f63175646bb4fe8087864a6325e60db8608ae1fa92b91",
   "files": {
     ".claude/commands/mm.md": "a07a3f25eaef9cd5e31d20731068e1110b040a74c6b756fce4c944a1bdb091b0",
     ".claude/hooks/block-personal-info.sh": "9d0b4742544a14da8e35451bb62fa59861dbd9def866795ce37f626863babf80",
@@ -35,7 +35,7 @@
     ".claude/skills/ci-weekly-deck/scripts/deck_builders.py": "1f6e1627ed628354ee619688c4c6a6d20750338e049dad80d1fa0f81ac4c9c60",
     ".claude/skills/ci-weekly-deck/scripts/extract_deck_data.py": "68b0d2e1c6a0cf67180c70c677462f131a291cedd7886f16af88b957ca77c0e2",
     ".claude/skills/ci-weekly-deck/scripts/sample_data.py": "c6e063a0f488fefbd1975694ed160cba4bd461d5998a8afc23edc2473b7ac2f7",
-    ".claude/skills/codex-review.md": "9958b500faabf764adf1230c887f2ce6a60eadc8694a4bd3836c038ae40f9803",
+    ".claude/skills/codex-review.md": "61645e85bc47af9c1323fd037578ec9f0e3a40b45715bdca93ccd4c1a2e8c4b0",
     ".claude/skills/create-brand.md": "8f555a3175aa5ababf59d8a5cd35a0d6582461f3268b8480e07b3d910911df0d",
     ".claude/skills/drive-eco-access.md": "1a2868dc61992f08c7270490df0ce80671c9d8331601a4f352ceabe48c6b3192",
     ".claude/skills/framework-recommend/SKILL.md": "d77747fbc6ebb098ae46050456fdd89b1f7719a699ff89ab43098a44631df06f",
@@ -384,6 +384,6 @@
     "scripts/openrouter-call.sh": "ebe4eded81a5c85a74fcb1a29dbe094b325e378df3a89772bbb672c145f30997",
     "scripts/qwen-call.sh": "11c6a2916ef54592ad18805cb9708289df9c9216d36c70e5a272e680a22ee5e7",
     "scripts/x-search.sh": "7ee2880f2f2b8660d8168446cd35ebccfefa41629b142040542695c150d3d7e8",
-    "template-manifest.json": "ae16cf1958686c2e6410b6b3bfa886ab80493d427525066f8c551ab7f224abb8"
+    "template-manifest.json": "f66247ab43debb89f3c65e7fbc77cf2dd980bc7de45251a5e052f0fbcb01955e"
   }
 }
