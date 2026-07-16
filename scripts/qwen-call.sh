@@ -13,7 +13,10 @@
 
 set -euo pipefail
 
-MODEL="${QWEN_MODEL:-qwen3.5:7b-instruct}"
+# モデル既定値は llm-models.conf（正データ・申請制で自動更新）から解決
+_CONF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/llm-models.conf"
+[ -f "$_CONF" ] && . "$_CONF"
+MODEL="${QWEN_MODEL:-${QWEN_DEFAULT_MODEL:-qwen3.5:7b-instruct}}"
 HOST="${OLLAMA_HOST:-http://localhost:11434}"
 TASK="generic"
 PROMPT=""

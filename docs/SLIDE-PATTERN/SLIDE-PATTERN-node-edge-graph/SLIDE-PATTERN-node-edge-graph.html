@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIDE-PATTERN-node-edge-graph</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #E8E8E8;
+      font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .slide-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .slide {
+      width: 960px;
+      height: 540px;
+      background: #FFFFFF;
+      border: 1px solid #CCCCCC;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* タイトルエリア */
+    .title-area {
+      padding: 14px 40px 12px;
+      border-bottom: 1px dashed #CCCCCC;
+      flex-shrink: 0;
+      background: #FAFAFA;
+    }
+    .area-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title-placeholder {
+      font-size: 16px;
+      color: #CCCCCC;
+      margin-top: 4px;
+    }
+    /* コンテンツエリア */
+    .content-area {
+      flex: 1;
+      padding: 12px 40px 14px;
+      overflow: hidden;
+      display: flex;
+    }
+    .ne-graph {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .node-text   { font-size: 12px; fill: #333333; }
+    .node-text-strong { font-size: 12px; font-weight: bold; fill: #333333; }
+    .edge-label  { font-size: 10px; fill: #666666; }
+    .note-text   { font-size: 10px; fill: #999999; }
+  </style>
+</head>
+<body>
+  <p class="slide-label">[node-edge-graph]</p>
+  <div class="slide">
+
+    <!-- タイトルエリア -->
+    <div class="title-area">
+      <div class="area-label">Title Area — SLIDE.md 参照</div>
+      <div class="title-placeholder">スライドタイトルが入ります</div>
+    </div>
+
+    <!-- コンテンツエリア -->
+    <div class="content-area">
+      <!--
+        グリッド座標系（8列×5行・V3.2_FORMAT.md「ノード・エッジ型グラフ図」参照）
+          MARGIN=8  COL_W=108  ROW_H=82  NODE_H=44  GAP=12
+          col_x(i) = 8 + i*108 → [8,116,224,332,440,548,656,764]
+          row_y(j) = 8 + j*82  → [8,90,172,254,336]
+          node.w   = colspan*108 - 12
+        接続点（エッジの始点・終点は必ずノードの縁の式から算出・手で微調整しない）
+          top-center=(x+w/2, y)  bottom-center=(x+w/2, y+h)
+          left-center=(x, y+h/2) right-center=(x+w, y+h/2)
+        検査: svg.ne-graph / rect.ne-node / .ne-edge が graph_node_edge_check.py の対象。
+              凡例の見本線など「意図的にノードへ繋がない線」は class="ne-skip" で除外。
+      -->
+      <svg class="ne-graph" viewBox="0 0 880 430" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#999999"/>
+          </marker>
+        </defs>
+
+        <!-- ===== ノード（グリッド座標のみ・絶対座標の手置き禁止） ===== -->
+        <!-- N1 データ収集: col0-2, row0 -->
+        <rect class="ne-node" x="8" y="8" width="312" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <text class="node-text" x="164" y="34" text-anchor="middle">データ収集（各システム）</text>
+        <!-- N2 自動集計・レポート生成: col5-7, row0 -->
+        <rect class="ne-node" x="548" y="8" width="312" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <text class="node-text" x="704" y="34" text-anchor="middle">自動集計・レポート生成</text>
+        <!-- N3 マスタ情報: col3-4, row2 -->
+        <rect class="ne-node" x="332" y="172" width="204" height="44" fill="#F5F5F5" stroke="#999999" stroke-width="1"/>
+        <text class="node-text" x="434" y="198" text-anchor="middle">マスタ情報</text>
+        <!-- N4 責任者確認: col5-7, row4 -->
+        <rect class="ne-node" x="548" y="336" width="312" height="44" fill="#EEEEEE" stroke="#999999" stroke-width="1"/>
+        <text class="node-text-strong" x="704" y="362" text-anchor="middle">責任者確認</text>
+        <!-- N5 修正指示: col3-4, row4 -->
+        <rect class="ne-node" x="332" y="336" width="204" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <text class="node-text" x="434" y="362" text-anchor="middle">修正指示</text>
+        <!-- N6 担当者対応: col0-2, row4 -->
+        <rect class="ne-node" x="8" y="336" width="312" height="44" fill="#FFFFFF" stroke="#999999" stroke-width="1"/>
+        <text class="node-text" x="164" y="362" text-anchor="middle">担当者対応</text>
+
+        <!-- ===== エッジ（始点・終点＝接続点の式から機械的に算出） ===== -->
+        <!-- N1右(320,30)→N2左(548,30) 自動 -->
+        <line class="ne-edge" x1="320" y1="30" x2="548" y2="30" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <text class="edge-label" x="434" y="24" text-anchor="middle">夜間バッチ</text>
+        <!-- N2下中央(704,52)→N4上中央(704,336) 自動 -->
+        <line class="ne-edge" x1="704" y1="52" x2="704" y2="336" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <text class="edge-label" x="712" y="198">月次</text>
+        <!-- N3右(536,194)→N2下縁 自動参照（直交ポリライン） -->
+        <polyline class="ne-edge" points="536,194 626,194 626,52" fill="none" stroke="#999999" stroke-width="1.5" marker-end="url(#arw)"/>
+        <!-- N4左(548,358)→N5右(536,358) 人手 -->
+        <line class="ne-edge" x1="548" y1="358" x2="536" y2="358" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+        <!-- N5左(332,358)→N6右(320,358) 人手 -->
+        <line class="ne-edge" x1="332" y1="358" x2="320" y2="358" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+        <!-- N6上中央(164,336)→N1下中央(164,52) 人手・随時ループ -->
+        <line class="ne-edge" x1="164" y1="336" x2="164" y2="52" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+        <text class="edge-label" x="172" y="198">再収集（随時）</text>
+
+        <!-- 凡例（見本線はノードへ繋がない意図的な線＝ne-skip で検査除外） -->
+        <line class="ne-skip" x1="560" y1="416" x2="596" y2="416" stroke="#999999" stroke-width="1.5"/>
+        <text class="note-text" x="602" y="420">自動連携</text>
+        <line class="ne-skip" x1="680" y1="416" x2="716" y2="416" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <text class="note-text" x="722" y="420">人手（随時）</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

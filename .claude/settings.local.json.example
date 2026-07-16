@@ -12,6 +12,9 @@
     "_mode_2_op": "方式2: 1Password Service Account 経由（推奨、ローテーションが中央管理）",
     "OP_SERVICE_ACCOUNT_TOKEN": "ops_eyJ...your-service-account-token-here",
 
+    "_active_context_user": "複数人で同じリポを使う場合、自分の担当者名を設定すると SessionStart hook が memory/active-context/<この名前>.md だけを注入する（共有コンテナで $HOME が全員同じでも個人識別できる）。未設定なら basename $HOME にフォールバック。例: 若松",
+    "ACTIVE_CONTEXT_USER": "",
+
     "_eco_mode": "Drive 共有フォルダなど大勢が使う領域では ECO_MODE=1 を設定すると軽処理が Qwen/Haiku にルーティングされる",
     "ECO_MODE": "0",
 

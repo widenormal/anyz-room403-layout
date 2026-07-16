@@ -21,7 +21,10 @@ set -euo pipefail
 #   - 引数の残りはスペース区切りで 1 つの PROMPT に連結します。
 #   - PROMPT 引数が空で stdin が tty でない場合は stdin を読み取ります。
 
-MODEL="grok-4.3"
+# モデル既定値は llm-models.conf（正データ・申請制で自動更新）から解決
+_CONF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/llm-models.conf"
+[ -f "$_CONF" ] && . "$_CONF"
+MODEL="${HERMES_MODEL:-${HERMES_DEFAULT_MODEL:-grok-4.3}}"
 PROVIDER="xai"
 PROMPT=""
 

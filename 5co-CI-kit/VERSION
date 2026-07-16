@@ -1,13 +1,13 @@
 v3.6
-date: 2026-07-11
+date: 2026-07-13
 format: ci-format-v3.2.css + ci-cover-light-v3.3.css（ライトバリアント追補：表紙=crystal-55／本文=crystal-25） + ci-charts.css（機能色・チャート） + V3.2_FORMAT.md
 serif-en: Hoefler Text（macOS標準・Adobe Fonts 依存なし）
 head: 案件ビルダーの正典CSS連結は ci_head.py 経由のみ（CSSコピー・inline再実装禁止・上記 format 宣言を自動追従）
-gates: 配布前に slide_overflow_check.py（あふれ）＋ check_text_overlap.py（要素の重なり）を通す（ci-finalize.sh が自動ゲート）
+gates: 配布前に slide_overflow_check.py（あふれ）＋ check_text_overlap.py（要素の重なり・NEAR-MISS近接は警告表示のみ）を通す。ノード・エッジ図（.ne-graph）を含む場合は graph_node_edge_check.py（ノード重なり・矢印接続）も通す（ci-finalize.sh が自動ゲート）。ゲートOK後も暗黙確認＝レンダリング結果の目視まで「完了」と報告しない（V3.2_FORMAT.md 規定2.5）
 utils: ページ参照は ci_pagerefs.py の {{PG:タイトル}} トークンで解決（直書き禁止・参照切れはビルド失敗）
 cover-ci: 表紙CIコンセプト必須（cover-full・pd-divider除く）。正典＝ci_head.cover_ci_block()（単一情報源・全CIスライド規則）
 naming: 色=crystal blue（--crystal）／濃紺=ink（--ink）／数字背景=Oracle（.numfield-full）で呼称統一（CI_KICKOFF.md「CI用語」）
-patterns: SLIDE-PATTERN 128種（docs/SLIDE-PATTERN/・v3.6でコンサルフレームワーク29種を追加＝カテゴリ「フレームワーク・分析」）。型選び＝framework-recommend スキル／CI v2 変換＝scripts/ci_pattern_adapter.py（全128種3色QA合格）
+patterns: SLIDE-PATTERN 129種（docs/SLIDE-PATTERN/・2026-07-13 追補でノード・エッジ型グラフ図 node-edge-graph を追加）。型選び＝framework-recommend スキル／CI v2 変換＝scripts/ci_pattern_adapter.py（全129種3色QA合格）
 canonical: 5co-hub/template:5co-CI-kit（唯一の格納場所・CI_SOURCE.md 参照）
 rule: すべてのセッションは生成前に本ファイルを確認し、常にこの最新版でスライドを作成する
-note: v3.6 はCSS不変（ci-format-v3.2.css/ci-cover-light-v3.3.css/ci-charts.css そのまま）。v3.5 に後続し、トップコンサル正典のギャップ分析（docs/SLIDE-PATTERN/FRAMEWORK-GAP-RESEARCH.md）に基づき SLIDE-PATTERN を 99種→128種へ拡張（ウォーターフォール・イシューツリー/KPIツリー・汎用2x2・ハーベイボール・メッコ・ファネル・レーダー・ヒートマップ・バリューチェーン・スリーホライズン・ジャーニーマップ等29種）。framework-recommend の発見枠に「フレームワーク・分析」カテゴリを追加（非破壊）
+note: v3.6 の 2026-07-13 追補（版号据え置き＝フレームワーク1種追加のためオーナー裁定・CSS 不変: ci-format-v3.2.css/ci-cover-light-v3.3.css/ci-charts.css そのまま）。ノード・エッジ型グラフ図（フロー図・ネットワーク図）を正典化——グリッド座標系（列×行＋接続点の式・純SVG/ハイブリッド=node-HTML×edge-SVG の2構成・V3.2_FORMAT.md「ノード・エッジ型グラフ図」）と専用ゲート graph_node_edge_check.py（NODE_OVERLAP/EDGE_DETACHED/NO_NODES）を新設し、SLIDE-PATTERN に node-edge-graph を追加（128種→129種）。あわせて check_text_overlap.py に NEAR-MISS 警告ティア（非ブロッキング）、全CI型共通の「暗黙確認」（ゲートOK後の目視必須＝規定2.5）を制定。顧客OKR会 AI運用OODAループ資料（data-analysis）からの逆輸入
