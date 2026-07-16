@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "template_version": "2026.07.2",
+  "template_version": "2026.07.3",
   "released_at": "2026-07-16",
-  "notes": "2026.07.2: sync 運用改善（sol 提案採用）— apply-template.sh に --print-synced 追加・sync の偽成功修正・一括マージの安全条件強化・local-sync の dirty 配布停止。2026.07.1 = バージョン管理の初版（baseline・既存 capability の introduced_in は管理開始点）。運用ルール = docs/template-versioning.md",
+  "notes": "2026.07.3: codex-review.md に開発委譲の例外規定を追加（Claude=実装・Codex=独立検品の原則＋read-onlyパッチ提案方式・運用上限。sol 裁定）。2026.07.2: sync 運用改善（--print-synced・偽成功修正・一括マージ安全条件・local-sync fail-closed）。2026.07.1 = baseline。運用ルール = docs/template-versioning.md",
   "capabilities": {
     "template-version-tracking": {
       "introduced_in": "2026.07.1",
