@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "template_version": "2026.07.3",
-  "released_at": "2026-07-16",
-  "notes": "2026.07.3: codex-review.md に開発委譲の例外規定を追加（Claude=実装・Codex=独立検品の原則＋read-onlyパッチ提案方式・運用上限。sol 裁定）。2026.07.2: sync 運用改善（--print-synced・偽成功修正・一括マージ安全条件・local-sync fail-closed）。2026.07.1 = baseline。運用ルール = docs/template-versioning.md",
+  "template_version": "2026.07.8",
+  "released_at": "2026-07-22",
+  "notes": "2026.07.8: scoped go 対応。①ci-merge-sync-prs.sh に ONLY_REPOS フィルタ（カンマ区切り owner/repo）②merge-template-sync-prs.yml に only_repos 入力③checks 読取不可時は statusCheckRollup 抜きで再取得し『CI 未観測』として判定続行（選択 B の一貫・最終ゲートはリポ側 branch protection・nobunaga#142 対応）。2026.07.7: 一括マージの CI 判定を運用選択 B に変更。statusCheckRollup が空なら『CI 無し』として通す（2026.07.6 の workflows 在り→保留する fail-open ガードを撤回・throughput を優先）。隠れた失敗 CI は checks 権限不足時に GraphQL がエラー→本体の `gh pr view` 失敗経路で除外されるため許容範囲。エラー可視化と verdict 共有関数/テストは維持（テストは B 挙動に更新）。恒久策は App への checks:read/statuses:read 付与。2026.07.6: ci-merge-sync-prs.sh の一括マージ安全性強化（sol 検品）。①fail-open 対策（後に 2026.07.7 で B へ変更）。②view 失敗時に gh 生エラーを表示（権限/未install/rate limit を切り分け可能に）。③判定ロジックを verdict モードに共有化しテスト固定。2026.07.5: ①Places API (New) 決定論パス追加（scripts/places-search.sh・Maps 専用キーを setup-op.sh で ~/.maps-env へ結線・llm-router に登録）。店舗の営業判定を grounding フォールバックから決定論化。②SessionStart の tool probe に vault 台帳（op item list のタイトル一覧・値非表示）を注入し、curated 表に無いキー（例: Seats.aero）も毎回可視化＝R3「聞く→最初から知っている」格上げ。共通テーマ＝存在するのに発見できない API キー問題の解消。2026.07.4: bash 3.2 互換 hotfix（変数直後の全角文字で unbound variable になる問題・6箇所ブレース化）＋launchd 登録の検証化＋git 同期先の dirty 保護。2026.07.3: codex-review.md に開発委譲の例外規定。2026.07.2: sync 運用改善。2026.07.1 = baseline。運用ルール = docs/template-versioning.md",
   "capabilities": {
     "template-version-tracking": {
       "introduced_in": "2026.07.1",
@@ -41,6 +41,12 @@
       "status": "stable",
       "entrypoint": "5co-CI-kit/CI_KICKOFF.md",
       "version_file": "5co-CI-kit/VERSION"
+    },
+    "places-search": {
+      "introduced_in": "2026.07.5",
+      "status": "stable",
+      "entrypoint": "scripts/places-search.sh",
+      "requires": ["maps-platform-api-key (op: claude-code-secrets/Maps Platform API Key)", "places-api-new-enabled"]
     }
   }
 }

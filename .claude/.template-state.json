@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "template_version": "2026.07.3",
-  "released_at": "2026-07-16",
-  "source_revision": "48e759ed5466b2b87c751bf869abb63a65f5c65b",
+  "template_version": "2026.07.8",
+  "released_at": "2026-07-22",
+  "source_revision": "ae56afad77f1c414d5a71e756aae8465b32df883",
   "target": "github",
-  "managed_content_digest": "sha256:030d0a0434312765a47f63175646bb4fe8087864a6325e60db8608ae1fa92b91",
+  "managed_content_digest": "sha256:71a7f38fea63f6146a0fb60a743f2bd553dbf15c2c86de08f89f37d351d70d1b",
   "files": {
     ".claude/commands/mm.md": "a07a3f25eaef9cd5e31d20731068e1110b040a74c6b756fce4c944a1bdb091b0",
     ".claude/hooks/block-personal-info.sh": "9d0b4742544a14da8e35451bb62fa59861dbd9def866795ce37f626863babf80",
@@ -18,9 +18,9 @@
     ".claude/output-styles/fable-like.md": "49a73c35ded6b0eff49478e5c776aca7d99f4e3ca3abd26139401062ad67e4ae",
     ".claude/scripts/session-claudemd-nudge.sh": "bb5a2d5e0649bd267affbe039c834c110344aa7b96e984e2cf9dbe6792794c15",
     ".claude/scripts/session-context.sh": "caee6b120b65908f2214ecfb44f39f064d6578e53486418aa8e598d520734776",
-    ".claude/scripts/setup-op.sh": "45f610ac90b3170a57db91129f1b7ffa7e9ae7d02f49ba824df3a8d8d5725c21",
+    ".claude/scripts/setup-op.sh": "76b4496be74fc4dc4120f7b658514d723b6c3a7c470e4c5a460f2b85ea70e7c7",
     ".claude/settings.json": "6a0962fe6c26b7a832389000ed1dd6bad2a22d1e94344149c2eddae5f0c69748",
-    ".claude/settings.local.json.example": "d0faa4aec83bef98d517f3d8b144a850bbc66515a587a41954f1ab3aa2e5735a",
+    ".claude/settings.local.json.example": "f02abd4963ed4849269f45c89210cd99403a6a2540171c9ac019ec5d09d37d1a",
     ".claude/skills/ci-weekly-deck.md": "63f766996dc022c2bd7e5b74f46402eb6b53a8394737792a3805a0a4a3eac3f6",
     ".claude/skills/ci-weekly-deck/.gitignore": "4b93f931aa1724bebcd2c8545ac4080685274a18a1a77d0e0dc7f3335b4a3af0",
     ".claude/skills/ci-weekly-deck/HANDOFF_naturelab_weekly.md": "0bb5d5e89dfe06dd4731dc8b492c58d95339c1d5cfac0ac16fbef12297bc18ef",
@@ -39,7 +39,7 @@
     ".claude/skills/create-brand.md": "8f555a3175aa5ababf59d8a5cd35a0d6582461f3268b8480e07b3d910911df0d",
     ".claude/skills/drive-eco-access.md": "1a2868dc61992f08c7270490df0ce80671c9d8331601a4f352ceabe48c6b3192",
     ".claude/skills/framework-recommend/SKILL.md": "d77747fbc6ebb098ae46050456fdd89b1f7719a699ff89ab43098a44631df06f",
-    ".claude/skills/llm-router.md": "4791b449fd2b784759ae16d248d9f8071c0c78df0d60d9a3f517dc43be06bf56",
+    ".claude/skills/llm-router.md": "be93f0072783775367b7ef2f7564123a1317a0bd73130499a67f98417d1def82",
     ".claude/skills/llmhub-benchmark.md": "7ef531bd3f5a23683c48dacc62eb28569e7c9de8db59c80c350f7bf50d1939d5",
     ".claude/skills/llmhub-health.md": "c5695442bc8c064976cca79cd21046c687dd1b0b70944d7635ae7a854a340673",
     ".claude/skills/llmhub-qwen-secure.md": "5e649dc7ae9fd2f8161be9e2530f7e16d44ecae2a427ed98fbe561e087ea1d4b",
@@ -384,6 +384,6 @@
     "scripts/openrouter-call.sh": "ebe4eded81a5c85a74fcb1a29dbe094b325e378df3a89772bbb672c145f30997",
     "scripts/qwen-call.sh": "11c6a2916ef54592ad18805cb9708289df9c9216d36c70e5a272e680a22ee5e7",
     "scripts/x-search.sh": "7ee2880f2f2b8660d8168446cd35ebccfefa41629b142040542695c150d3d7e8",
-    "template-manifest.json": "f66247ab43debb89f3c65e7fbc77cf2dd980bc7de45251a5e052f0fbcb01955e"
+    "template-manifest.json": "8e69349f20a7492f1f2820ae6b78e3c62bb6381ce5e6aaf74411b44d0b1044e8"
   }
 }

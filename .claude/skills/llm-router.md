@@ -54,6 +54,7 @@
 | 出典付きリサーチ（要約・調査） | `scripts/openrouter-call.sh --online` | key 1本・プリペイドで課金一元化（残高切れ＝自動停止が安全網）。Web検索は Exa ベース |
 | Google 検索の鮮度・網羅が要る調査 | `scripts/gemini-call.sh` | Google 検索グラウンディング。従量課金なので必要時のみ |
 | X(Twitter) の調査 | XMCP / `scripts/x-search.sh` | 構造化 API（`x-search.md` スキル参照） |
+| 店舗・施設の実データ（本日営業・営業時間・住所・電話・評価） | `scripts/places-search.sh` | Google Places API (New)。営業判定は WebSearch/grounding でなくこれが第一選択。Maps 専用キー（Gemini とは別＝罠1）。要 Places API (New) 有効化 |
 | 既知 URL の内容取得・要約 | `WebFetch` | 単一ページの読み取りに十分 |
 | 上記が未セットアップ・key 無し | `WebSearch` / `WebFetch` | フォールバック |
 
