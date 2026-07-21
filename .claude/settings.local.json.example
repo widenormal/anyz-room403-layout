@@ -8,6 +8,8 @@
     "XAI_API_KEY": "xai-...your-grok-api-key-here",
     "OPENAI_API_KEY": "sk-...your-openai-api-key-here",
     "GITHUB_TOKEN": "ghp_...your-github-pat-here",
+    "_maps_note": "Places API (New) 用の Maps 専用キー（Gemini キーとは別＝罠1）。scripts/places-search.sh が使用。導入手順=docs/setup-runbooks/google-cloud-api-key.md",
+    "MAPS_API_KEY": "AIza...your-maps-platform-key-here",
 
     "_mode_2_op": "方式2: 1Password Service Account 経由（推奨、ローテーションが中央管理）",
     "OP_SERVICE_ACCOUNT_TOKEN": "ops_eyJ...your-service-account-token-here",
